@@ -125,6 +125,44 @@ public class Personne {
         this.pourcentage = pourcentage;
     }
 
+    public static List<Personne> getAll() throws SQLException {
+        Connection connex = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        List<Personne> result = new ArrayList<>();
+
+        try {
+            connex = Database.getConnection();
+
+            String sql = "SELECT p.id, p.nom, p.prenom, p.adresse, g.genre FROM Personne as p JOIN Genre g ON p.id_genre = g.id";
+            st = connex.prepareStatement(sql);
+            rs = st.executeQuery();
+
+            while (rs.next()) {
+                Personne p = new Personne();
+                p.setId(rs.getInt("id"));
+                p.setNom(rs.getString("nom"));
+                p.setPrenom(rs.getString("prenom"));
+                p.setAdresse(rs.getString("adresse"));
+                p.setGenre(rs.getString("genre"));
+
+                result.add(p);
+            }
+
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (rs != null)
+                rs.close();
+            if (st != null)
+                st.close();
+            if (connex != null)
+                connex.close();
+        }
+
+        return result;
+    }
+
     public static Personne getById(int id) throws SQLException {
         Connection connex = null;
         PreparedStatement st = null;
@@ -191,7 +229,7 @@ public class Personne {
 
             this.insertExperience();
             this.insertPoste();
-            
+
             return this;
         } catch (SQLException e) {
             throw e;
@@ -261,6 +299,29 @@ public class Personne {
             st.setInt(1, this.getId());
             st.setInt(2, this.getPoste().getId());
             st.executeUpdate();
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (st != null)
+                st.close();
+            if (connex != null)
+                connex.close();
+        }
+    }
+
+    public void insertSoftSkill() throws SQLException {
+        Connection connex = null;
+        PreparedStatement st = null;
+
+        try {
+            connex = Database.getConnection();
+            for (SoftSkill skill : this.getSoftSkills()) {
+                String sql = "INSERT INTO personnesoftskill (id_personne, id_softskill) VALUES (?, ?)";
+                st = connex.prepareStatement(sql);
+                st.setInt(1, this.getId());
+                st.setInt(2, skill.getId());
+                st.executeUpdate();
+            }
         } catch (SQLException e) {
             throw e;
         } finally {
