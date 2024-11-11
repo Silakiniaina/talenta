@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
+    <servlet>
+        <servlet-name>PosteServlet</servlet-name>
+        <servlet-class>controller.PosteServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CompetenceServlet</servlet-name>
+        <servlet-class>controller.CompetenceServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SelectionServlet</servlet-name>
+        <servlet-class>controller.SelectionServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SelectionController</servlet-name>
+        <servlet-class>controller.SelectionController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AjoutCvServlet</servlet-name>
+        <servlet-class>controller.AjoutCvServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PosteServlet</servlet-name>
+        <url-pattern>/PosteServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CompetenceServlet</servlet-name>
+        <url-pattern>/CompetenceServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SelectionServlet</servlet-name>
+        <url-pattern>/SelectionServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SelectionController</servlet-name>
+        <url-pattern>/SelectionController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AjoutCvServlet</servlet-name>
+        <url-pattern>/ajout-cv</url-pattern>
+    </servlet-mapping>
+</web-app>

@@ -1,0 +1,19 @@
+.table-container {
+    background-color: #495057; /* Darker gray background for the table */
+    border-radius: 10px;
+    padding: 40px;
+    margin-top: 40px;
+}
+
+.table th {
+    background-color: #212529; /* Dark background for table headers */
+    color: #f8f9fa; /* Light text for headers */
+    font-weight: 500;
+    text-align: center;
+}
+
+.table td {
+    background-color: #6c757d; /* Slightly lighter gray for table rows */
+    color: #f8f9fa;
+    text-align: center;
+}
