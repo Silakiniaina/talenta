@@ -40,7 +40,7 @@ public class EntretienController extends HttpServlet{
             List<Personne> pers= Personne.getAll();
             List<SoftSkill> skills= SoftSkill.getAll();
 
-            RequestDispatcher dispat = req.getRequestDispatcher("/WEB-INF/views/formulaireCv.jsp");
+            RequestDispatcher dispat = req.getRequestDispatcher("/WEB-INF/views/entretien.jsp");
             req.setAttribute("candidat", pers);
             req.setAttribute("skills", skills);
             dispat.forward(req, resp);
