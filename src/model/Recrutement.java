@@ -18,15 +18,14 @@ public class Recrutement {
     private Date dateFin;
     private int nombre;
     private Poste poste;
-    private List<CompetenceRecrutement> listCompetence;
 
     // CONSTRUCTORS
     public Recrutement(){
-        this.setListCompetence(new ArrayList<>());
+        
     }
 
     public Recrutement(Date debut, Date fin, int nombre, int idPoste) throws SQLException{
-        this.setListCompetence(new ArrayList<>());
+
         this.setDateDebut(debut);
         this.setDateFin(fin);
         this.setNombre(nombre);
@@ -52,7 +51,6 @@ public class Recrutement {
                 d.setDateFin(rs.getDate(3));
                 d.setNombre(rs.getInt(4));
                 d.setPoste(rs.getInt(5));
-                d.setListCompetence(CompetenceRecrutement.getAllByRecrutement(d.getIdRecrutement()));
                 result.add(d);
             }
         } catch (SQLException e) {
@@ -90,7 +88,6 @@ public class Recrutement {
                 result.setDateFin(rs.getDate(3));
                 result.setNombre(rs.getInt(4));
                 result.setPoste(rs.getInt(5));
-                result.setListCompetence(CompetenceRecrutement.getAllByRecrutement(result.getIdRecrutement()));
             }
         } catch (SQLException e) {
             throw e;
@@ -132,7 +129,6 @@ public class Recrutement {
                 }
             }
             c.commit();
-            this.insertCompetence();
             return this;
         } catch (SQLException e) {
             c.rollback();
@@ -147,33 +143,33 @@ public class Recrutement {
         }
     }
 
-    public void insertCompetence() throws SQLException {
-        Connection c = null;
-        PreparedStatement st = null;
+    // public void insertCompetence() throws SQLException {
+    //     Connection c = null;
+    //     PreparedStatement st = null;
 
-        try {
-            c = Database.getConnection();
-            c.setAutoCommit(false);
-            for (CompetenceRecrutement competence : this.getListCompetence()) {
-                String sql = "INSERT INTO competence_recrutement (id_recrutement, id_competence, experience) VALUES (?, ?, ?)";
-                st = c.prepareStatement(sql);
-                st.setInt(1, this.getIdRecrutement());
-                st.setInt(2, competence.getCompetence().getIdCompetence());
-                st.setInt(3, competence.getExperience());
-                st.executeUpdate();
-            }
+    //     try {
+    //         c = Database.getConnection();
+    //         c.setAutoCommit(false);
+    //         for (CompetenceRecrutement competence : this.getListCompetence()) {
+    //             String sql = "INSERT INTO competence_recrutement (id_recrutement, id_competence, experience) VALUES (?, ?, ?)";
+    //             st = c.prepareStatement(sql);
+    //             st.setInt(1, this.getIdRecrutement());
+    //             st.setInt(2, competence.getCompetence().getIdCompetence());
+    //             st.setInt(3, competence.getExperience());
+    //             st.executeUpdate();
+    //         }
 
-            c.commit();
-        } catch (SQLException e) {
-            c.rollback();
-            throw e;
-        } finally {
-            if (st != null)
-                st.close();
-            if (c != null)
-                c.close();
-        }
-    }
+    //         c.commit();
+    //     } catch (SQLException e) {
+    //         c.rollback();
+    //         throw e;
+    //     } finally {
+    //         if (st != null)
+    //             st.close();
+    //         if (c != null)
+    //             c.close();
+    //     }
+    // }
 
     // GETTERS AND SETTERS
     public int getIdRecrutement() {
@@ -191,9 +187,7 @@ public class Recrutement {
     public Poste getPoste() {
         return poste;
     }
-    public List<CompetenceRecrutement> getListCompetence(){
-        return this.listCompetence;
-    }
+
 
     public void setIdRecrutement(int idRecrutement) {
         this.idRecrutement = idRecrutement;
@@ -215,8 +209,5 @@ public class Recrutement {
     }
     public void setPoste(int idposte)throws SQLException {
         this.poste = Poste.getById(idposte);
-    }
-    public void setListCompetence(List<CompetenceRecrutement> ls){
-        this.listCompetence = ls;
     }
 }

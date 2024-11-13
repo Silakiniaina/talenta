@@ -14,13 +14,15 @@ public class Poste {
     private int idPoste;
     private String nomPoste;
     private Departement departement;
+    private List<CompetenceRequise> listCompetence;
 
     // CONSTRUCTOR
     public Poste() {
-
+        this.setListCompetence(new ArrayList<>());
     }
 
     public Poste(String nom, int idDepartement) throws SQLException {
+        this.setListCompetence(new ArrayList<>());
         this.setNomPoste(nom);
         this.setDepartement(idDepartement);
     }
@@ -96,6 +98,9 @@ public class Poste {
     public Departement getDepartement() {
         return departement;
     }
+    public List<CompetenceRequise> getListCompetence(){
+        return this.listCompetence;
+    }
 
     public void setIdPoste(int idPoste) {
         this.idPoste = idPoste;
@@ -107,5 +112,9 @@ public class Poste {
 
     public void setDepartement(int iddepartement) throws SQLException {
         this.departement = Departement.getById(iddepartement);
+    }
+
+    public void setListCompetence(List<CompetenceRequise> ls){
+        this.listCompetence = ls;
     }
 }

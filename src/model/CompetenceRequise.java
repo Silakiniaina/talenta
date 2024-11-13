@@ -9,25 +9,25 @@ import java.util.List;
 
 import model.utils.Database;
 
-public class CompetenceRecrutement {
+public class CompetenceRequise {
     
     private Competence competence;
     private int experience;
 
     // CONSTRUCTORS
-    public CompetenceRecrutement(){
+    public CompetenceRequise(){
 
     }
 
-    public CompetenceRecrutement(int competence, int experience) throws SQLException{
+    public CompetenceRequise(int competence, int experience) throws SQLException{
         this.setCompetence(competence);
         this.setExperience(experience);
     }
 
 
     // CRUD
-    public static List<CompetenceRecrutement> getAllByRecrutement(int idRecrutement) throws SQLException{
-        List<CompetenceRecrutement> result = new ArrayList<>();
+    public static List<CompetenceRequise> getAllByRecrutement(int idRecrutement) throws SQLException{
+        List<CompetenceRequise> result = new ArrayList<>();
         Connection c = null;
         PreparedStatement prstm = null; 
         ResultSet rs = null;
@@ -39,7 +39,7 @@ public class CompetenceRecrutement {
             rs = prstm.executeQuery();
 
             while (rs.next()) {
-                CompetenceRecrutement d = new CompetenceRecrutement();
+                CompetenceRequise d = new CompetenceRequise();
                 d.setCompetence(rs.getInt(1));
                 d.setExperience(rs.getInt(2));
                 result.add(d);

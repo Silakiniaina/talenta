@@ -96,14 +96,14 @@ CREATE TABLE recrutement_candidat(
    FOREIGN KEY(id_recrutement) REFERENCES recrutement(id_recrutement)
 );
 
-CREATE TABLE competence_recrutement(
-   id_recrutement INTEGER,
-   id_competence INTEGER,
-   experience INTEGER NOT NULL,
-   PRIMARY KEY(id_recrutement, id_competence),
-   FOREIGN KEY(id_recrutement) REFERENCES recrutement(id_recrutement),
-   FOREIGN KEY(id_competence) REFERENCES competence(id_competence)
-);
+-- CREATE TABLE competence_recrutement(
+--    id_recrutement INTEGER,
+--    id_competence INTEGER,
+--    experience INTEGER NOT NULL,
+--    PRIMARY KEY(id_recrutement, id_competence),
+--    FOREIGN KEY(id_recrutement) REFERENCES recrutement(id_recrutement),
+--    FOREIGN KEY(id_competence) REFERENCES competence(id_competence)
+-- );
 
 CREATE TABLE competence_candidat(
    id_candidat INTEGER,
@@ -130,4 +130,13 @@ CREATE TABLE reponse_entretient(
    PRIMARY KEY(id_candidat, id_questionaire),
    FOREIGN KEY(id_candidat) REFERENCES candidat(id_candidat),
    FOREIGN KEY(id_questionaire) REFERENCES questionaire(id_questionaire)
+);
+
+CREATE TABLE competence_requise(
+   id_poste INTEGER,
+   id_competence INTEGER,
+   experience INTEGER NOT NULL,
+   PRIMARY KEY(id_poste, id_competence),
+   FOREIGN KEY(id_poste) REFERENCES poste(id_poste),
+   FOREIGN KEY(id_competence) REFERENCES competence(id_competence)
 );

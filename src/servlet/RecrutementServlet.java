@@ -11,7 +11,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.Competence;
-import model.CompetenceRecrutement;
+import model.CompetenceRequise;
 import model.Poste;
 import model.Recrutement;
 
@@ -52,7 +52,7 @@ public class RecrutementServlet extends HttpServlet{
             r.setPoste(poste);
 
             for(int i=0; i<competences.length; i++){
-                CompetenceRecrutement cr = new CompetenceRecrutement(Integer.parseInt(competences[i]), Integer.parseInt(experiences[i]));
+                CompetenceRequise cr = new CompetenceRequise(Integer.parseInt(competences[i]), Integer.parseInt(experiences[i]));
                 r.getListCompetence().add(cr);
             }
 

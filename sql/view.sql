@@ -23,7 +23,9 @@ FROM
 JOIN 
     recrutement r ON r.id_recrutement = (SELECT id_recrutement FROM recrutement_candidat WHERE id_candidat = c.id_candidat)
 JOIN 
-    competence_recrutement cr ON r.id_recrutement = cr.id_recrutement
+    poste p ON r.id_poste = p.id_poste
+JOIN
+    competence_requise cr ON p.id_poste = cr.id_poste
 LEFT JOIN 
     competence_candidat cc ON c.id_candidat = cc.id_candidat 
     AND cr.id_competence = cc.id_competence
