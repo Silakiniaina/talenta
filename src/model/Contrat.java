@@ -1,118 +1,119 @@
 package model;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.*;
+
+import model.utils.Database;
 
 public class Contrat {
+    private int idContrat;
+    private Date dateDebutContrat;
+    private double salaireBase;
+    private Date dateFinContrat;
+    private Candidat candidat;
+    private TypeContrat typeContrat;
     
-    int id;
-    Personne personne;
-    Poste poste;
-    Date dateDebut;
-    Date dateFin;
-
-    public int getId() {
-        return id;
-    }
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public Personne getPersonne() {
-        return personne;
-    }
-    public void setPersonne(int id) throws SQLException {
-        this.personne = Personne.getById(id);
-    }
-
-    public Poste getPoste() {
-        return poste;
-    }
-    public void setPoste(int id) throws SQLException {
-        this.poste = Poste.getById(id);
-    }
-
-    public Date getDateDebut() {
-        return dateDebut;
-    }
-    public void setDateDebut(Date DateDebut) {
-        this.dateDebut = DateDebut;
-    }
-
-    public Date getDateFin() {
-        return dateFin;
-    }
-    public void setDateFin(Date DateFin) {
-        this.dateFin = DateFin;
-    }
-
-    public Contrat (int id, int idPersonne, int idPoste, Date debut, Date fin) throws SQLException{
-        this.setId(id);
-        this.setPersonne(idPersonne);
-        this.setPoste(idPoste);
-        this.setDateDebut(debut);
-        this.setDateFin(fin);
-    }
+    // Constructeurs
+    public Contrat() {}
     
-    public void insert() throws SQLException {
-        Connection connex = null;
-        PreparedStatement st = null;
-
-        try {
-            connex = Database.getConnection();
-
-            String sql = "INSERT INTO Contrat (id_personne, id_poste, date_debut, date_fin) VALUES (?, ?, ?, ?)";
-            st = connex.prepareStatement(sql);
-            st.setInt(1, this.personne.getId());
-            st.setInt(2, this.poste.getId());
-            st.setDate(3, this.dateDebut);
-            st.setDate(4, this.dateFin);
-
-            st.executeUpdate();
-            System.out.println("Insertion réussie du contrat");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (st != null) st.close();
-            if (connex != null) connex.close();
-        }
+    public Contrat(Date date_debut_contrat, double salaire_base, Date date_fin_contrat, 
+                   int id_candidat, int id_type_contrat) throws SQLException{
+        this.setDateDebutContrat(date_debut_contrat);
+        this.setSalaireBase(salaire_base);
+        this.setDateFinContrat(date_fin_contrat); 
+        this.setCandidat(id_candidat);
+        this.setTypeContrat(id_type_contrat);
     }
 
-    public static List<Contrat> getAll() throws SQLException {
-        List<Contrat> contrats = new ArrayList<>();
-        Connection connex = null;
-        PreparedStatement st = null;
-        ResultSet rs = null;
-
+    // ACTION
+    public void insert(Recrutement r) throws SQLException {
+        String sql = "INSERT INTO contrat (date_debut_contrat, salaire_base, date_fin_contrat, " +
+            "id_candidat, id_type_contrat) VALUES (?, ?, ?, ?, ?)";
+        Connection c = null; 
+        PreparedStatement prstm = null; 
+        
         try {
-            connex = Database.getConnection();
-            String sql = "SELECT * FROM Contrat c";
-            st = connex.prepareStatement(sql);
-            rs = st.executeQuery();
+            c = Database.getConnection();
+            c.setAutoCommit(false);
 
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                int idPersonne = rs.getInt("id_personne");
-                int idPoste = rs.getInt("id_poste");
-                Date dateDebut = rs.getDate("date_debut");
-                Date dateFin = rs.getDate("date_fin");
-
-                Contrat contrat = new Contrat(id, idPersonne, idPoste, dateDebut, dateFin);
-                contrats.add(contrat);
+            prstm = c.prepareStatement(sql);
+            prstm.setDate(1, this.getDateDebutContrat());
+            prstm.setDouble(2, this.getSalaireBase());
+            if (this.getDateFinContrat() != null) {
+                prstm.setDate(3, this.getDateFinContrat());
+            } else {
+                prstm.setNull(3, Types.DATE);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (rs != null) rs.close();
-            if (st != null) st.close();
-            if (connex != null) connex.close();
-        }
+            prstm.setInt(4, this.getCandidat().getIdCandidat());
+            prstm.setInt(5, this.getTypeContrat().getId_type_contrat());
+            
+            prstm.executeUpdate();
+            c.commit();
 
-        return contrats;
+            this.getCandidat().insertIntoEmploye(r);
+        }catch(SQLException e){
+            c.rollback();
+            throw e;
+        }finally{
+            if(prstm != null){
+                prstm.close();
+            }
+            if(c != null){
+                c.close();
+            }
+        }
+    }
+
+    public int getIdContrat() {
+        return idContrat;
+    }
+
+    public Date getDateDebutContrat() {
+        return dateDebutContrat;
+    }
+
+    public double getSalaireBase() {
+        return salaireBase;
+    }
+
+    public Date getDateFinContrat() {
+        return dateFinContrat;
+    }
+
+    public Candidat getCandidat() {
+        return candidat;
+    }
+
+    public TypeContrat getTypeContrat() {
+        return typeContrat;
+    }
+
+    public void setIdContrat(int idContrat) {
+        this.idContrat = idContrat;
+    }
+
+    public void setDateDebutContrat(Date dateDebutContrat) {
+        this.dateDebutContrat = dateDebutContrat;
+    }
+    public void setDateDebutContrat(String dt){
+        this.dateDebutContrat = Date.valueOf(dt);
+    }
+
+    public void setSalaireBase(double salaire_base) {
+        this.salaireBase = salaire_base;
+    }
+
+    public void setDateFinContrat(Date dateFinContrat) {
+        this.dateFinContrat = dateFinContrat;
+    }
+    public void setDateFinContrat(String dt){
+        this.dateFinContrat = Date.valueOf(dt);
+    }
+
+    public void setCandidat(int candidat)throws SQLException {
+        this.candidat = Candidat.getById(candidat);
+    }
+
+    public void setTypeContrat(int typeContrat)  throws SQLException{
+        this.typeContrat = TypeContrat.getById(typeContrat);
     }
 }

@@ -1,61 +1,36 @@
-<%@page import="java.util.List"%>
-<%@page import="model.Person"%>
-<%@page import="model.Poste"%>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.Date" %>
+<%@ page import="model.Poste" %>
+<%@ page import="model.TypeContrat" %> 
 <%
-    List<Person> listePerson = (List<Person>) request.getAttribute("listePerson");
-    List<Poste> listePost = (List<Poste>) request.getAttribute("listePost");
+    List<TypeContrat> typeContrats = (List<TypeContrat>)request.getAttribute("typeContrats");
+    String idCandidat = (String)request.getAttribute("idCandidat");
+    String idRecrutement = (String)request.getAttribute("idRecrutement");
 %>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulaire de Sélection</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
+<%@include file="header.jsp" %>
 <body>
-    <div class="container mt-5">
-        <h1>Formulaire de Sélection</h1>
-        <form action="yourFormActionURL" method="post">
+    <h1>Ajouter un Contrat</h1>
+    <form action="contrat" method="post">
+        <input type="hidden" name="idCandidat" value="<%= idCandidat %>">
+        <input type="hidden" name="idRecrutement" value="<%= idRecrutement %>">
+        <label for="dateDebut">Date de début :</label>
+        <input type="date" id="dateDebut" name="debut" required><br><br>
 
-            <!-- Select for Person -->
-            <div class="mb-3">
-                <label for="person-select" class="form-label">Personne</label>
-                <select id="person-select" name="personId" class="form-select" required>
-                    <% for (Person person : listePerson) { %>
-                        <option value="<%= person.getId() %>"><%= person.getNom() %> <%= person.getPrenom() %></option>
-                    <% } %>
-                </select>
-            </div>
+        <label for="nombre">Salaire :</label>
+        <input type="number" id="nombre" name="salaire" required><br><br>
 
-            <!-- Select for Post -->
-            <div class="mb-3">
-                <label for="post-select" class="form-label">Poste</label>
-                <select id="post-select" name="postId" class="form-select" required>
-                    <% for (Poste post : listePost) { %>
-                        <option value="<%= post.getId() %>"><%= post.getNom() %></option>
-                    <% } %>
-                </select>
-            </div>
+        <label for="poste">TypeContrat :</label>
+        <select id="poste" name="type" required>
+            <%
+                for (TypeContrat typeContrat : typeContrats) {
+                    out.println("<option value=\"" + typeContrat.getId_type_contrat() + "\">" + typeContrat.getLabel() + "</option>");
+                }
+            %>
+        </select><br><br>
+        <label for="dateFin">Date de fin :</label>
+        <input type="date" id="dateFin" name="fin" ><br><br>
 
-            <!-- Date Input for Debut -->
-            <div class="mb-3">
-                <label for="date-debut" class="form-label">Date de Début</label>
-                <input type="date" id="date-debut" name="dateDebut" class="form-control" required>
-            </div>
-
-            <!-- Date Input for Fin -->
-            <div class="mb-3">
-                <label for="date-fin" class="form-label">Date de Fin</label>
-                <input type="date" id="date-fin" name="dateFin" class="form-control" required>
-            </div>
-
-            <!-- Submit Button -->
-            <button type="submit" class="btn btn-primary">Soumettre</button>
-        </form>
-    </div>
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <input type="submit" value="Signer">
+    </form>
 </body>
 </html>
