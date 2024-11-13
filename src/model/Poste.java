@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,6 +85,74 @@ public class Poste {
             throw e;
         }
         return result;
+    }
+
+    public Poste insert() throws SQLException{
+        Connection c = null; 
+        PreparedStatement prstm = null;
+        String query = "INSERT INTO poste(nom,id_departement) VALUES (?, ?)";
+        try {
+            c = Database.getConnection();
+            c.setAutoCommit(false);
+
+            prstm = c.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            prstm.setString(1, this.getNomPoste());
+            prstm.setInt(2, this.getDepartement().getIdDepartement());
+
+            int affectedRows = prstm.executeUpdate();
+            if (affectedRows > 0) {
+                try (ResultSet generatedKeys = prstm.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        int id = generatedKeys.getInt(1);
+                        this.setIdPoste(id);
+                    }
+                }
+            }
+
+            c.commit();
+            this.insertCompetence();
+
+            return this;
+        } catch (SQLException e) {
+            c.rollback();
+            throw e;
+        }finally{
+            if(prstm != null){
+                prstm.close();
+            }
+            if(c != null){
+                c.close();
+            }
+        }
+    }
+
+    public void insertCompetence() throws SQLException {
+        Connection c = null;
+        PreparedStatement st = null;
+
+        try {
+            c = Database.getConnection();
+            c.setAutoCommit(false);
+            for (CompetenceRequise competence : this.getListCompetence()) {
+                String sql = "INSERT INTO competence_requise (id_poste, id_competence, experience) VALUES (?, ?, ?)";
+                st = c.prepareStatement(sql);
+                
+                st.setInt(1, this.getIdPoste());
+                st.setInt(2, competence.getCompetence().getIdCompetence());
+                st.setInt(3, competence.getExperience());
+                st.executeUpdate();
+            }
+
+            c.commit();
+        } catch (SQLException e) {
+            c.rollback();
+            throw e;
+        } finally {
+            if (st != null)
+                st.close();
+            if (c != null)
+                c.close();
+        }
     }
 
     // GETTERS AND SETTERS

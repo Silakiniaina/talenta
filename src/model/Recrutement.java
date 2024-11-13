@@ -21,7 +21,7 @@ public class Recrutement {
 
     // CONSTRUCTORS
     public Recrutement(){
-        
+
     }
 
     public Recrutement(Date debut, Date fin, int nombre, int idPoste) throws SQLException{
@@ -142,34 +142,6 @@ public class Recrutement {
             }
         }
     }
-
-    // public void insertCompetence() throws SQLException {
-    //     Connection c = null;
-    //     PreparedStatement st = null;
-
-    //     try {
-    //         c = Database.getConnection();
-    //         c.setAutoCommit(false);
-    //         for (CompetenceRecrutement competence : this.getListCompetence()) {
-    //             String sql = "INSERT INTO competence_recrutement (id_recrutement, id_competence, experience) VALUES (?, ?, ?)";
-    //             st = c.prepareStatement(sql);
-    //             st.setInt(1, this.getIdRecrutement());
-    //             st.setInt(2, competence.getCompetence().getIdCompetence());
-    //             st.setInt(3, competence.getExperience());
-    //             st.executeUpdate();
-    //         }
-
-    //         c.commit();
-    //     } catch (SQLException e) {
-    //         c.rollback();
-    //         throw e;
-    //     } finally {
-    //         if (st != null)
-    //             st.close();
-    //         if (c != null)
-    //             c.close();
-    //     }
-    // }
 
     // GETTERS AND SETTERS
     public int getIdRecrutement() {
