@@ -11,7 +11,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.Competence;
-import model.Poste;
 import model.Recrutement;
 
 public class RecrutementServlet extends HttpServlet{
@@ -19,15 +18,22 @@ public class RecrutementServlet extends HttpServlet{
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         PrintWriter out = resp.getWriter();
+        String mode = req.getParameter("mode");
+        RequestDispatcher disp = null;
         try {
-            List<Poste> listPoste = Poste.getAll();
-            List<Recrutement> listRecrutement = Recrutement.getAll();
-            List<Competence> listCompetences = Competence.getAll();
+            if(mode != null && mode.equals("i")){
+                String idPoste = req.getParameter("idPoste");
 
-            req.setAttribute("postes", listPoste);
-            req.setAttribute("recrutements", listRecrutement);
-            req.setAttribute("competences", listCompetences);
-            RequestDispatcher disp = req.getRequestDispatcher("/WEB-INF/views/recrutement.jsp");
+                req.setAttribute("idPoste", idPoste);
+                disp = req.getRequestDispatcher("/WEB-INF/views/addRecrutement.jsp");
+            }else{
+                List<Recrutement> listRecrutement = Recrutement.getAll();
+                List<Competence> listCompetences = Competence.getAll();
+    
+                req.setAttribute("recrutements", listRecrutement);
+                req.setAttribute("competences", listCompetences);
+                disp = req.getRequestDispatcher("/WEB-INF/views/recrutement.jsp");
+            }
             disp.forward(req, resp);
         } catch (Exception e) {
             e.printStackTrace(out);

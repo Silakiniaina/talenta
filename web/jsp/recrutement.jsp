@@ -1,62 +1,14 @@
-<%@ page import="java.util.List" %>
 <%@ page import="java.util.Date" %>
+<%@ page import="java.util.List" %>
 <%@ page import="model.Poste" %>
 <%@ page import="model.Recrutement" %> 
 <%@ page import="model.Competence" %> 
 <%@ page import="model.CompetenceRequise" %> 
 <%
     List<Recrutement> recrutements = (List<Recrutement>)request.getAttribute("recrutements");
-    List<Poste> postes = (List<Poste>)request.getAttribute("postes");
     List<Competence> competences = (List<Competence>)request.getAttribute("competences");
 %>
-
 <%@include file="header.jsp" %>
-    <h1>Ajouter un Recrutement</h1>
-    <form action="recrutement" method="post">
-        <label for="dateDebut">Date de début :</label>
-        <input type="date" id="dateDebut" name="debut" required><br><br>
-
-        <label for="dateFin">Date de fin :</label>
-        <input type="date" id="dateFin" name="fin" required><br><br>
-
-        <label for="nombre">Nombre :</label>
-        <input type="number" id="nombre" name="nombre" required><br><br>
-
-        <label for="poste">Poste :</label>
-        <select id="poste" name="poste" required>
-            <%
-                for (Poste poste : postes) {
-                    out.println("<option value=\"" + poste.getIdPoste() + "\">" + poste.getNomPoste() + "</option>");
-                }
-            %>
-        </select><br><br>
-
-<!-- 
-        <h3>Compétences requises</h3>
-        <div id="competence-container">
-            <%
-                out.println("<div class='competence-row'>");
-            %>
-            <label for="competence">Compétence :</label>
-            <select name="competences" required>
-                <%
-                    for (Competence competence : competences) {
-                        out.println("<option value=\"" + competence.getIdCompetence() + "\">" + competence.getNomCompetence() + "</option>");
-                    }
-                %>
-            </select>
-            <label for="experience">Expérience (années) :</label>
-            <input type="number" name="experiences" required><br><br>
-            <%
-                out.println("</div>");
-            %>
-        </div>
-
-        <button type="button" onclick="addCompetence()">Ajouter une autre compétence</button><br><br>
--->
-        <input type="submit" value="Ajouter">
-    </form>
-
     <h2>Liste des Recrutements</h2>
     <table border="1" class="recruitment-table">
         <tr>

@@ -11,6 +11,7 @@
         <nav>
             <ul>
                 <li><a href="recrutement">Recrutement</a></li>
+                <li><a href="poste">Poste</a></li>
                 <li><a href="#">Employer</a></li>
             </ul>
         </nav>
