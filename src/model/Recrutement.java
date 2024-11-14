@@ -18,18 +18,11 @@ public class Recrutement {
     private Date dateFin;
     private int nombre;
     private Poste poste;
+    private Status status;
 
     // CONSTRUCTORS
     public Recrutement(){
 
-    }
-
-    public Recrutement(Date debut, Date fin, int nombre, int idPoste) throws SQLException{
-
-        this.setDateDebut(debut);
-        this.setDateFin(fin);
-        this.setNombre(nombre);
-        this.setPoste(idPoste);
     }
 
     // CRUD
@@ -51,6 +44,7 @@ public class Recrutement {
                 d.setDateFin(rs.getDate(3));
                 d.setNombre(rs.getInt(4));
                 d.setPoste(rs.getInt(5));
+                d.setStatus(rs.getInt(6));
                 result.add(d);
             }
         } catch (SQLException e) {
@@ -159,6 +153,9 @@ public class Recrutement {
     public Poste getPoste() {
         return poste;
     }
+    public Status getStatus(){
+        return this.status;
+    }
 
 
     public void setIdRecrutement(int idRecrutement) {
@@ -181,5 +178,8 @@ public class Recrutement {
     }
     public void setPoste(int idposte)throws SQLException {
         this.poste = Poste.getById(idposte);
+    }
+    public void setStatus(int idstatus)throws SQLException{
+        this.status = Status.getById(idstatus);
     }
 }

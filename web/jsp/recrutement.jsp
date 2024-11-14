@@ -3,7 +3,7 @@
 <%@ page import="model.Poste" %>
 <%@ page import="model.Recrutement" %> 
 <%@ page import="model.Competence" %> 
-<%@ page import="model.CompetenceRecrutement" %> 
+<%@ page import="model.CompetenceRequise" %> 
 <%
     List<Recrutement> recrutements = (List<Recrutement>)request.getAttribute("recrutements");
     List<Poste> postes = (List<Poste>)request.getAttribute("postes");
@@ -31,7 +31,7 @@
             %>
         </select><br><br>
 
-         <!-- Ajout de compétences pour le recrutement -->
+<!-- 
         <h3>Compétences requises</h3>
         <div id="competence-container">
             <%
@@ -53,7 +53,7 @@
         </div>
 
         <button type="button" onclick="addCompetence()">Ajouter une autre compétence</button><br><br>
-
+-->
         <input type="submit" value="Ajouter">
     </form>
 
@@ -78,10 +78,10 @@
                 out.println("<td>" + recrutement.getPoste().getNomPoste() + "</td>");
 
                 out.println("<td>");
-                    List<CompetenceRecrutement> competencesRequises = recrutement.getListCompetence();
-                    for (CompetenceRecrutement compRec : competencesRequises) {
-                        out.println(compRec.getCompetence().getNomCompetence() + " (" + compRec.getExperience() + " ans)<br>");
-                    }
+                List<CompetenceRequise> competencesRequises = recrutement.getPoste().getListCompetence();
+                for (CompetenceRequise compRec : competencesRequises) {
+                    out.println(compRec.getCompetence().getNomCompetence() + " (" + compRec.getExperience() + " ans)<br>");
+                }
                 out.println("</td>");
                 out.println("<td><a href=candidat?idRecrutement="+recrutement.getIdRecrutement()+" >Postuler</a></td>");
                 out.println("<td><a href=listeCandidat?idRecrutement="+recrutement.getIdRecrutement()+" >Liste Candidat</a></td>");
@@ -91,7 +91,7 @@
             }
         %>
     </table>
-
+<!--
     <script>
         // JavaScript pour ajouter dynamiquement une nouvelle ligne de compétence
         function addCompetence() {
@@ -113,5 +113,6 @@
             container.appendChild(newRow);
         }
     </script>
+-->
 </body>
 </html>

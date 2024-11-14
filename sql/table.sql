@@ -18,6 +18,12 @@ CREATE TABLE poste(
    FOREIGN KEY(id_departement) REFERENCES departement(id_departement)
 );
 
+CREATE TABLE status(
+   id_status SERIAL,
+   label VARCHAR(150)  NOT NULL,
+   PRIMARY KEY(id_status)
+);
+
 CREATE TABLE recrutement(
    id_recrutement SERIAL,
    date_debut_recrutement DATE NOT NULL,
@@ -140,3 +146,6 @@ CREATE TABLE competence_requise(
    FOREIGN KEY(id_poste) REFERENCES poste(id_poste),
    FOREIGN KEY(id_competence) REFERENCES competence(id_competence)
 );
+
+ALTER TABLE recrutement ADD COLUMN id_status INT DEFAULT 1;
+ALTER TABLE recrutement ADD CONSTRAINT fk_status_recrutement FOREIGN KEY(id_status) REFERENCES status(id_status);

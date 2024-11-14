@@ -32,6 +32,10 @@
         <servlet-name>ContratServlet</servlet-name>
         <servlet-class>servlet.ContratServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>PosteServlet</servlet-name>
+        <servlet-class>servlet.PosteServlet</servlet-class>
+    </servlet>
 
     <servlet-mapping>
         <servlet-name>RecrutementServlet</servlet-name>
@@ -64,5 +68,9 @@
     <servlet-mapping>
         <servlet-name>ContratServlet</servlet-name>
         <url-pattern>/contrat</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PosteServlet</servlet-name>
+        <url-pattern>/poste</url-pattern>
     </servlet-mapping>
 </web-app>

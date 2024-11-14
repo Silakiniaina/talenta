@@ -42,3 +42,10 @@ INSERT INTO type_contrat(label) VALUES
     ('CDD'),
     ('CDI')
 ;
+
+INSERT INTO status(label) VALUES 
+    ('Sheduled'),
+    ('In progress'),
+    ('Finished'),
+    ('Blocked')
+;

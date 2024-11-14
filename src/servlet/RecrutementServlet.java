@@ -11,7 +11,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.Competence;
-import model.CompetenceRequise;
 import model.Poste;
 import model.Recrutement;
 
@@ -42,19 +41,12 @@ public class RecrutementServlet extends HttpServlet{
         String dateFin = req.getParameter("fin");
         int nb = Integer.parseInt(req.getParameter("nombre"));
         int poste = Integer.parseInt(req.getParameter("poste"));
-        String[] competences = req.getParameterValues("competences");
-        String[] experiences = req.getParameterValues("experiences");
         try {
             Recrutement r = new Recrutement();
             r.setDateDebut(dateDebut);
             r.setDateFin(dateFin);
             r.setNombre(nb);
             r.setPoste(poste);
-
-            for(int i=0; i<competences.length; i++){
-                CompetenceRequise cr = new CompetenceRequise(Integer.parseInt(competences[i]), Integer.parseInt(experiences[i]));
-                r.getListCompetence().add(cr);
-            }
 
             r.insert();
             resp.sendRedirect("recrutement");
