@@ -66,6 +66,7 @@
             <th>Nombre</th>
             <th>Poste</th>
             <th>Competence Requise</th>
+            <th>Status</th>
             <th>Action</th>
         </tr>
         <%
@@ -82,6 +83,7 @@
                 for (CompetenceRequise compRec : competencesRequises) {
                     out.println(compRec.getCompetence().getNomCompetence() + " (" + compRec.getExperience() + " ans)<br>");
                 }
+                out.println("<td>" + recrutement.getStatus().getLabel() + "</td>");
                 out.println("</td>");
                 out.println("<td><a href=candidat?idRecrutement="+recrutement.getIdRecrutement()+" >Postuler</a></td>");
                 out.println("<td><a href=listeCandidat?idRecrutement="+recrutement.getIdRecrutement()+" >Liste Candidat</a></td>");
