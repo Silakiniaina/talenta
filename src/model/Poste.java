@@ -45,6 +45,7 @@ public class Poste {
                 d.setIdPoste(rs.getInt(1));
                 d.setNomPoste(rs.getString(2));
                 d.setDepartement(rs.getInt(3));
+                d.setListCompetence(CompetenceRequise.getAllByPoste(d.getIdPoste()));
                 result.add(d);
             }
         }catch (SQLException e) {
@@ -80,6 +81,8 @@ public class Poste {
                 result.setIdPoste(rs.getInt(1));
                 result.setNomPoste(rs.getString(2));
                 result.setDepartement(rs.getInt(3));
+                result.setListCompetence(CompetenceRequise.getAllByPoste(result.getIdPoste()));
+
             }
         } catch (SQLException e) {
             throw e;
@@ -136,7 +139,7 @@ public class Poste {
             for (CompetenceRequise competence : this.getListCompetence()) {
                 String sql = "INSERT INTO competence_requise (id_poste, id_competence, experience) VALUES (?, ?, ?)";
                 st = c.prepareStatement(sql);
-                
+
                 st.setInt(1, this.getIdPoste());
                 st.setInt(2, competence.getCompetence().getIdCompetence());
                 st.setInt(3, competence.getExperience());

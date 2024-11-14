@@ -26,16 +26,16 @@ public class CompetenceRequise {
 
 
     // CRUD
-    public static List<CompetenceRequise> getAllByRecrutement(int idRecrutement) throws SQLException{
+    public static List<CompetenceRequise> getAllByPoste(int idPoste) throws SQLException{
         List<CompetenceRequise> result = new ArrayList<>();
         Connection c = null;
         PreparedStatement prstm = null; 
         ResultSet rs = null;
-        String query = "SELECT id_competence, experience FROM competence_recrutement WHERE id_recrutement = ?";
+        String query = "SELECT id_competence, experience FROM competence_requise WHERE id_poste = ?";
         try {
             c = Database.getConnection();
             prstm = c.prepareStatement(query);
-            prstm.setInt(1, idRecrutement);
+            prstm.setInt(1, idPoste);
             rs = prstm.executeQuery();
 
             while (rs.next()) {

@@ -49,3 +49,9 @@ INSERT INTO status(label) VALUES
     ('Finished'),
     ('Blocked')
 ;
+
+INSERT INTO competence_requise(id_poste, id_competence,experience) VALUES 
+    (3,1,0),
+    (3,2,3),
+    (3,3,1)
+;
