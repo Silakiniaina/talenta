@@ -215,10 +215,20 @@ public class Candidat {
                 result.setGenre(rs.getInt(6));
                 result.setListCompetence(CompetenceCandidat.getAllByCandidat(result.getIdCandidat()));
             }
+            return result;
         } catch (SQLException e) {
             throw e;
+        }finally{
+            if(rs != null){
+                rs.close();
+            }
+            if(prstm != null){
+                prstm.close();
+            }
+            if(c != null){
+                c.close();
+            }
         }
-        return result;
     }
 
 

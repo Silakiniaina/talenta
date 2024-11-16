@@ -154,3 +154,20 @@ ALTER TABLE recrutement ADD CONSTRAINT fk_status_recrutement FOREIGN KEY(id_stat
 ALTER TABLE candidat SET COLUMN email VARCHAR(150) NOT NULL;
 ALTER TABLE candidat SET COLUMN mdp VARCHAR(256) NOT NULL ;
 ALTER TABLE candidat ADD CONSTRAINT uq_candidat UNIQUE(id_candidat,email);
+
+CREATE TABLE role_talenta(
+   id_role INT , 
+   nom_role VARCHAR(150) NOT NULL,
+   PRIMARY KEY(id_role)
+);
+
+CREATE TABLE responsable(
+   id_responsable INT , 
+   nom VARCHAR(150) NOT NULL, 
+   email VARCHAR(256) NOT NULL,
+   mdp VARCHAR(256) NOT NULL,
+   id_role INT NOT NULL,
+   PRIMARY KEY(id_responsable),
+   UNIQUE(id_responsable, email),
+   FOREIGN KEY(id_role) REFERENCES role_talenta(id_role)
+);

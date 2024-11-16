@@ -8,6 +8,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.Admin;
 import model.Candidat;
 
 public class LoginServlet extends HttpServlet{
@@ -33,7 +34,15 @@ public class LoginServlet extends HttpServlet{
                     out.println("Error login");
                 }
             }else if(mode != null && mode.equals("admin")){
-                disp = req.getRequestDispatcher("/WEB-INF/views/accueilAdmin.jsp");
+                Admin d = Admin.login(email, mdp);
+                if(d != null){
+                    //disp = req.getRequestDispatcher("/WEB-INF/views/accueilCandidat.jsp");
+                    out.println("admin connected : "+d.getNomAdmin());
+                }else{
+                    // req.setAttribute("error", "Login incorecte");
+                    // disp = req.getRequestDispatcher("/WEB-INF/views/login.jsp");
+                    out.println("Error login");
+                }
             }
             //disp.forward(req, resp);
        }catch (Exception e) {
