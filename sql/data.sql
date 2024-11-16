@@ -55,3 +55,12 @@ INSERT INTO competence_requise(id_poste, id_competence,experience) VALUES
     (3,2,3),
     (3,3,1)
 ;
+
+INSERT INTO role_talenta(nom_role) VALUES
+    ('Admin'),
+    ('Responsable RH')
+;
+
+INSERT INTO responsable(nom,email,mdp,id_role) VALUES 
+    ('Sanda','sanda@admin.com','admin',1)
+;
