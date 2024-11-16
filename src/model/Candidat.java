@@ -191,6 +191,36 @@ public class Candidat {
         }
     }
 
+    public static Candidat login(String email, String password) throws SQLException{
+        Candidat result = null; 
+        Connection c = null; 
+        PreparedStatement prstm = null;
+        ResultSet rs = null; 
+        String query = "SELECT * FROM candidat WHERE email = ? AND mdp = ? ";
+        try {
+            c = Database.getConnection();
+            prstm = c.prepareStatement(query);
+            prstm.setString(1, email);
+            prstm.setString(2, password);
+
+            rs = prstm.executeQuery();
+
+            if(rs.next()){
+                result = new Candidat();
+                result.setIdCandidat(rs.getInt(1));
+                result.setNomCandidat(rs.getString(2));
+                result.setPrenomCandidat(rs.getString(3));
+                result.setDateNaissance(rs.getDate(4));
+                result.setAdresse(rs.getString(5));
+                result.setGenre(rs.getInt(6));
+                result.setListCompetence(CompetenceCandidat.getAllByCandidat(result.getIdCandidat()));
+            }
+        } catch (SQLException e) {
+            throw e;
+        }
+        return result;
+    }
+
 
 
     // GETTERS AND SETTERS

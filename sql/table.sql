@@ -149,3 +149,8 @@ CREATE TABLE competence_requise(
 
 ALTER TABLE recrutement ADD COLUMN id_status INT DEFAULT 1;
 ALTER TABLE recrutement ADD CONSTRAINT fk_status_recrutement FOREIGN KEY(id_status) REFERENCES status(id_status);
+
+
+ALTER TABLE candidat SET COLUMN email VARCHAR(150) NOT NULL;
+ALTER TABLE candidat SET COLUMN mdp VARCHAR(256) NOT NULL ;
+ALTER TABLE candidat ADD CONSTRAINT uq_candidat UNIQUE(id_candidat,email);

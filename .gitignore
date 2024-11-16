@@ -1,0 +1,9 @@
+/bin
+/lib 
+
+*.class
+*.txt
+*.py
+*.loo
+*.lo1
+*.jar
