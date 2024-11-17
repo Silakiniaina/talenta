@@ -3,11 +3,14 @@ package servlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import com.google.gson.Gson;
+
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import model.Admin;
 import model.Candidat;
 
@@ -26,8 +29,8 @@ public class LoginServlet extends HttpServlet{
             if(mode != null && mode.equals("candidat")){
                 Candidat d = Candidat.login(email, mdp);
                 if(d != null){
+                    req.getSession(false).setAttribute("candidat", d);
                     disp = req.getRequestDispatcher("/WEB-INF/views/accueilCandidat.jsp");
-                    out.println("candidat connected : "+d.getNomCandidat());
                 }else{
                     req.setAttribute("error", "Login incorecte");
                     disp = req.getRequestDispatcher("/WEB-INF/views/login.jsp");

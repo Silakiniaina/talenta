@@ -213,6 +213,7 @@ public class Candidat {
                 result.setDateNaissance(rs.getDate(4));
                 result.setAdresse(rs.getString(5));
                 result.setGenre(rs.getInt(6));
+                result.getCompetences(c);
             }
             return result;
         } catch (SQLException e) {
@@ -238,7 +239,7 @@ public class Candidat {
         String query = "SELECT id_competence FROM competence_candidat WHERE id_candidat = ?";
         try {
 
-            if(conn != null){
+            if(conn == null){
                 c = Database.getConnection();
                 isNewConnection = true;
             }else{
@@ -249,6 +250,7 @@ public class Candidat {
             rs = prstm.executeQuery();
 
             Competence d = null;
+            this.setListCompetence(new ArrayList<>());
 
             while (rs.next()) {
                 d = Competence.getById(c, rs.getInt(1));

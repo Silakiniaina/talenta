@@ -40,6 +40,10 @@
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>servlet.LoginServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AddCompetenceServlet</servlet-name>
+        <servlet-class>servlet.candidat.AddCompetenceServlet</servlet-class>
+    </servlet>
 
     <servlet-mapping>
         <servlet-name>RecrutementServlet</servlet-name>
@@ -80,5 +84,9 @@
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/login</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddCompetenceServlet</servlet-name>
+        <url-pattern>/competence/add</url-pattern>
     </servlet-mapping>
 </web-app>
