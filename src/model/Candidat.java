@@ -10,6 +10,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.Gson;
+
 import model.utils.Database;
 
 public class Candidat {
@@ -20,7 +22,7 @@ public class Candidat {
     private Date dateNaissance;
     private String adresse;
     private Genre genre;
-    private List<CompetenceCandidat> listCompetence;
+    private List<Competence> listCompetence;
 
     // CONSTRUCTORS
     public Candidat(){
@@ -56,7 +58,7 @@ public class Candidat {
                 d.setDateNaissance(rs.getDate(4));
                 d.setAdresse(rs.getString(5));
                 d.setGenre(rs.getInt(6));
-                d.setListCompetence(CompetenceCandidat.getAllByCandidat(d.getIdCandidat()));
+                d.getCompetences(c);
                 result.add(d);
             }
         } catch (SQLException e) {
@@ -70,7 +72,7 @@ public class Candidat {
         Connection c = null;
         PreparedStatement prstm = null; 
         ResultSet rs = null;
-        String query = "SELECT * FROM v_candidat WHERE id_candidat = ?";
+        String query = "SELECT * FROM candidat WHERE id_candidat = ?";
         try {
             c = Database.getConnection();
             prstm = c.prepareStatement(query);
@@ -85,12 +87,12 @@ public class Candidat {
                 result.setDateNaissance(rs.getDate(4));
                 result.setAdresse(rs.getString(5));
                 result.setGenre(rs.getInt(6));
-                result.setListCompetence(CompetenceCandidat.getAllByCandidat(result.getIdCandidat()));
+                result.getCompetences(c);
             }
+            return result;
         } catch (SQLException e) {
             throw e;
         }
-        return result;
     }
 
     public Candidat insert() throws SQLException{
@@ -118,7 +120,6 @@ public class Candidat {
                 }
             }
             c.commit();
-            this.insertCompetence();
             return this;
         } catch (SQLException e) {
             c.rollback();
@@ -163,19 +164,18 @@ public class Candidat {
     }
 
 
-    public void insertCompetence() throws SQLException {
+    public void insertCompetence(Competence comp) throws SQLException {
         Connection c = null;
         PreparedStatement st = null;
 
         try {
             c = Database.getConnection();
             c.setAutoCommit(false);
-            for (CompetenceCandidat competence : this.getListCompetence()) {
-                String sql = "INSERT INTO competence_candidat (id_candidat, id_competence, experience) VALUES (?, ?, ?)";
+            if(comp != null){
+                String sql = "INSERT INTO competence_candidat (id_candidat, id_competence) VALUES (?, ?)";
                 st = c.prepareStatement(sql);
                 st.setInt(1, this.getIdCandidat());
-                st.setInt(2, competence.getCompetence().getIdCompetence());
-                st.setInt(3, competence.getExperience());
+                st.setInt(2, comp.getIdCompetence());
                 st.executeUpdate();
             }
 
@@ -213,7 +213,6 @@ public class Candidat {
                 result.setDateNaissance(rs.getDate(4));
                 result.setAdresse(rs.getString(5));
                 result.setGenre(rs.getInt(6));
-                result.setListCompetence(CompetenceCandidat.getAllByCandidat(result.getIdCandidat()));
             }
             return result;
         } catch (SQLException e) {
@@ -226,6 +225,45 @@ public class Candidat {
                 prstm.close();
             }
             if(c != null){
+                c.close();
+            }
+        }
+    }
+
+    public void getCompetences(Connection conn)throws SQLException{
+        Connection c = null;
+        PreparedStatement prstm = null; 
+        ResultSet rs = null;
+        boolean isNewConnection = false;
+        String query = "SELECT id_competence FROM competence_candidat WHERE id_candidat = ?";
+        try {
+
+            if(conn != null){
+                c = Database.getConnection();
+                isNewConnection = true;
+            }else{
+                c = conn;
+            }
+            prstm = c.prepareStatement(query);
+            prstm.setInt(1, this.getIdCandidat());
+            rs = prstm.executeQuery();
+
+            Competence d = null;
+
+            while (rs.next()) {
+                d = Competence.getById(c, rs.getInt(1));
+                this.getListCompetence().add(d);
+            }
+        } catch (SQLException e) {
+            throw e;
+        }finally{
+            if(rs != null){
+                rs.close();
+            }
+            if(prstm != null){
+                prstm.close();
+            }
+            if(c != null && isNewConnection){
                 c.close();
             }
         }
@@ -274,11 +312,25 @@ public class Candidat {
         this.adresse = adresse;
     }
 
-    public void setListCompetence(List<CompetenceCandidat> listCompetence) {
+    public void setListCompetence(List<Competence> listCompetence) {
         this.listCompetence = listCompetence;
     }
 
-    public List<CompetenceCandidat> getListCompetence() {
+    public List<Competence> getListCompetence() {
         return listCompetence;
     }   
+
+    public static void main(String[] args) {
+        try {
+            Candidat c = Candidat.getById(1);
+            if(c != null){
+                System.out.println("c n\'est pas null");
+                System.out.println(new Gson().toJson(c.getListCompetence()));
+            }else{
+                System.out.println("c est null");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

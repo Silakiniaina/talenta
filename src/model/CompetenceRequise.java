@@ -68,7 +68,7 @@ public class CompetenceRequise {
         return experience;
     }
     public void setCompetence(int id_competence) throws SQLException{
-        this.competence = Competence.getById(id_competence);
+        this.competence = Competence.getById(null,id_competence);
     }
     public void setExperience(int experience) {
         this.experience = experience;

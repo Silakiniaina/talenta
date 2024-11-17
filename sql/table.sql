@@ -171,3 +171,46 @@ CREATE TABLE responsable(
    UNIQUE(id_responsable, email),
    FOREIGN KEY(id_role) REFERENCES role_talenta(id_role)
 );
+
+DROP TABLE competence_candidat CASCADE;
+
+CREATE TABLE categorie_competence (
+   id_categorie_competence SERIAL PRIMARY KEY,
+   label VARCHAR(150) NOT NULL
+);
+
+CREATE TABLE type_diplome(
+   id_type_diplome SERIAL PRIMARY KEY, 
+   label VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE competence_candidat (
+   id_candidat INT NOT NULL,
+   id_competence INT NOT NULL,
+   FOREIGN KEY(id_candidat) REFERENCES candidat(id_candidat),
+   FOREIGN KEY(id_competence) REFERENCES competence(id_competence)
+);
+
+CREATE TABLE education_candidat (
+   id_education_candidat SERIAL PRIMARY KEY,
+   id_candidat INT NOT NULL,
+   date_debut DATE NOT NULL,
+   date_fin DATE NOT NULL,
+   id_type_diplome INT NOT NULL,
+   nom_ecole VARCHAR(256) NOT NULL,
+   UNIQUE(id_type_diplome , nom_ecole),
+   FOREIGN KEY (id_candidat) REFERENCES candidat(id_candidat),
+   FOREIGN KEY (id_type_diplome) REFERENCES type_diplome(id_type_diplome)
+);
+
+CREATE TABLE experience_candidat (
+   id_experience_candidat SERIAL PRIMARY KEY,
+   id_candidat INT NOT NULL,
+   date_debut DATE NOT NULL,
+   date_fin DATE NOT NULL,
+   description_experience TEXT NOT NULL,
+   FOREIGN KEY (id_candidat) REFERENCES candidat(id_candidat)
+);
+
+ALTER TABLE competence ADD COLUMN id_categorie_competence INT;
+ALTER TABLE competence ADD CONSTRAINT fk_categorie_competence FOREIGN KEY(id_categorie_competence) REFERENCES categorie_competence(id_categorie_competence);
