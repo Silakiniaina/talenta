@@ -20,7 +20,7 @@ public class DetailsCandidatServlet extends HttpServlet{
             Candidat c = Candidat.getById(Integer.parseInt(idCandidat));
 
             req.setAttribute("candidat", c);
-            RequestDispatcher disp = req.getRequestDispatcher("/WEB-INF/views/detailsCandidat.jsp");
+            RequestDispatcher disp = req.getRequestDispatcher("/WEB-INF/views/candidat/detailsCandidat.jsp");
             disp.forward(req, resp);
         } catch (Exception e) {
             e.printStackTrace(out);

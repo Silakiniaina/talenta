@@ -23,10 +23,14 @@ public class Candidat {
     private String adresse;
     private Genre genre;
     private List<Competence> listCompetence;
+    private List<Experience> listExperience;
+    private List<Education> listEducation;
 
     // CONSTRUCTORS
     public Candidat(){
         this.setListCompetence(new ArrayList<>());
+        this.setListExperience(new ArrayList<>());
+        this.setListEducation(new ArrayList<>());
     }
 
     public Candidat(String nom, String prenom, String dtn, int genre, String adresse) throws SQLException{
@@ -59,6 +63,8 @@ public class Candidat {
                 d.setAdresse(rs.getString(5));
                 d.setGenre(rs.getInt(6));
                 d.getCompetences(c);
+                d.getExperiences(c);
+                d.getEducations(c);
                 result.add(d);
             }
         } catch (SQLException e) {
@@ -81,13 +87,14 @@ public class Candidat {
 
             if (rs.next()) {
                 result = new Candidat();
-                result.setIdCandidat(rs.getInt(1));
                 result.setNomCandidat(rs.getString(2));
                 result.setPrenomCandidat(rs.getString(3));
                 result.setDateNaissance(rs.getDate(4));
                 result.setAdresse(rs.getString(5));
                 result.setGenre(rs.getInt(6));
                 result.getCompetences(c);
+                result.getExperiences(c);
+                result.getEducations(c);
             }
             return result;
         } catch (SQLException e) {
@@ -196,7 +203,7 @@ public class Candidat {
         Connection c = null; 
         PreparedStatement prstm = null;
         ResultSet rs = null; 
-        String query = "SELECT * FROM candidat WHERE email = ? AND mdp = ? ";
+        String query = "SELECT * FROM v_candidat WHERE email = ? AND mdp = ? ";
         try {
             c = Database.getConnection();
             prstm = c.prepareStatement(query);
@@ -214,6 +221,8 @@ public class Candidat {
                 result.setAdresse(rs.getString(5));
                 result.setGenre(rs.getInt(6));
                 result.getCompetences(c);
+                result.getExperiences(c);
+                result.getEducations(c);
             }
             return result;
         } catch (SQLException e) {
@@ -271,6 +280,14 @@ public class Candidat {
         }
     }
 
+    public void getExperiences(Connection c)throws SQLException{
+        this.setListExperience(Experience.getAllByCandidat(c,this.getIdCandidat()));
+    }
+
+    public void getEducations(Connection c)throws SQLException{
+        this.setListEducation(Education.getAllByCandidat(c,this.getIdCandidat()));
+    }
+
 
 
     // GETTERS AND SETTERS
@@ -294,7 +311,16 @@ public class Candidat {
     }
     public String getAdresse() {
         return adresse;
+    
     }
+    public List<Experience> getListExperience(){
+        return this.listExperience;
+    }
+
+    public List<Education> getListEducation(){
+        return this.listEducation;
+    }
+
     public void setIdCandidat(int idCandidat) {
         this.idCandidat = idCandidat;
     }
@@ -321,6 +347,14 @@ public class Candidat {
     public List<Competence> getListCompetence() {
         return listCompetence;
     }   
+
+    public void setListExperience(List<Experience> ls){
+        this.listExperience = ls;
+    }
+
+    public void setListEducation(List<Education> ls){
+        this.listEducation = ls;
+    }
 
     public static void main(String[] args) {
         try {

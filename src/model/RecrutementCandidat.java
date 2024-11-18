@@ -60,7 +60,7 @@ public class RecrutementCandidat {
         Connection c = null;
         PreparedStatement prstm = null; 
         ResultSet rs = null;
-        String query = "SELECT id_candidat FROM recrutement_candidat WHERE id_recrutement = ?";
+        String query = "SELECT id_candidat FROM v_recrutement_candidat WHERE id_recrutement = ?";
         try {
             c = Database.getConnection();
             prstm = c.prepareStatement(query);
@@ -68,9 +68,11 @@ public class RecrutementCandidat {
             rs = prstm.executeQuery();
 
             while (rs.next()) {
+                System.out.println(rs.getInt(1));
                 Candidat d = Candidat.getById(rs.getInt(1));
                 result.add(d);
             }
+            return result;
         } catch (SQLException e) {
             throw e;
         }finally{
@@ -84,7 +86,6 @@ public class RecrutementCandidat {
                 c.close();
             }
         }
-        return result;
     }
 
     // GETTERS AND SETTERS
@@ -108,5 +109,16 @@ public class RecrutementCandidat {
     }
     public void setDatePostule(String dt){
         this.datePostule = Date.valueOf(dt);
+    }
+
+    public static void main(String[] args) {
+        try {
+            List<Candidat> c = RecrutementCandidat.getCandidatByRecrutement(1);
+            for(Candidat cand : c){
+                System.out.println(cand.getIdCandidat());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

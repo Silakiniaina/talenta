@@ -20,7 +20,8 @@
         </thead>
         <tbody>
             <%
-                for (Candidat candidat : candidats) {
+                if (candidats != null && !candidats.isEmpty()) {
+                    for (Candidat candidat : candidats) {
             %>
             <tr>
                 <td><%= candidat.getNomCandidat() %></td>
@@ -29,6 +30,13 @@
                 <td><%= candidat.getAdresse() %></td>
                 <td><%= candidat.getGenre().getLabel() %></td>
                 <td><a href="detailsCandidat?idCandidat=<%= candidat.getIdCandidat() %>">Voir CV</a></td>
+            </tr>
+            <%
+                    }
+                } else {
+            %>
+            <tr>
+                <td colspan="7">Aucun candidat présélectionné trouvé.</td>
             </tr>
             <%
                 }
