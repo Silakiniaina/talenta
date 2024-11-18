@@ -1,95 +1,74 @@
-----------------------------------------------------------------------------------------------------------------------------------------------
------------------------------------LISTE DES EMPLOYES CAPABLES POUR UN POSTE------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------------------------------------------------
-
-CREATE OR REPLACE VIEW v_employe_capable AS
+CREATE OR REPLACE VIEW v_preselection_candidat AS
 SELECT 
-    e.id_personne,  
-    p.nom AS nom_employe, 
-    p.prenom AS prenom_employe,  
-    e.id_poste, 
-    pos.nom AS poste_nom,  
-    verifier_pourcentage_competences(e.id_personne, e.id_poste) AS pourcentage  
+    c.id_candidat,
+    r.id_recrutement,
+    COUNT(cr.id_competence) AS nombre_competences_requises,
+    COUNT(cc.id_competence) AS nombre_competences_candidat,
+    (COUNT(cc.id_competence) * 100.0 / COUNT(cr.id_competence)) AS pourcentage_adéquation_competence,
+    COALESCE(SUM(
+        CASE 
+            WHEN cc.experience::INTEGER >= cr.experience THEN 1 
+            ELSE cc.experience::FLOAT / cr.experience 
+        END
+    ) * 100.0 / COUNT(cr.id_competence), 0) AS pourcentage_adéquation_experience,
+    ((COUNT(cc.id_competence) * 100.0 / COUNT(cr.id_competence)) * 0.5 + 
+     COALESCE(SUM(
+        CASE 
+            WHEN cc.experience::INTEGER >= cr.experience THEN 1 
+            ELSE cc.experience::FLOAT / cr.experience 
+        END
+    ) * 100.0 / COUNT(cr.id_competence), 0) * 0.5) AS score_global
 FROM 
-    Employe e  
+    v_candidat c
 JOIN 
-    Personne p ON e.id_personne = p.id  -
+    recrutement r ON r.id_recrutement = (SELECT id_recrutement FROM recrutement_candidat WHERE id_candidat = c.id_candidat)
 JOIN 
-    Poste pos ON e.id_poste = pos.id  
-WHERE 
-    verifier_pourcentage_competences(e.id_personne, e.id_poste) >= 70  
-ORDER BY 
-    pourcentage DESC; 
-
-----------------------------------------------------------------------------------------------------------------------------------------------
-------------------------------------------------------LISTE DES CV SELECTIONNES----------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------------------------------------------------
-
-CREATE OR REPLACE VIEW v_selection AS
-SELECT 
-    c.id_personne,
-    p.nom AS nom_candidat,
-    p.prenom AS prenom_candidat,
-    c.id_poste,
-    pos.nom,
-    verifier_pourcentage_competences(c.id_personne, c.id_poste) AS pourcentage,
-    ROW_NUMBER() OVER (ORDER BY verifier_pourcentage_competences(c.id_personne, c.id_poste) DESC) AS rang
-FROM 
-    Candidat c
-JOIN 
-    Personne p ON c.id_personne = p.id
-JOIN 
-    Poste pos ON c.id_poste = pos.id
-ORDER BY 
-    pourcentage DESC
-LIMIT 3;
-
-----------------------------------------------------------------------------------------------------------------------------------------------
------------------------------------LISTE DES CANDIDATS APRES ENTRETIEN------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------------------------------------------------
-
-CREATE OR REPLACE VIEW v_entretien AS
-SELECT 
-    v.id_personne,
-    v.id_poste,
-    v.rang,
-    p.nom AS nom_candidat,  
-    p.prenom AS prenom_candidat, 
-    COUNT(ss.id) AS nb_soft_skills,
-    (100 - v.rang + COUNT(ss.id)) AS score_entretien 
-FROM 
-    v_selection v
-JOIN 
-    PersonneSoftSkill ps ON v.id_personne = ps.id_personne  
-JOIN 
-    SoftSkill ss ON ps.id_softSkill = ss.id 
-JOIN 
-    Personne p ON v.id_personne = p.id
-GROUP BY 
-    v.id_personne, v.id_poste, v.rang, p.nom, p.prenom  
-ORDER BY 
-    score_entretien DESC; 
-
-----------------------------------------------------------------------------------------------------------------------------------------------
------------------------------------ETAT DES POSTES (VACANTS OU OCCUPES)------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------------------------------------------------
-
-CREATE OR REPLACE VIEW v_etatPoste AS
-SELECT 
-    p.id AS poste_id,
-    p.nom AS poste_nom,
-    p.nb_employe AS total_places,
-    COUNT(e.id) AS current_employes,
-    CASE 
-        WHEN COUNT(e.id) = p.nb_employe THEN 'complet'
-        ELSE CONCAT(p.nb_employe - COUNT(e.id), ' places vacantes')
-    END AS etat
-FROM 
-    Poste p
+    poste p ON r.id_poste = p.id_poste
+JOIN
+    competence_requise cr ON p.id_poste = cr.id_poste
 LEFT JOIN 
-    Employe e ON p.id = e.id_poste AND e.date_fin IS NULL
+    competence_candidat cc ON c.id_candidat = cc.id_candidat 
+    AND cr.id_competence = cc.id_competence
 GROUP BY 
-    p.id, p.nom, p.nb_employe;
+    c.id_candidat, c.nom, c.prenom, r.id_recrutement
+HAVING ((COUNT(cc.id_competence) * 100.0 / COUNT(cr.id_competence)) * 0.5 + 
+     COALESCE(SUM(
+        CASE 
+            WHEN cc.experience::INTEGER >= cr.experience THEN 1 
+            ELSE cc.experience::FLOAT / cr.experience 
+        END
+    ) * 100.0 / COUNT(cr.id_competence), 0) * 0.5) >= 50
+ORDER BY 
+    score_global DESC
+;
 
+CREATE OR REPLACE VIEW v_evaluation_test_recrutement AS
+SELECT 
+    pc.id_recrutement,
+    c.id_candidat,
+    COUNT(rt.id_questionaire) AS nombre_questions_repondues,
+    AVG(rt.reponse) AS score_moyen
+FROM 
+    v_preselection_candidat pc
+JOIN 
+    v_candidat c ON pc.id_candidat = c.id_candidat
+JOIN 
+    recrutement r ON pc.id_recrutement = r.id_recrutement
+JOIN 
+    reponse_test rt ON c.id_candidat = rt.id_candidat
+GROUP BY 
+    pc.id_recrutement, c.id_candidat
+ORDER BY 
+    pc.id_recrutement, score_moyen DESC;
 
+CREATE OR REPLACE view v_candidat AS
+SELECT 
+    * 
+FROM candidat 
+WHERE id_candidat 
+NOT IN (
+    SELECT 
+        id_candidat
+    FROM employe 
+);
 

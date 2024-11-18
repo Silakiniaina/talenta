@@ -1,0 +1,43 @@
+/* Reset some default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+/* Header Styling */
+header {
+    background-color: #0044cc; /* Dark blue background color */
+    color: #ffffff;            /* White text color */
+    padding: 15px 0;           /* Vertical padding */
+    text-align: center;
+}
+
+/* Navigation Styling */
+nav ul {
+    list-style-type: none;     /* Remove bullet points */
+    display: flex;             /* Align items in a row */
+    justify-content: center;   /* Center-align items horizontally */
+    gap: 20px;                 /* Space between navigation items */
+}
+
+nav ul li {
+    display: inline;
+}
+
+nav ul li a {
+    color: #ffffff;            /* White text color */
+    text-decoration: none;     /* Remove underline */
+    font-size: 1.1em;          /* Slightly larger font size */
+    padding: 8px 15px;         /* Padding for clickable area */
+    border-radius: 4px;        /* Rounded corners */
+    transition: background 0.3s ease; /* Smooth transition for hover effect */
+}
+
+nav ul li a:hover {
+    background-color: #003399; /* Darker blue on hover */
+}

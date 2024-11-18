@@ -1,17 +1,17 @@
 #!/bin/bash
 
-current_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-bin_dir="$current_dir/bin"
-lib_dir="$current_dir/lib"
-temp_dir="$current_dir/src/temp"
+current="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+bin="$current/bin"
+lib="$current/lib"
+src="$current/src"
+temp="$current/src/temp"
 
-if [ ! -d "$temp_dir" ]; then
-  mkdir "$temp_dir"
+if [ ! -d "$temp" ]; then
+  mkdir "$temp"
 fi
 
-find "$current_dir/src" -type f -name "*.java" -exec cp -r {} "$temp_dir" \;
-javac -d "$bin_dir" -cp "$lib_dir/*" "$current_dir"/src/temp/*.java
-rm -R "$current_dir"/src/temp
+find "$src" -type f -name "*.java" -exec cp -r {} "$temp" \;
+javac -d "$bin" -cp "$lib/*" "$temp"/*.java
+rm -R "$temp"
 
-echo "Compilation finished"
-java -cp "bin:lib/*" model.Personne
+java -cp "bin:lib/*" model.Candidat

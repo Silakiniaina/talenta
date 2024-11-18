@@ -1,43 +1,101 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
     <servlet>
+        <servlet-name>RecrutementServlet</servlet-name>
+        <servlet-class>servlet.RecrutementServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CandidatServlet</servlet-name>
+        <servlet-class>servlet.CandidatServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ListeCandidatServlet</servlet-name>
+        <servlet-class>servlet.ListeCandidatServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DetailsCandidatServlet</servlet-name>
+        <servlet-class>servlet.DetailsCandidatServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>PreselectionServlet</servlet-name>
+        <servlet-class>servlet.PreselectionServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TestCandidatServlet</servlet-name>
+        <servlet-class>servlet.TestCandidatServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ResultatTestServlet</servlet-name>
+        <servlet-class>servlet.ResultatTestServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ContratServlet</servlet-name>
+        <servlet-class>servlet.ContratServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>PosteServlet</servlet-name>
-        <servlet-class>controller.PosteServlet</servlet-class>
+        <servlet-class>servlet.PosteServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>CompetenceServlet</servlet-name>
-        <servlet-class>controller.CompetenceServlet</servlet-class>
+        <servlet-name>LoginServlet</servlet-name>
+        <servlet-class>servlet.LoginServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>SelectionServlet</servlet-name>
-        <servlet-class>controller.SelectionServlet</servlet-class>
+        <servlet-name>AddCompetenceServlet</servlet-name>
+        <servlet-class>servlet.candidat.AddCompetenceServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>SelectionController</servlet-name>
-        <servlet-class>controller.SelectionController</servlet-class>
+        <servlet-name>NotificationServlet</servlet-name>
+        <servlet-class>servlet.candidat.NotificationServlet</servlet-class>
     </servlet>
-    <servlet>
-        <servlet-name>AjoutCvServlet</servlet-name>
-        <servlet-class>controller.AjoutCvServlet</servlet-class>
-    </servlet>
+
+
+    <servlet-mapping>
+        <servlet-name>RecrutementServlet</servlet-name>
+        <url-pattern>/recrutement</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CandidatServlet</servlet-name>
+        <url-pattern>/candidat</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListeCandidatServlet</servlet-name>
+        <url-pattern>/listeCandidat</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DetailsCandidatServlet</servlet-name>
+        <url-pattern>/detailsCandidat</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PreselectionServlet</servlet-name>
+        <url-pattern>/preselection</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TestCandidatServlet</servlet-name>
+        <url-pattern>/testCandidat</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ResultatTestServlet</servlet-name>
+        <url-pattern>/resultatTest</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ContratServlet</servlet-name>
+        <url-pattern>/contrat</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>PosteServlet</servlet-name>
-        <url-pattern>/PosteServlet</url-pattern>
+        <url-pattern>/poste</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>CompetenceServlet</servlet-name>
-        <url-pattern>/CompetenceServlet</url-pattern>
+        <servlet-name>LoginServlet</servlet-name>
+        <url-pattern>/login</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>SelectionServlet</servlet-name>
-        <url-pattern>/SelectionServlet</url-pattern>
+        <servlet-name>AddCompetenceServlet</servlet-name>
+        <url-pattern>/addCompetence</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>SelectionController</servlet-name>
-        <url-pattern>/SelectionController</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>AjoutCvServlet</servlet-name>
-        <url-pattern>/ajout-cv</url-pattern>
+        <servlet-name>NotificationServlet</servlet-name>
+        <url-pattern>/notifCandidat</url-pattern>
     </servlet-mapping>
 </web-app>

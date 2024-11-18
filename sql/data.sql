@@ -1,61 +1,93 @@
--- Insertion des types de compétences
-INSERT INTO TypeCompetence (type) VALUES 
-('Technique'),
-('Diplôme'),
-('Langue'),
-('Autre');
+INSERT INTO departement(nom) VALUES
+    ('DSI'),
+    ('DIGITAL'),
+    ('MARKETING'),
+    ('FINANCE')
+;
 
+INSERT INTO poste(nom,id_departement) VALUES
+    ('Developpeur backend',1),
+    ('Developpeur frontent',1),
+    ('Integrateur',1),
+    ('Designer',1)
+;
 
-INSERT INTO Competence (nom, id_typeCompetence, details) VALUES 
-('Java', 1, 'Programmation'),
-('Python', 1, 'Programmation'),
-('C++', 1, 'Programmation'),
-('C#', 1, 'Programmation'),
-('JavaScript', 1, 'Programmation'),
-('PHP', 1, 'Programmation'),
-('PostgreSQL', 1, 'Base de donnees'),
-('MongoDB', 1, 'Base de donnees'),
-('SQLite', 1, 'Base de donnees'),
-('Mysql', 1, 'Base de donnees'),
-('Oracle', 1, 'Base de donnees'),
-('Spring Boot', 1, 'Programmation'),
-('Django', 1, 'Programmation'),
-('Node.js', 1, 'Programmation'),
-('Git', 1, 'Outil');
-
-
-INSERT INTO Competence (nom, id_typeCompetence, details) VALUES 
-('Licence', 2, NULL),
-('Master', 2, NULL),
-('BTS', 2, NULL),
-('Doctorat', 2, NULL),
-('DUT', 2, NULL);
-
-INSERT INTO Competence (nom, id_typeCompetence, details) VALUES 
-('Français', 3, NULL),
-('Anglais', 3, NULL),
-('Espagnol', 3, NULL),
-('Mandarin', 3, NULL);
-
-INSERT INTO Competence (nom, id_typeCompetence, details) VALUES 
-('Volontariat', 4, NULL),
-('Mentorat', 4, NULL);
-
-
-
-INSERT INTO Poste (nom, nb_employe) VALUES 
-('Developpeur Full Stack', 3),
-('Chef de projet', 3),
-('Testeur QA', 3),
-('Administrateur Systemes et Reseaux', 3);
-
-INSERT INTO Genre (genre) VALUES ('homme'), ('femme');
-
-
-INSERT INTO SoftSkill (nom) VALUES 
+INSERT INTO competence (label) VALUES 
 ('Communication'),
-('Travail en equipe'),
+('Gestion de projet'),
+('Analyse de données'),
+('Développement web'),
+('Gestion des relations clients'),
+('Marketing digital'),
+('Résolution de problèmes'),
 ('Leadership'),
-('Adaptabilite'),
-('Resolution de problemes');
+('Travail en équipe'),
+('Créativité');
 
+INSERT INTO genre(label) VALUES
+    ('Homme'),
+    ('Femme')
+;
+
+INSERT INTO type_questionaire (label) VALUES ('Compétences Techniques');
+INSERT INTO type_questionaire (label) VALUES ('Aptitudes Interpersonnelles');
+
+INSERT INTO questionaire (question, id_type_questionaire) VALUES ('Maîtrisez-vous Java ?', 1);
+INSERT INTO questionaire (question, id_type_questionaire) VALUES ('Avez-vous de l expérience en gestion de projet ?', 1);
+INSERT INTO questionaire (question, id_type_questionaire) VALUES ('Êtes-vous à l aise pour travailler en équipe ?', 2);
+INSERT INTO questionaire (question, id_type_questionaire) VALUES ('Comment évaluez-vous votre capacité à résoudre des conflits ?', 2);
+
+
+INSERT INTO type_contrat(label) VALUES
+    ('CDD'),
+    ('CDI')
+;
+
+INSERT INTO status(label) VALUES 
+    ('Sheduled'),
+    ('In progress'),
+    ('Finished'),
+    ('Blocked')
+;
+
+INSERT INTO competence_requise(id_poste, id_competence,experience) VALUES 
+    (3,1,0),
+    (3,2,3),
+    (3,3,1)
+;
+
+INSERT INTO role_talenta(nom_role) VALUES
+    ('Admin'),
+    ('Responsable RH')
+;
+
+INSERT INTO responsable(nom,email,mdp,id_role) VALUES 
+    ('Sanda','sanda@admin.com','admin',1)
+;
+
+
+INSERT INTO type_diplome(label) VALUES
+    ('Licence'),
+    ('Master'),
+    ('Doctorat')
+;
+
+INSERT INTO poste (nom, id_departement, annees_experience_requises)
+VALUES ('Huhu', 2, 3);
+
+INSERT INTO competence_requise_poste (id_poste, id_competence, obligatoire)
+VALUES 
+    (9, 1, true),  
+    (9, 2, true);  
+
+INSERT INTO competence_requise_poste (id_poste, id_competence, obligatoire)
+VALUES 
+    (9, 3, false);
+
+INSERT INTO diplome_requis_poste (id_poste, id_type_diplome, obligatoire)
+VALUES 
+    (9, 4, true); 
+
+INSERT INTO diplome_requis_poste (id_poste, id_type_diplome, obligatoire)
+VALUES 
+    (9, 5, false); 

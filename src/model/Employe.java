@@ -3,48 +3,50 @@ package model;
 import java.sql.Date;
 import java.sql.SQLException;
 
-public class Employe extends Personne {
+public class Employe {
     
-    Poste poste;
-    Date dateEmbauche;
-    Date dateFin;
+    private int idEmploye;
+    private Candidat candidat;
+    private Poste poste;
+    private Date dateEmbauche;
 
+    // CONSTRUCTORS
+    public Employe(){
+
+    }
+
+    public Employe(int idEmploye,int idCandidat, int idPoste, Date dtb) throws SQLException{
+        this.setIdEmploye(idEmploye);
+        this.setCandidat(idCandidat);
+        this.setPoste(idPoste);
+        this.setDateEmbauche(dtb);
+    }
+
+
+    // GETTERS AND SETTERS
+    public void setIdEmploye(int idEmploye) {
+        this.idEmploye = idEmploye;
+    }
+    public void setCandidat(int candidat) throws SQLException{
+        this.candidat = Candidat.getById(candidat);
+    }
+    public void setPoste(int poste)throws SQLException {
+        this.poste = Poste.getById(poste);
+    }
+    public void setDateEmbauche(Date dateEmbauche) {
+        this.dateEmbauche = dateEmbauche;
+    }
+    public int getIdEmploye() {
+        return idEmploye;
+    }
+    public Candidat getCandidat() {
+        return candidat;
+    }
     public Poste getPoste() {
         return poste;
     }
-
-    public void setPoste(Poste poste) {
-        this.poste = poste;
-    }
-
-    public void setPoste(int idPoste) throws SQLException {
-        this.poste = Poste.getById(idPoste);
-    }
-
     public Date getDateEmbauche() {
         return dateEmbauche;
     }
 
-    public void setDateEmbauche(Date dateEmbauche) {
-        this.dateEmbauche = dateEmbauche;
-    }
-
-    public Date getDateFin() {
-        return dateFin;
-    }
-
-    public void setDateFin(Date dateFin) {
-        this.dateFin = dateFin;
-    }
-
-    public Employe (int id, String nom, String prenom, int idPoste, double pourcentage) throws SQLException{
-        this.setId(id);
-        this.setNom(nom);
-        this.setPrenom(prenom);
-        this.setPoste(idPoste);
-        this.setPourcentage(pourcentage);
-    }
-    
-    public Employe() {}
-    
 }
