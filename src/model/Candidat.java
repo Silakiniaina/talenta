@@ -72,7 +72,7 @@ public class Candidat {
         Connection c = null;
         PreparedStatement prstm = null; 
         ResultSet rs = null;
-        String query = "SELECT * FROM candidat WHERE id_candidat = ?";
+        String query = "SELECT * FROM v_candidat WHERE id_candidat = ?";
         try {
             c = Database.getConnection();
             prstm = c.prepareStatement(query);

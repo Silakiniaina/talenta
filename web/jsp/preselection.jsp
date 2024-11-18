@@ -10,13 +10,13 @@
 <table>
     <thead>
         <tr>
+            <th>ID candidat</th>
             <th>Nom du Candidat</th>
-            <th>Recrutement</th>
-            <th>Compétences Requises</th>
-            <th>Compétences du Candidat</th>
-            <th>% Correspondance Compétences</th>
-            <th>% Correspondance Expérience</th>
-            <th>Score Global</th>
+            <th>Poste</th>
+            <th>% competence</th>
+            <th>% diplome</th>
+            <th>% experience</th>
+            <th>% global</th>
             <th>Action</th>
         </tr>
     </thead>
@@ -30,11 +30,11 @@
                     Recrutement recrutement = preselection.getRecrutement();
         %>
         <tr>
+            <td><%= candidat.getIdCandidat() %></td>
             <td><%= candidat.getNomCandidat() %> <%= candidat.getPrenomCandidat() %></td>
-            <td><%= recrutement.getIdRecrutement() %></td>
-            <td><%= preselection.getNombreCompetenceRequise() %></td>
-            <td><%= preselection.getNombreCompetenceCandidat() %></td>
+            <td><%= recrutement.getPoste().getNomPoste() %></td>
             <td><%= String.format("%.2f", preselection.getPourcentageCompetence()) %> %</td>
+            <td><%= String.format("%.2f", preselection.getPourcentageDiplome()) %> %</td>
             <td><%= String.format("%.2f", preselection.getPourcentageExperience()) %> %</td>
             <td><%= String.format("%.2f", preselection.getScoreGlobale()) %></td>
             <td><a href="testCandidat?idCandidat=<%= candidat.getIdCandidat() %>">Tester Candidat</a></td>

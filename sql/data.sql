@@ -64,3 +64,30 @@ INSERT INTO role_talenta(nom_role) VALUES
 INSERT INTO responsable(nom,email,mdp,id_role) VALUES 
     ('Sanda','sanda@admin.com','admin',1)
 ;
+
+
+INSERT INTO type_diplome(label) VALUES
+    ('Licence'),
+    ('Master'),
+    ('Doctorat')
+;
+
+INSERT INTO poste (nom, id_departement, annees_experience_requises)
+VALUES ('Huhu', 2, 3);
+
+INSERT INTO competence_requise_poste (id_poste, id_competence, obligatoire)
+VALUES 
+    (9, 1, true),  
+    (9, 2, true);  
+
+INSERT INTO competence_requise_poste (id_poste, id_competence, obligatoire)
+VALUES 
+    (9, 3, false);
+
+INSERT INTO diplome_requis_poste (id_poste, id_type_diplome, obligatoire)
+VALUES 
+    (9, 4, true); 
+
+INSERT INTO diplome_requis_poste (id_poste, id_type_diplome, obligatoire)
+VALUES 
+    (9, 5, false); 

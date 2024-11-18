@@ -13,10 +13,9 @@ public class PreselectionCandidat {
     
     private Candidat candidat;
     private Recrutement recrutement;
-    private int nombreCompetenceRequise;
-    private int nombreCompetenceCandidat;
     private double pourcentageCompetence;
     private double pourcentageExperience;
+    private double pourcentageDiplome;
     private double scoreGlobale;
 
     // CONSTRUCTORS
@@ -24,15 +23,6 @@ public class PreselectionCandidat {
 
     }
 
-    public PreselectionCandidat(int idCandidat, int idRecrutement, int requise, int got, double pourcentageCompetence, double pourcentageExperience, double score)throws SQLException{
-        this.setCandidat(idCandidat);
-        this.setRecrutement(idRecrutement);
-        this.setNombreCompetenceRequise(requise);
-        this.setNombreCompetenceCandidat(idCandidat);
-        this.setPourcentageCompetence(pourcentageCompetence);
-        this.setPourcentageExperience(pourcentageExperience);
-        this.setScoreGlobale(score);
-    }
 
     // ACTIONS 
     public static List<PreselectionCandidat> getPreselectionByRecrutement(int idRecrutement) throws SQLException{
@@ -40,7 +30,7 @@ public class PreselectionCandidat {
         Connection c = null;
         PreparedStatement prstm = null; 
         ResultSet rs = null;
-        String query = "SELECT * FROM v_preselection_candidat WHERE id_recrutement = ?";
+        String query = "SELECT * FROM v_filtre_cv WHERE id_recrutement = ?";
         try {
             c = Database.getConnection();
             prstm = c.prepareStatement(query);
@@ -48,15 +38,13 @@ public class PreselectionCandidat {
             rs = prstm.executeQuery();
 
             while (rs.next()) {
-                PreselectionCandidat d = new PreselectionCandidat(
-                    rs.getInt(1),
-                    rs.getInt(2),
-                    rs.getInt(3),
-                    rs.getInt(4),
-                    rs.getDouble(5),
-                    rs.getDouble(6),
-                    rs.getDouble(7)
-                );
+                PreselectionCandidat d = new PreselectionCandidat();
+                d.setCandidat(rs.getInt(1));
+                d.setRecrutement(rs.getInt(2));
+                d.setPourcentageCompetence(rs.getDouble(4));
+                d.setPourcentageDiplome(rs.getDouble(5));
+                d.setPourcentageExperience(rs.getDouble(6));
+                d.setScoreGlobale(rs.getDouble(7));
                 result.add(d);
             }
         } catch (SQLException e) {
@@ -83,17 +71,15 @@ public class PreselectionCandidat {
     public Recrutement getRecrutement() {
         return recrutement;
     }
-    public int getNombreCompetenceRequise() {
-        return nombreCompetenceRequise;
-    }
-    public int getNombreCompetenceCandidat() {
-        return nombreCompetenceCandidat;
-    }
+
     public double getPourcentageCompetence() {
         return pourcentageCompetence;
     }
     public double getPourcentageExperience() {
         return pourcentageExperience;
+    }
+    public double getPourcentageDiplome(){
+        return pourcentageDiplome;
     }
     public double getScoreGlobale() {
         return scoreGlobale;
@@ -104,17 +90,14 @@ public class PreselectionCandidat {
     public void setRecrutement(int idrecrutement) throws SQLException{
         this.recrutement = Recrutement.getById(idrecrutement);
     }
-    public void setNombreCompetenceRequise(int nombreCompetenceRequise) {
-        this.nombreCompetenceRequise = nombreCompetenceRequise;
-    }
-    public void setNombreCompetenceCandidat(int nombreCompetenceCandidat) {
-        this.nombreCompetenceCandidat = nombreCompetenceCandidat;
-    }
     public void setPourcentageCompetence(double pourcentageCompetence) {
         this.pourcentageCompetence = pourcentageCompetence;
     }
     public void setPourcentageExperience(double pourcentageExperience) {
         this.pourcentageExperience = pourcentageExperience;
+    }
+    public void setPourcentageDiplome(double d){
+        this.pourcentageDiplome = d;
     }
     public void setScoreGlobale(double scoreGlobale) {
         this.scoreGlobale = scoreGlobale;

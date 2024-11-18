@@ -5,7 +5,7 @@
     List<Competence> competences = (List<Competence>)request.getAttribute("allCompetence");
     List<Competence> candidatCompetences = (List<Competence>)request.getAttribute("candidat_competence");
 %>
-<form action="add" method="post">
+<form action="addCompetence" method="post">
     <label for="competence">Competence</label>
     <select id="comp" name="competence" required>
         <%

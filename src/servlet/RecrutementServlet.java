@@ -10,7 +10,9 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.Candidat;
 import model.Competence;
+import model.NotificationCandidat;
 import model.Recrutement;
 
 public class RecrutementServlet extends HttpServlet{
@@ -20,19 +22,25 @@ public class RecrutementServlet extends HttpServlet{
         PrintWriter out = resp.getWriter();
         String mode = req.getParameter("mode");
         RequestDispatcher disp = null;
+        String role = req.getParameter("role");
         try {
-            if(mode != null && mode.equals("i")){
-                String idPoste = req.getParameter("idPoste");
+            List<Recrutement> listRecrutement = Recrutement.getAll();
+            List<Competence> listCompetences = Competence.getAll();
 
-                req.setAttribute("idPoste", idPoste);
-                disp = req.getRequestDispatcher("/WEB-INF/views/addRecrutement.jsp");
+            req.setAttribute("recrutements", listRecrutement);
+            req.setAttribute("competences", listCompetences);
+
+            if(role != null){
+                disp = req.getRequestDispatcher("/WEB-INF/views/candidat/recrutementCandidat.jsp");
             }else{
-                List<Recrutement> listRecrutement = Recrutement.getAll();
-                List<Competence> listCompetences = Competence.getAll();
+                if(mode != null && mode.equals("i")){
+                    String idPoste = req.getParameter("idPoste");
     
-                req.setAttribute("recrutements", listRecrutement);
-                req.setAttribute("competences", listCompetences);
-                disp = req.getRequestDispatcher("/WEB-INF/views/recrutement.jsp");
+                    req.setAttribute("idPoste", idPoste);
+                    disp = req.getRequestDispatcher("/WEB-INF/views/addRecrutement.jsp");
+                }else{
+                    disp = req.getRequestDispatcher("/WEB-INF/views/recrutement.jsp");
+                }
             }
             disp.forward(req, resp);
         } catch (Exception e) {
@@ -55,6 +63,17 @@ public class RecrutementServlet extends HttpServlet{
             r.setPoste(poste);
 
             r.insert();
+
+            List<Candidat> candidats = Candidat.getAll();
+            for(Candidat candidat : candidats){
+                NotificationCandidat nc = new NotificationCandidat();
+                nc.setCandidat(candidat.getIdCandidat());
+                nc.setContenuNotification("Recrutement entre : "+dateDebut+" et "+dateFin);
+                nc.setTargetLink("recrutement?role=candidat");
+
+                nc.insert();
+            }
+
             resp.sendRedirect("recrutement");
         } catch (SQLException e) {
             e.printStackTrace(out);

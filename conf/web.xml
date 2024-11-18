@@ -44,6 +44,11 @@
         <servlet-name>AddCompetenceServlet</servlet-name>
         <servlet-class>servlet.candidat.AddCompetenceServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>NotificationServlet</servlet-name>
+        <servlet-class>servlet.candidat.NotificationServlet</servlet-class>
+    </servlet>
+
 
     <servlet-mapping>
         <servlet-name>RecrutementServlet</servlet-name>
@@ -87,6 +92,10 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>AddCompetenceServlet</servlet-name>
-        <url-pattern>/competence/add</url-pattern>
+        <url-pattern>/addCompetence</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NotificationServlet</servlet-name>
+        <url-pattern>/notifCandidat</url-pattern>
     </servlet-mapping>
 </web-app>

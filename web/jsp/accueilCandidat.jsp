@@ -1,2 +1,3 @@
 <a href="recrutement">Recrutement</a>
-<a href="competence/add">Add competence</a>
+<a href="addCompetence">Add competence</a>
+<a href="notifCandidat">Notification</a>

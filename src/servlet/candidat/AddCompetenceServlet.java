@@ -44,7 +44,7 @@ public class AddCompetenceServlet extends HttpServlet{
             c.insertCompetence(comp);
             c.getCompetences(null);
 
-            resp.sendRedirect("add");
+            resp.sendRedirect("addCompetence");
         } catch (Exception e) {
             e.printStackTrace(out);
         }
