@@ -238,3 +238,53 @@ CREATE TABLE diplome_requis_poste (
     FOREIGN KEY (id_type_diplome) REFERENCES type_diplome(id_type_diplome),
     PRIMARY KEY (id_poste, id_type_diplome)
 );
+
+CREATE TABLE simulation (
+   id_simulation SERIAL PRIMARY KEY,
+   titre VARCHAR(255) NOT NULL,
+   description TEXT NOT NULL,
+   date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+   id_responsable INT NOT NULL, 
+   FOREIGN KEY(id_responsable) REFERENCES responsable(id_responsable)
+);
+
+CREATE TABLE question_simulation (
+   id_question_simulation SERIAL PRIMARY KEY,
+   id_simulation INT REFERENCES simulation(id_simulation) ON DELETE CASCADE,
+   texte_question TEXT NOT NULL
+);
+
+CREATE TABLE reponse_simulation_possibles (
+   id_reponse_simulation_possibles SERIAL PRIMARY KEY,
+   id_question_simulation INT REFERENCES question_simulation(id_question_simulation) ON DELETE CASCADE,
+   texte_reponse TEXT NOT NULL
+);
+
+
+CREATE TABLE simulation_candidat (
+   id_attribution SERIAL PRIMARY KEY,
+   id_simulation INT REFERENCES simulation(id_simulation) ON DELETE CASCADE,
+   id_candidat INT NOT NULL, 
+   id_status INT NOT NULL,
+   FOREIGN KEY(id_candidat) REFERENCES candidat(id_candidat),
+   FOREIGN KEY(id_status) REFERENCES status(id_status)
+);
+
+CREATE TABLE reponse_attendue(
+   id_simulation INT NOT NULL, 
+   id_question_simulation INT NOT NULL, 
+   id_reponse_attendue INT NOT NULL,
+   FOREIGN KEY(id_simulation) REFERENCES simulation(id_simulation),
+   FOREIGN KEY(id_question_simulation) REFERENCES question_simulation(id_question_simulation),
+   FOREIGN KEY(id_reponse_attendue) REFERENCES reponse_simulation_possibles(id_reponse_simulation_possibles)
+);
+
+CREATE TABLE reponse_simulation_candidat (
+   id_reponse SERIAL PRIMARY KEY,
+   id_attribution INT REFERENCES simulation_candidat(id_attribution) ON DELETE CASCADE,
+   id_question INT REFERENCES question_simulation(id_question_simulation),
+   id_reponse_candidat INT NOT NULL,
+   date_soumission TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+   FOREIGN KEY(id_attribution) REFERENCES simulation_candidat(id_attribution),
+   FOREIGN KEY(id_reponse_candidat) REFERENCES reponse_simulation_possibles(id_reponse_simulation_possibles)
+);

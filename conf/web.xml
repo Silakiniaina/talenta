@@ -2,43 +2,40 @@
 <web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
     <servlet>
         <servlet-name>RecrutementServlet</servlet-name>
-        <servlet-class>servlet.RecrutementServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>CandidatServlet</servlet-name>
-        <servlet-class>servlet.CandidatServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>ListeCandidatServlet</servlet-name>
-        <servlet-class>servlet.ListeCandidatServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>DetailsCandidatServlet</servlet-name>
-        <servlet-class>servlet.DetailsCandidatServlet</servlet-class>
+        <servlet-class>servlet.recrutement.RecrutementServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>PreselectionServlet</servlet-name>
-        <servlet-class>servlet.PreselectionServlet</servlet-class>
+        <servlet-class>servlet.recrutement.PreselectionServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>TestCandidatServlet</servlet-name>
-        <servlet-class>servlet.TestCandidatServlet</servlet-class>
+        <servlet-class>servlet.recrutement.TestCandidatServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ResultatTestServlet</servlet-name>
-        <servlet-class>servlet.ResultatTestServlet</servlet-class>
+        <servlet-class>servlet.recrutement.ResultatTestServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ContratServlet</servlet-name>
-        <servlet-class>servlet.ContratServlet</servlet-class>
+        <servlet-class>servlet.recrutement.ContratServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>CandidatServlet</servlet-name>
+        <servlet-class>servlet.candidat.CandidatServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ListeCandidatServlet</servlet-name>
+        <servlet-class>servlet.candidat.ListeCandidatServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DetailsCandidatServlet</servlet-name>
+        <servlet-class>servlet.candidat.DetailsCandidatServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>PosteServlet</servlet-name>
-        <servlet-class>servlet.PosteServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>LoginServlet</servlet-name>
-        <servlet-class>servlet.LoginServlet</servlet-class>
+        <servlet-class>servlet.candidat.PosteServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>AddCompetenceServlet</servlet-name>
@@ -48,7 +45,21 @@
         <servlet-name>NotificationServlet</servlet-name>
         <servlet-class>servlet.candidat.NotificationServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ChatServlet</servlet-name>
+        <servlet-class>servlet.candidat.ChatServlet</servlet-class>
+    </servlet>
 
+    <servlet>
+        <servlet-name>DetailsSimulationServlet</servlet-name>
+        <servlet-class>servlet.simulation.DetailsSimulationServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>LoginServlet</servlet-name>
+        <servlet-class>servlet.shared.LoginServlet</servlet-class>
+    </servlet>
+    
 
     <servlet-mapping>
         <servlet-name>RecrutementServlet</servlet-name>
@@ -97,5 +108,13 @@
     <servlet-mapping>
         <servlet-name>NotificationServlet</servlet-name>
         <url-pattern>/notifCandidat</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ChatServlet</servlet-name>
+        <url-pattern>/chat</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DetailsSimulationServlet</servlet-name>
+        <url-pattern>/detailsSimulation</url-pattern>
     </servlet-mapping>
 </web-app>

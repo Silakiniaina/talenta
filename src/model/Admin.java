@@ -56,6 +56,41 @@ public class Admin {
             }
         }
     }
+
+    public static Admin getById(int id) throws SQLException{
+        Admin result = null;
+        Connection c = null;
+        PreparedStatement prstm = null; 
+        ResultSet rs = null;
+        String query = "SELECT * FROM responsable WHERE id_responsable = ?";
+        try {
+            c = Database.getConnection();
+            prstm = c.prepareStatement(query);
+            prstm.setInt(1, id);
+            rs = prstm.executeQuery();
+
+            if (rs.next()) {
+                result = new Admin();
+                result.setIdAdmin(rs.getInt(1));
+                result.setNomAdmin(rs.getString(2));
+                result.setEmailAdmin(rs.getString(3));
+                result.setRoleAdmin(rs.getInt(5));
+            }
+            return result;
+        } catch (SQLException e) {
+            throw e;
+        }finally{
+            if(rs != null){
+                rs.close();
+            }
+            if(prstm != null){
+                prstm.close();
+            }
+            if(c != null){
+                c.close();
+            }
+        }
+    }
     
     // GETTERS AND SETTERS
     public String getNomAdmin() {

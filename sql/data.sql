@@ -91,3 +91,11 @@ VALUES
 INSERT INTO diplome_requis_poste (id_poste, id_type_diplome, obligatoire)
 VALUES 
     (9, 5, false); 
+
+INSERT INTO simulation(titre, description,id_responsable) VALUES
+    ('Simulation omby','Project simulation omby', 1)
+;
+
+INSERT INTO question_simulation(id_simulation, texte_reponse) VALUES
+    (1,'WHO ARE YOU')
+;

@@ -104,6 +104,9 @@ public class RecrutementCandidat {
     public void setCandidat(int candidat) throws SQLException{
         this.candidat = Candidat.getById(candidat);
     }
+    public void setCandidat(Candidat d){
+        this.candidat = d;
+    }
     public void setDatePostule(Date datePostule) {
         this.datePostule = datePostule;
     }

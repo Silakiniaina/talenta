@@ -14,4 +14,4 @@ find "$src" -type f -name "*.java" -exec cp -r {} "$temp" \;
 javac -d "$bin" -cp "$lib/*" "$temp"/*.java
 rm -R "$temp"
 
-java -cp "bin:lib/*" model.RecrutementCandidat
+java -cp "bin:lib/*" model.QuestionSimulation

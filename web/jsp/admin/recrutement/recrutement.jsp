@@ -19,6 +19,7 @@
             <th>Poste</th>
             <th>Competence Requise</th>
             <th>Status</th>
+            <th>Action</th>
         </tr>
         <%
             for (Recrutement recrutement : recrutements) {
@@ -36,7 +37,10 @@
                 }
                 out.println("<td>" + recrutement.getStatus().getLabel() + "</td>");
                 out.println("</td>");
-                out.println("<td><a href=candidat?idRecrutement="+recrutement.getIdRecrutement()+" >Postuler</a></td>");
+                out.println("<td><a href=listeCandidat?idRecrutement="+recrutement.getIdRecrutement()+" >Liste Candidat</a></td>");
+                out.println("<td><a href=preselection?idRecrutement="+recrutement.getIdRecrutement()+" >Liste Preselection</a></td>");
+                out.println("<td><a href=resultatTest?idRecrutement="+recrutement.getIdRecrutement()+" >Resultat Test</a></td>");
+                out.println("</tr>");
             }
         %>
     </table>
