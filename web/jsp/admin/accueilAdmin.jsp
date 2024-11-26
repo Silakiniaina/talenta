@@ -1,2 +1,3 @@
-<a href="recrutement">Recrutement</a>
-<a href="poste">Poste</a>
+<%@ include file="../shared/head.jsp" %>
+<%@ include file="../shared/sidebarAdmin.jsp" %>
+<%@ include file="../shared/script.jsp" %>

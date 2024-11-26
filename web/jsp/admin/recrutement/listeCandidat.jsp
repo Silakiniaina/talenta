@@ -4,7 +4,6 @@
     List<Candidat> candidats = (List<Candidat>)request.getAttribute("candidats");
 %>
 
-<%@include file="../shared/header.jsp" %>
     <h1>Liste des Candidats</h1>
 
     <table border="1">

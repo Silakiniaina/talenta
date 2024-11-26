@@ -102,4 +102,86 @@ public class PreselectionCandidat {
     public void setScoreGlobale(double scoreGlobale) {
         this.scoreGlobale = scoreGlobale;
     }
+
+    public String getTypeNiveau(int a){
+        String result = "success";
+        switch (a) {
+            case 1:
+                if(this.getPourcentageCompetence() >= 80){
+                    result = "success";
+                }else if(this.getPourcentageCompetence() >= 50 && this.getPourcentageCompetence() <= 80){
+                    result = "primary";
+                }else if(this.getPourcentageCompetence() >= 25 && this.getPourcentageCompetence() <= 50){
+                    result = "warning";
+                }else{
+                    result = "danger";
+                }
+                break;
+
+            case 2:
+                if(this.getPourcentageDiplome() >= 80){
+                    result = "success";
+                }else if(this.getPourcentageDiplome() >= 50 && this.getPourcentageDiplome() <= 80){
+                    result = "primary";
+                }else if(this.getPourcentageDiplome() >= 25 && this.getPourcentageDiplome() <= 50){
+                    result = "warning";
+                }else{
+                    result = "danger";
+                }
+                break;
+
+            case 3:
+                if(this.getPourcentageExperience() >= 80){
+                    result = "success";
+                }else if(this.getPourcentageExperience() >= 50 && this.getPourcentageExperience() <= 80){
+                    result = "primary";
+                }else if(this.getPourcentageExperience() >= 25 && this.getPourcentageExperience() <= 50){
+                    result = "warning";
+                }else{
+                    result = "danger";
+                }
+                break;
+
+            case 4:
+                if(this.getScoreGlobale() >= 80){
+                    result = "success";
+                }else if(this.getScoreGlobale() >= 50 && this.getScoreGlobale() <= 80){
+                    result = "primary";
+                }else if(this.getScoreGlobale() >= 25 && this.getScoreGlobale() <= 50){
+                    result = "warning";
+                }else{
+                    result = "danger";
+                }
+                break;
+        
+            default:
+                break;
+        }
+        return result;
+    }
+
+    public String getTypeArrow(int a){
+        String result = "up";
+        switch (a) {
+            case 1:
+                result = this.getPourcentageCompetence() >= 50 ? "up" : "down";
+                break;
+
+            case 2:
+                result = this.getPourcentageDiplome() >= 50 ? "up" : "down";
+                break;
+
+            case 3:
+                result = this.getPourcentageExperience() >= 50 ? "up" : "down";
+                break;
+
+            case 4:
+                result = this.getScoreGlobale() >= 50 ? "up" : "down"; 
+                break;
+        
+            default:
+                break;
+        }
+        return result;
+    }
 }

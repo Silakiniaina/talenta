@@ -41,10 +41,10 @@
                                                     <td><%= candidat.getIdCandidat() %></td>
                                                     <td><%= candidat.getNomCandidat() %> <%= candidat.getPrenomCandidat() %></td>
                                                     <td><%= recrutement.getPoste().getNomPoste() %></td>
-                                                    <td class="text-<%= preselection.getTypeNiveau(1) %>"> <%= preselection.getPourcentageCompetence() %> <i class="mdi mdi-arrow-<%= preselection.getTypeArrow(1) %>"></i></td>
-                                                    <td class="text-<%= preselection.getTypeNiveau(2) %>"> <%= preselection.getPourcentageDiplome() %> <i class="mdi mdi-arrow-<%= preselection.getTypeArrow(2) %>"></i></td>
-                                                    <td class="text-<%= preselection.getTypeNiveau(3) %>"> <%= preselection.getPourcentageExperience() %> <i class="mdi mdi-arrow-<%= preselection.getTypeArrow(3) %>"></i></td>
-                                                    <td class="text-<%= preselection.getTypeNiveau(4) %>"> <%= preselection.getScoreGlobale() %> <i class="mdi mdi-arrow-<%= preselection.getTypeArrow(4) %>"></i></td>
+                                                    <td class="text-<%= preselection.getTypeNiveau(1) %>>"> <%= candidat.getPourcentageCompetence() %> <i class="mdi mdi-arrow-<%= preselection.getTypeArrow(1) %>"></i></td>
+                                                    <td class="text-<%= preselection.getTypeNiveau(2) %>>"> <%= candidat.getPourcentageDiplome() %> <i class="mdi mdi-arrow-<%= preselection.getTypeArrow(2) %>"></i></td>
+                                                    <td class="text-<%= preselection.getTypeNiveau(3) %>>"> <%= candidat.getPourcentageExperience() %> <i class="mdi mdi-arrow-<%= preselection.getTypeArrow(3) %>"></i></td>
+                                                    <td class="text-<%= preselection.getTypeNiveau(4) %>>"> <%= candidat.getScoreGlobale() %> <i class="mdi mdi-arrow-<%= preselection.getTypeArrow(4) %>"></i></td>
                                                     <td><a href="#" type="button">Test</a></td>
                                                 </tr>
                                             <%

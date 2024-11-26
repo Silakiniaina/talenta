@@ -61,7 +61,7 @@ public class PosteServlet extends HttpServlet{
             }
 
             p.insert();
-            out.println("Poste inseree");
+            resp.sendRedirect("poste");
         } catch (SQLException e) {
             e.printStackTrace(out);
         }

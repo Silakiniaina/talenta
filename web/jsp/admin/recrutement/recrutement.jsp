@@ -8,41 +8,52 @@
     List<Recrutement> recrutements = (List<Recrutement>)request.getAttribute("recrutements");
     List<Competence> competences = (List<Competence>)request.getAttribute("competences");
 %>
-<%@include file="../shared/header.jsp" %>
-    <h2>Liste des Recrutements</h2>
-    <table border="1" class="recruitment-table">
-        <tr>
-            <th>ID</th>
-            <th>Date de début</th>
-            <th>Date de fin</th>
-            <th>Nombre</th>
-            <th>Poste</th>
-            <th>Competence Requise</th>
-            <th>Status</th>
-            <th>Action</th>
-        </tr>
-        <%
-            for (Recrutement recrutement : recrutements) {
-                out.println("<tr>");
-                out.println("<td>" + recrutement.getIdRecrutement() + "</td>");
-                out.println("<td>" + recrutement.getDateDebut() + "</td>");
-                out.println("<td>" + recrutement.getDateFin() + "</td>");
-                out.println("<td>" + recrutement.getNombre() + "</td>");
-                out.println("<td>" + recrutement.getPoste().getNomPoste() + "</td>");
-
-                out.println("<td>");
-                List<CompetenceRequise> competencesRequises = recrutement.getPoste().getListCompetence();
-                for (CompetenceRequise compRec : competencesRequises) {
-                    out.println(compRec.getCompetence().getNomCompetence() + " (" + compRec.getExperience() + " ans)<br>");
-                }
-                out.println("<td>" + recrutement.getStatus().getLabel() + "</td>");
-                out.println("</td>");
-                out.println("<td><a href=listeCandidat?idRecrutement="+recrutement.getIdRecrutement()+" >Liste Candidat</a></td>");
-                out.println("<td><a href=preselection?idRecrutement="+recrutement.getIdRecrutement()+" >Liste Preselection</a></td>");
-                out.println("<td><a href=resultatTest?idRecrutement="+recrutement.getIdRecrutement()+" >Resultat Test</a></td>");
-                out.println("</tr>");
-            }
-        %>
-    </table>
-</body>
+    <%@include file="../../shared/head.jsp" %>
+    <body>
+        <div class="container-scroller">
+            <%@include file="../../shared/sidebarAdmin.jsp" %>
+            <div class="container-fluid page-body-wrapper">
+                <%@include file="../../shared/navbar.jsp" %>
+                <div class="main-panel">
+                    <div class="content-wrapper">
+                        <h2>Liste des Recrutements</h2>
+                        <div class="row">
+                            <%
+                                for(Recrutement r : recrutements){
+                            %>
+                            <div class="col-sm-4 grid-margin">
+                                <div class="card">
+                                    <div class="card-body p-3">
+                                        <div class="row">
+                                            <div class="col-12 col-sm-12 col-xl-8">
+                                                <div class="d-flex d-sm-block d-md-flex align-items-center" style="justify-content: space-between;">
+                                                    <h4 class="mb-0"><%= r.getPoste().getNomPoste() %></h4>
+                                                </div>
+                                                <div class="bg-gray-dark d-flex d-md-block d-xl-flex flex-row py-3 px-4 px-md-3 px-xl-4 rounded mt-3">
+                                                    <h3><%= r.getNombre() %> postes</h3>
+                                                </div>
+                                                <h6 class="text-muted font-weight-normal">Date Fin : <%= r.getDateFin() %></h6>
+                                            </div>
+                                            <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
+                                                <h4 class="mb-0">#<%= r.getIdRecrutement() %></h4>
+                                                <i class="icon-lg mdi mdi-codepen text-primary ml-auto"></i>
+                                            </div>
+                                            <div class="d-flex d-sm-block d-md-flex align-items-center"style="gap:10px;">
+                                                <a href="listeCandidat?idRecrutement=<%=r.getIdRecrutement() %>" type="button" class="btn btn-inverse-primary ">Candidats</a>
+                                                <a href="preselection?idRecrutement=<%=r.getIdRecrutement() %>" type="button" class="btn btn-inverse-secondary ">Selection</a>
+                                                <a href="resultatTest?idRecrutement=<%=r.getIdRecrutement() %>" type="button" class="btn btn-inverse-success ">Resultat</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <% } %>
+                        </div>
+                    </div>
+                    <%@ include file="../../shared/footer.jsp" %>
+                </div>
+            </div>
+        </div>
+        <%@ include file="../../shared/script.jsp" %>
+    </body>
 </html>
