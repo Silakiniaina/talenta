@@ -143,6 +143,37 @@ public class PreselectionCandidat {
         }
     }
 
+    public void eliminer(Connection c)throws SQLException{
+        PreparedStatement prstm = null; 
+        String sql  = "DELETE FROM recrutement_candidat WHERE id_recrutement = ? AND id_candidat = ?";
+        boolean isNewConnection = false;
+        try {
+            if(c == null){
+                c = Database.getConnection();
+                isNewConnection = true;
+            }
+            c.setAutoCommit(false);
+            
+            prstm = c.prepareStatement(sql);
+            prstm.setInt(1, this.getRecrutement().getIdRecrutement());
+            prstm.setInt(2, this.getCandidat().getIdCandidat());
+            prstm.executeUpdate();
+
+            c.commit();
+
+        } catch (Exception e) {
+            c.rollback();
+            throw e;
+        }finally{
+            if(prstm != null){
+                prstm.close();
+            }
+            if(c != null && isNewConnection){
+                c.close();
+            }
+        }
+    }
+
 
     public static PreselectionCandidat getByCandidatAndRecrutement(Connection c, int idCandidat, int idRecrutement) throws SQLException{
         PreselectionCandidat result = null; 

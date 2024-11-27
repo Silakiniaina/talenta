@@ -44,6 +44,7 @@ public class PreselectionManagementServlet extends HttpServlet{
                     pr.preselectionner(c);
                     notif.setContenuNotification("Votre candidature pour le poste de : "+r.getPoste().getNomPoste()+" a ete preselectionner");
                 }else if(mode.equals("e")){
+                    pr.eliminer(c);
                     notif.setContenuNotification("Votre candidature pour le poste de : "+r.getPoste().getNomPoste()+" a ete eliminer");
                 }else if(mode.equals("d")){
                     pr.depreselectionner(c);
