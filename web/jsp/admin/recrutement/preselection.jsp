@@ -105,7 +105,7 @@
                                                         <td class="text-<%= preselection.getTypeNiveau(3) %>"> <%= preselection.getPourcentageExperience() %> <i class="ti-arrow-<%= preselection.getTypeArrow(3) %>"></i></td>
                                                         <td class="text-<%= preselection.getTypeNiveau(4) %>"> <%= preselection.getScoreGlobale() %> <i class="ti-arrow-<%= preselection.getTypeArrow(4) %>"></i></td>
                                                         <td colspan="2">
-                                                            <a type="button" class="btn btn-sm btn-outline-primary" href="#">Preselectionner</a>
+                                                            <a type="button" class="btn btn-sm btn-outline-primary" href="preselectionManagement?candidat=<%= candidat.getIdCandidat() %>&recrutement=<%= recrutement.getIdRecrutement() %>&mode=p">Preselectionner</a>
                                                             <a type="button" class="btn btn-sm btn-outline-danger" href="#">Eliminer</a></td>
                                                         </td>
                                                     </tr>

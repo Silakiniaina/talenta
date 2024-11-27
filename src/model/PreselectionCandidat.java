@@ -65,7 +65,7 @@ public class PreselectionCandidat {
 
             res.put("preselectionne", preselection);
             res.put("normal", result);
-            
+
             return res;
         } catch (SQLException e) {
             throw e;
@@ -82,6 +82,82 @@ public class PreselectionCandidat {
         }
     }
 
+    public void preselectionner(Connection c) throws SQLException{
+        PreparedStatement prstm = null; 
+        String sql  = "UPDATE recrutement_candidat SET is_prechosen = true WHERE id_recrutement = ? AND id_candidat = ?";
+        boolean isNewConnection = false;
+        try {
+            if(c == null){
+                c = Database.getConnection();
+                isNewConnection = true;
+            }
+            c.setAutoCommit(false);
+            
+            prstm = c.prepareStatement(sql);
+            prstm.setInt(1, this.getRecrutement().getIdRecrutement());
+            prstm.setInt(2, this.getCandidat().getIdCandidat());
+            prstm.executeUpdate();
+
+            c.commit();
+
+        } catch (Exception e) {
+            c.rollback();
+            throw e;
+        }finally{
+            if(prstm != null){
+                prstm.close();
+            }
+            if(c != null && isNewConnection){
+                c.close();
+            }
+        }
+    }
+
+    public static PreselectionCandidat getByCandidatAndRecrutement(Connection c, int idCandidat, int idRecrutement) throws SQLException{
+        PreselectionCandidat result = null; 
+        PreparedStatement prtm = null; 
+        ResultSet rs = null; 
+        String sql = "SELECT * FROM v_filtre_cv WHERE id_recrutement = ? AND id_candidat = ?";
+        boolean isNewConnection = false; 
+        
+        try {
+            if(c == null){
+                c = Database.getConnection();
+                isNewConnection  = true;
+            }
+
+            prtm = c.prepareStatement(sql);
+            prtm.setInt(1, idRecrutement);
+            prtm.setInt(2 ,idCandidat);
+
+            rs = prtm.executeQuery();
+
+            if(rs.next()){
+                result = new PreselectionCandidat();
+                result.setCandidat(c,rs.getInt(1));
+                result.setRecrutement(c,rs.getInt(2));
+                result.setPourcentageCompetence(rs.getDouble(4));
+                result.setPourcentageDiplome(rs.getDouble(5));
+                result.setPourcentageExperience(rs.getDouble(6));
+                result.setScoreGlobale(rs.getDouble(7));
+                result.setPrechosen(rs.getBoolean(8));
+            }
+            return result;
+        } catch (Exception e) {
+            throw e;
+        }finally{
+            if(rs != null){
+                rs.close();
+            }
+            if(prtm != null){
+                prtm.close();
+            }
+            if(c != null && isNewConnection){
+                c.close();
+            }
+        }
+
+    }
 
     // GETTERS
     public Candidat getCandidat() {
