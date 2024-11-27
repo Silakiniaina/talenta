@@ -2,6 +2,7 @@ package servlet.recrutement;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -56,6 +57,8 @@ public class RecrutementServlet extends HttpServlet{
         int nb = Integer.parseInt(req.getParameter("nombre"));
         int poste = Integer.parseInt(req.getParameter("poste"));
         try {
+            Connection connexion = (Connection)req.getSession().getAttribute("connexion");
+
             Recrutement r = new Recrutement();
             r.setDateDebut(dateDebut);
             r.setDateFin(dateFin);
@@ -67,7 +70,7 @@ public class RecrutementServlet extends HttpServlet{
             List<Candidat> candidats = Candidat.getAll();
             for(Candidat candidat : candidats){
                 NotificationCandidat nc = new NotificationCandidat();
-                nc.setCandidat(candidat.getIdCandidat());
+                nc.setCandidat(connexion,candidat.getIdCandidat());
                 nc.setContenuNotification("Recrutement entre : "+dateDebut+" et "+dateFin);
                 nc.setTargetLink("recrutement?role=candidat");
 

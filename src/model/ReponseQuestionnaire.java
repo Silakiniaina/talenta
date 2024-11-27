@@ -17,12 +17,6 @@ public class ReponseQuestionnaire {
 
     }
 
-    public ReponseQuestionnaire(int idQuestion, int idCandidat, int reponse) throws SQLException{
-        this.setQuestionaire(idQuestion);
-        this.setCandidat(idCandidat);
-        this.setReponse(reponse);
-    }
-
     // ACTION
     public void insert() throws SQLException{
         Connection c = null; 
@@ -56,8 +50,10 @@ public class ReponseQuestionnaire {
     public void setQuestionaire(int questionaire) throws SQLException{
         this.questionaire = Questionaire.getById(questionaire);
     }
-    public void setCandidat(int candidat)throws SQLException {
-        this.candidat = Candidat.getById(candidat);
+    public void setCandidat(Connection con, int candidat) throws SQLException{
+        Candidat c = new Candidat();
+        c.setIdCandidat(candidat);
+        this.candidat = c.getById(con);
     }
     public void setReponse(int reponse) {
         this.reponse = reponse;

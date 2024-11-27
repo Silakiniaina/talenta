@@ -2,6 +2,8 @@ package servlet.recrutement;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.util.HashMap;
 import java.util.List;
 
 import jakarta.servlet.RequestDispatcher;
@@ -18,7 +20,8 @@ public class PreselectionServlet extends HttpServlet{
         PrintWriter out = resp.getWriter();
         String idRecrutement = req.getParameter("idRecrutement");
         try {
-            List<PreselectionCandidat> ls = PreselectionCandidat.getPreselectionByRecrutement(Integer.parseInt(idRecrutement));
+            Connection con = (Connection)req.getSession().getAttribute("connexion");
+            HashMap<String,List<PreselectionCandidat>> ls = PreselectionCandidat.getPreselectionByRecrutement(con,Integer.parseInt(idRecrutement));
 
             req.setAttribute("preselections", ls);
             RequestDispatcher disp = req.getRequestDispatcher("/WEB-INF/views/admin/recrutement/preselection.jsp");

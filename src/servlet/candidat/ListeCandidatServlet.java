@@ -2,6 +2,7 @@ package servlet.candidat;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
 import java.util.List;
 
 import jakarta.servlet.RequestDispatcher;
@@ -10,6 +11,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.Candidat;
+import model.Recrutement;
 import model.RecrutementCandidat;
 
 public class ListeCandidatServlet extends HttpServlet{
@@ -19,9 +21,16 @@ public class ListeCandidatServlet extends HttpServlet{
         PrintWriter out = resp.getWriter();
         String idRecrutement = req.getParameter("idRecrutement");
         try {
-            List<Candidat> ls = RecrutementCandidat.getCandidatByRecrutement(Integer.parseInt(idRecrutement));
 
-            req.setAttribute("candidats", ls);
+            Connection connexion = (Connection)req.getSession().getAttribute("connexion");
+
+            Recrutement r = new Recrutement();
+            r.setIdRecrutement(Integer.parseInt(idRecrutement));
+            r = r.getById(connexion);
+
+            //List<Candidat> ls = r.getListCandidats();
+
+            req.setAttribute("candidats", null);
             RequestDispatcher disp = req.getRequestDispatcher("/WEB-INF/views/admin/recrutement/listeCandidat.jsp");
             disp.forward(req, resp);
         } catch (Exception e) {

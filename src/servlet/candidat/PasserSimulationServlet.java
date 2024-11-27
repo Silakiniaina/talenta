@@ -44,19 +44,19 @@ public class PasserSimulationServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            Connection conn = Database.getConnection();
+            Connection connexion = (Connection)request.getSession().getAttribute("connexion");
             int idSimulation = Integer.parseInt(request.getParameter("id"));
             Candidat candidat = (Candidat) request.getSession().getAttribute("candidat");
             
             // Créer une nouvelle attribution
             SimulationCandidat simCandidat = new SimulationCandidat();
             simCandidat.setSimulation(idSimulation);
-            simCandidat.setCandidat(candidat.getIdCandidat());
+            simCandidat.setCandidat(connexion,candidat.getIdCandidat());
             simCandidat.setStatus(1); // Status "En cours" par exemple
-            simCandidat.save(conn);
+            simCandidat.save(connexion);
             
             // Enregistrer les réponses
-            List<QuestionSimulation> questions = Simulation.getById(conn, idSimulation).getQuestions();
+            List<QuestionSimulation> questions = Simulation.getById(connexion, idSimulation).getQuestions();
             for (QuestionSimulation question : questions) {
                 String reponse = request.getParameter("question_" + question.getIdQuestionSimulation());
                 if (reponse != null && !reponse.trim().isEmpty()) {

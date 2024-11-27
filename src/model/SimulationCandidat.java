@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 
 public class SimulationCandidat {
@@ -17,32 +16,30 @@ public class SimulationCandidat {
     
     // Constructeurs
     public SimulationCandidat() {}
-    
-    public SimulationCandidat(int idAttribution, int idSimulation, int idCandidat, int idStatus)throws SQLException {
-        this.setIdAttribution(idAttribution); 
-        this.setSimulation(idSimulation);
-        this.setCandidat(idCandidat);
-        this.setStatus(idStatus);
-    }
+
     
     // Méthodes DAO
-    public static List<SimulationCandidat> getByCandidat(Connection conn, int candidatId) throws SQLException {
-        List<SimulationCandidat> simulations = new ArrayList<>();
-        String query = "SELECT * FROM simulation_candidat WHERE id_candidat = ?";
-        try (PreparedStatement pstmt = conn.prepareStatement(query)) {
-            pstmt.setInt(1, candidatId);
-            ResultSet rs = pstmt.executeQuery();
-            while (rs.next()) {
-                simulations.add(new SimulationCandidat(
-                    rs.getInt("id_attribution"),
-                    rs.getInt("id_simulation"),
-                    rs.getInt("id_candidat"),
-                    rs.getInt("id_status")
-                ));
-            }
-        }
-        return simulations;
-    }
+    // public static List<SimulationCandidat> getByCandidat(Connection conn, int candidatId) throws SQLException {
+    //     List<SimulationCandidat> simulations = new ArrayList<>();
+    //     String query = "SELECT * FROM simulation_candidat WHERE id_candidat = ?";
+    //     try (PreparedStatement pstmt = conn.prepareStatement(query)) {
+    //         pstmt.setInt(1, candidatId);
+    //         ResultSet rs = pstmt.executeQuery();
+    //         while (rs.next()) {
+    //             SimulationCandidat s = new SimulationCandidat();
+    //             s.setIdAttribution(rs.getInt("id_attribution"));
+    //             s.setSimulation(rs.getInt("id_simulation"));
+    //             s.setCandidat(conn, candidatId);
+    //             simulations.add(new SimulationCandidat(
+    //                 ,
+    //                 ,
+    //                 rs.getInt("id_candidat"),
+    //                 rs.getInt("id_status")
+    //             ));
+    //         }
+    //     }
+    //     return simulations;
+    // }
     
     public void save(Connection conn) throws SQLException {
         if (this.idAttribution == 0) {
@@ -92,8 +89,10 @@ public class SimulationCandidat {
         this.simulation = Simulation.getById(null, simulation);
     }
 
-    public void setCandidat(int candidat) throws SQLException{
-        this.candidat = Candidat.getById(candidat);
+    public void setCandidat(Connection con, int candidat) throws SQLException{
+        Candidat c = new Candidat();
+        c.setIdCandidat(candidat);
+        this.candidat = c.getById(con);
     }
 
     public void setStatus(int status) throws SQLException{

@@ -14,15 +14,6 @@ public class Contrat {
     
     // Constructeurs
     public Contrat() {}
-    
-    public Contrat(Date date_debut_contrat, double salaire_base, Date date_fin_contrat, 
-                   int id_candidat, int id_type_contrat) throws SQLException{
-        this.setDateDebutContrat(date_debut_contrat);
-        this.setSalaireBase(salaire_base);
-        this.setDateFinContrat(date_fin_contrat); 
-        this.setCandidat(id_candidat);
-        this.setTypeContrat(id_type_contrat);
-    }
 
     // ACTION
     public void insert(Recrutement r) throws SQLException {
@@ -109,8 +100,10 @@ public class Contrat {
         this.dateFinContrat = Date.valueOf(dt);
     }
 
-    public void setCandidat(int candidat)throws SQLException {
-        this.candidat = Candidat.getById(candidat);
+    public void setCandidat(Connection con, int candidat)throws SQLException {
+        Candidat c = new Candidat();
+        c.setIdCandidat(candidat);
+        this.candidat = c.getById(con);
     }
 
     public void setTypeContrat(int typeContrat)  throws SQLException{

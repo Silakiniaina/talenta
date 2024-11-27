@@ -41,7 +41,7 @@ public class NotificationCandidat {
             while (rs.next()) {
                 NotificationCandidat d = new NotificationCandidat();
                 d.setIdNotification(rs.getInt(1));
-                d.setCandidat(rs.getInt(2));
+                d.setCandidat(c,rs.getInt(2));
                 d.setContenuNotification(rs.getString(3));
                 d.setDateNotification(rs.getTimestamp(4));
                 d.setDateVueNotification(rs.getTimestamp(5));
@@ -79,7 +79,7 @@ public class NotificationCandidat {
             while (rs.next()) {
                 NotificationCandidat d = new NotificationCandidat();
                 d.setIdNotification(rs.getInt(1));
-                d.setCandidat(rs.getInt(2));
+                d.setCandidat(c,rs.getInt(2));
                 d.setContenuNotification(rs.getString(3));
                 d.setDateNotification(rs.getTimestamp(4));
                 d.setDateVueNotification(rs.getTimestamp(5));
@@ -117,7 +117,7 @@ public class NotificationCandidat {
             if (rs.next()) {
                 result = new NotificationCandidat();
                 result.setIdNotification(rs.getInt(1));
-                result.setCandidat(rs.getInt(2));
+                result.setCandidat(c,rs.getInt(2));
                 result.setContenuNotification(rs.getString(3));
                 result.setDateNotification(rs.getTimestamp(4));
                 result.setDateVueNotification(rs.getTimestamp(5));
@@ -225,8 +225,10 @@ public class NotificationCandidat {
     public void setDateVueNotification(Timestamp dateVueNotification) {
         this.dateVueNotification = dateVueNotification;
     }
-    public void setCandidat(int candidat) throws SQLException{
-        this.candidat = Candidat.getById(candidat);
+    public void setCandidat(Connection con, int candidat) throws SQLException{
+        Candidat c = new Candidat();
+        c.setIdCandidat(candidat);
+        this.candidat = c.getById(con);
     }
     public void setTargetLink(String str){
         this.targetLink = str;

@@ -18,7 +18,7 @@ public class ResultatTestServlet extends HttpServlet{
        PrintWriter out = resp.getWriter();
        String idRecrutement = req.getParameter("idRecrutement");
        try {
-         List<ResultatEvalution> resultat = ResultatEvalution.getResultatParRecrutement(Integer.parseInt(idRecrutement));
+         List<ResultatEvalution> resultat = null;
 
          req.setAttribute("resultats", resultat);
          req.setAttribute("idRecrutement", idRecrutement);

@@ -19,6 +19,7 @@ public class Recrutement {
     private int nombre;
     private Poste poste;
     private Status status;
+    private List<Candidat> listCandidats;
 
     // CONSTRUCTORS
     public Recrutement(){
@@ -45,6 +46,8 @@ public class Recrutement {
                 d.setNombre(rs.getInt(4));
                 d.setPoste(rs.getInt(5));
                 d.setStatus(rs.getInt(6));
+                d.fetchListCandidat(c);
+
                 result.add(d);
             }
         } catch (SQLException e) {
@@ -63,26 +66,29 @@ public class Recrutement {
         return result;
     }
 
-    public static Recrutement getById(int id) throws SQLException{
-        Recrutement result = null;
-        Connection c = null;
-        PreparedStatement prstm = null; 
+    public Recrutement getById(Connection c) throws SQLException{
+        PreparedStatement prstm = null;
+        boolean isNewConnection = false; 
         ResultSet rs = null;
         String query = "SELECT * FROM recrutement WHERE id_recrutement = ?";
         try {
-            c = Database.getConnection();
+            if(c == null){
+                c = Database.getConnection();
+                isNewConnection = true;
+            }
             prstm = c.prepareStatement(query);
-            prstm.setInt(1, id);
+            prstm.setInt(1, this.getIdRecrutement());
             rs = prstm.executeQuery();
 
             if(rs.next()) {
-                result = new Recrutement();
-                result.setIdRecrutement(rs.getInt(1));
-                result.setDateDebut(rs.getDate(2));
-                result.setDateFin(rs.getDate(3));
-                result.setNombre(rs.getInt(4));
-                result.setPoste(rs.getInt(5));
+                this.setIdRecrutement(rs.getInt(1));
+                this.setDateDebut(rs.getDate(2));
+                this.setDateFin(rs.getDate(3));
+                this.setNombre(rs.getInt(4));
+                this.setPoste(rs.getInt(5));
+                this.fetchListCandidat(c);
             }
+            return this;
         } catch (SQLException e) {
             throw e;
         }finally{
@@ -92,11 +98,10 @@ public class Recrutement {
             if(prstm != null){
                 prstm.close();
             }
-            if(c != null){
+            if(c != null && isNewConnection){
                 c.close();
             }
         }
-        return result;
     }
 
     public Recrutement insert() throws SQLException{
@@ -137,6 +142,42 @@ public class Recrutement {
         }
     }
 
+    public void fetchListCandidat(Connection c) throws SQLException{
+        List<Candidat> result = new ArrayList<>();
+        boolean isNewConnection = false;
+        PreparedStatement prstm = null; 
+        ResultSet rs = null;
+        String query = "SELECT id_candidat FROM v_recrutement_candidat WHERE id_recrutement = ?";
+        try {
+            if(c == null){
+                c = Database.getConnection();
+                isNewConnection = true;
+            }
+            prstm = c.prepareStatement(query);
+            prstm.setInt(1, this.getIdRecrutement());
+            rs = prstm.executeQuery();
+
+            while (rs.next()) {
+                Candidat cd = new Candidat();
+                cd.setIdCandidat(rs.getInt(1));
+                result.add(cd.getById(c));
+            }
+            this.setListCandidats(result);
+        } catch (SQLException e) {
+            throw e;
+        }finally{
+            if(rs != null){
+                rs.close();
+            }
+            if(prstm != null){
+                prstm.close();
+            }
+            if(c != null && isNewConnection){
+                c.close();
+            }
+        }
+    }
+
     // GETTERS AND SETTERS
     public int getIdRecrutement() {
         return idRecrutement;
@@ -156,8 +197,13 @@ public class Recrutement {
     public Status getStatus(){
         return this.status;
     }
-
-
+    public List<Candidat> getListCandidats() {
+        return listCandidats;
+    }
+    
+    public void setListCandidats(List<Candidat> listCandidats) {
+        this.listCandidats = listCandidats;
+    }
     public void setIdRecrutement(int idRecrutement) {
         this.idRecrutement = idRecrutement;
     }

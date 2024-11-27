@@ -2,6 +2,7 @@ package servlet.recrutement;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -45,14 +46,18 @@ public class ContratServlet extends HttpServlet{
         int recrutement = Integer.parseInt(request.getParameter("idRecrutement"));
         double salaire = Double.parseDouble(request.getParameter("salaire"));
         try {
+            Connection connexion = (Connection)request.getSession().getAttribute("connexion");
+
             Contrat c = new Contrat();
             c.setDateDebutContrat(dateDebut);
             c.setDateFinContrat(dateFin);
             c.setTypeContrat(type);
-            c.setCandidat(candidat);
+            c.setCandidat(connexion,candidat);
             c.setSalaireBase(salaire);
 
-            Recrutement r = Recrutement.getById(recrutement);
+            Recrutement r = new Recrutement();
+            r.setIdRecrutement(recrutement);
+            r = r.getById(connexion);
 
             c.insert(r);
             out.println("Contrat fait");

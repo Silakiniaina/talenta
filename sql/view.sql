@@ -129,9 +129,10 @@ SELECT
             ) AS numeric
         ),
         2
-    ) as pourcentage_matching_total
+    ) as pourcentage_matching_total,
+    po.is_prechosen
 FROM v_candidat c
-JOIN recrutement_candidat po ON c.id_candidat = po.id_candidat
+JOIN v_recrutement_candidat po ON c.id_candidat = po.id_candidat
 JOIN recrutement r ON r.id_recrutement = po.id_recrutement
 JOIN poste p ON p.id_poste = r.id_poste
 LEFT JOIN competences_match cm ON c.id_candidat = cm.id_candidat AND r.id_recrutement = cm.id_recrutement

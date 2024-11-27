@@ -5,11 +5,16 @@ import java.io.PrintWriter;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
+import java.sql.Connection;
+
 import model.Candidat;
 
+@WebServlet("/detailsCandidat")
 public class DetailsCandidatServlet extends HttpServlet{
     
     @Override
@@ -17,7 +22,11 @@ public class DetailsCandidatServlet extends HttpServlet{
         PrintWriter out = resp.getWriter();
         String idCandidat = req.getParameter("idCandidat");
         try {
-            Candidat c = Candidat.getById(Integer.parseInt(idCandidat));
+            Connection connexion = (Connection)req.getSession().getAttribute("connexion");
+
+            Candidat c = new Candidat();
+            c.setIdCandidat(Integer.parseInt(idCandidat));
+            c = c.getById(connexion);
 
             req.setAttribute("candidat", c);
             RequestDispatcher disp = req.getRequestDispatcher("/WEB-INF/views/candidat/detailsCandidat.jsp");

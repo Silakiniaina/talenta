@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import model.utils.Database;
@@ -17,6 +18,7 @@ public class PreselectionCandidat {
     private double pourcentageExperience;
     private double pourcentageDiplome;
     private double scoreGlobale;
+    private boolean prechosen;
 
     // CONSTRUCTORS
     public PreselectionCandidat(){
@@ -25,28 +27,46 @@ public class PreselectionCandidat {
 
 
     // ACTIONS 
-    public static List<PreselectionCandidat> getPreselectionByRecrutement(int idRecrutement) throws SQLException{
+    public static HashMap<String,List<PreselectionCandidat>> getPreselectionByRecrutement(Connection c , int idRecrutement) throws SQLException{
         List<PreselectionCandidat> result = new ArrayList<>();
-        Connection c = null;
+        HashMap<String,List<PreselectionCandidat>> res = new HashMap<>();
+        boolean isNewConnection = false;
         PreparedStatement prstm = null; 
         ResultSet rs = null;
         String query = "SELECT * FROM v_filtre_cv WHERE id_recrutement = ?";
         try {
-            c = Database.getConnection();
+            if(c == null){
+                c = Database.getConnection();
+                isNewConnection = true;
+            }
             prstm = c.prepareStatement(query);
             prstm.setInt(1, idRecrutement);
             rs = prstm.executeQuery();
 
             while (rs.next()) {
                 PreselectionCandidat d = new PreselectionCandidat();
-                d.setCandidat(rs.getInt(1));
-                d.setRecrutement(rs.getInt(2));
+                d.setCandidat(c,rs.getInt(1));
+                d.setRecrutement(c,rs.getInt(2));
                 d.setPourcentageCompetence(rs.getDouble(4));
                 d.setPourcentageDiplome(rs.getDouble(5));
                 d.setPourcentageExperience(rs.getDouble(6));
                 d.setScoreGlobale(rs.getDouble(7));
+                d.setPrechosen(rs.getBoolean(8));
                 result.add(d);
             }
+            List<PreselectionCandidat> preselection = new ArrayList<>();
+            for(PreselectionCandidat p : result){
+                if(p.isPrechosen()){
+                    preselection.add(p);
+                }
+            }
+
+            result.removeAll(preselection);
+
+            res.put("preselectionne", preselection);
+            res.put("normal", result);
+            
+            return res;
         } catch (SQLException e) {
             throw e;
         }finally{
@@ -56,11 +76,10 @@ public class PreselectionCandidat {
             if(prstm != null){
                 prstm.close();
             }
-            if(c != null){
+            if(c != null && isNewConnection){
                 c.close();
             }
         }
-        return result;
     }
 
 
@@ -84,11 +103,20 @@ public class PreselectionCandidat {
     public double getScoreGlobale() {
         return scoreGlobale;
     }
-    public void setCandidat(int idcandidat) throws SQLException{
-        this.candidat = Candidat.getById(idcandidat);
+    public boolean isPrechosen() {
+        return prechosen;
     }
-    public void setRecrutement(int idrecrutement) throws SQLException{
-        this.recrutement = Recrutement.getById(idrecrutement);
+
+    public void setCandidat(Connection con, int candidat) throws SQLException{
+        Candidat c = new Candidat();
+        c.setIdCandidat(candidat);
+        this.candidat = c.getById(con);
+    }
+    public void setRecrutement(Connection c,int idrecrutement) throws SQLException{
+        Recrutement r = new Recrutement();
+        r.setIdRecrutement(idrecrutement);
+
+        this.recrutement = r.getById(c);
     }
     public void setPourcentageCompetence(double pourcentageCompetence) {
         this.pourcentageCompetence = pourcentageCompetence;
@@ -98,6 +126,9 @@ public class PreselectionCandidat {
     }
     public void setPourcentageDiplome(double d){
         this.pourcentageDiplome = d;
+    }
+    public void setPrechosen(boolean prechosen) {
+        this.prechosen = prechosen;
     }
     public void setScoreGlobale(double scoreGlobale) {
         this.scoreGlobale = scoreGlobale;

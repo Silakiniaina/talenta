@@ -16,8 +16,6 @@
     List<Experience> experiences = candidat.getListExperience();
     List<Education> educations = candidat.getListEducation();
 %>
-
-<%@include file="../header.jsp" %>
 <body>
     <h1>CV de <%= candidat.getNomCandidat() + " " + candidat.getPrenomCandidat() %></h1>
 

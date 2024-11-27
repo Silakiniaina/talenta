@@ -2,6 +2,7 @@ package servlet.candidat;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
 import java.sql.Date;
 import java.time.LocalDate;
 import jakarta.servlet.ServletException;
@@ -22,8 +23,10 @@ public class CandidatServlet extends HttpServlet{
        try {
             HttpSession session = req.getSession();
             Candidat candidat = (Candidat)session.getAttribute("candidat");
+            Connection c = (Connection)session.getAttribute("connexion");
+            
             RecrutementCandidat rec = new RecrutementCandidat();
-            rec.setRecrutement(Integer.parseInt(idRecrutement));
+            rec.setRecrutement(c,Integer.parseInt(idRecrutement));
             rec.setCandidat(candidat);
             rec.setDatePostule(Date.valueOf(LocalDate.now()));
             rec.insert();

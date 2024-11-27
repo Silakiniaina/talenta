@@ -30,10 +30,6 @@
         <servlet-class>servlet.candidat.ListeCandidatServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>DetailsCandidatServlet</servlet-name>
-        <servlet-class>servlet.candidat.DetailsCandidatServlet</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>PosteServlet</servlet-name>
         <servlet-class>servlet.candidat.PosteServlet</servlet-class>
     </servlet>
@@ -66,10 +62,6 @@
     <servlet-mapping>
         <servlet-name>ListeCandidatServlet</servlet-name>
         <url-pattern>/listeCandidat</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>DetailsCandidatServlet</servlet-name>
-        <url-pattern>/detailsCandidat</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>PreselectionServlet</servlet-name>

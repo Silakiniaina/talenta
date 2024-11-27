@@ -1,8 +1,8 @@
 <%@ page import="java.util.List" %>
-<%@ page import=" model.PreselectionCandidat" %>
-<%@ page import=" model.Candidat" %>
-<%@ page import=" model.Recrutement" %>
-
+<%@ page import="model.Candidat" %>
+<%
+    List<Candidat> candidats = (List<Candidat>)request.getAttribute("candidats");
+%>
     <%@include file="../../shared/head.jsp" %>
     <body>
         <div class="container-scroller">
@@ -14,39 +14,33 @@
                         <div class="col-lg-12 grid-margin stretch-card">
                             <div class="card">
                                 <div class="card-body">
-                                    <h4 class="card-title">Preselection candidat</h4>
+                                    <h4 class="card-title">List des candidatures</h4>
                                     <div class="table-responsive">
                                     <table class="table table-hover">
                                         <thead>
                                             <tr>
-                                                <th>ID</th>
+                                                <th>#</th>
                                                 <th>Nom</th>
-                                                <th>Poste</th>
-                                                <th>% Competence</th>
-                                                <th>% diplome</th>
-                                                <th>% experience</th>
-                                                <th>% globale</th>
+                                                <th>Prenom</th>
+                                                <th>Date Naissance</th>
+                                                <th>Genre</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <%
-                                                List<PreselectionCandidat> preselectionCandidats = (List<PreselectionCandidat>) request.getAttribute("preselections");
-                                                if (preselectionCandidats != null && !preselectionCandidats.isEmpty()) {
-                                                    for (PreselectionCandidat preselection : preselectionCandidats) {
-                                                        Candidat candidat = preselection.getCandidat();
-                                                        Recrutement recrutement = preselection.getRecrutement();
+                                                if (candidats != null && !candidats.isEmpty()) {
+                                                    for (Candidat candidat : candidats) {
                                             %>
-                                                <tr>
-                                                    <td><%= candidat.getIdCandidat() %></td>
-                                                    <td><%= candidat.getNomCandidat() %> <%= candidat.getPrenomCandidat() %></td>
-                                                    <td><%= recrutement.getPoste().getNomPoste() %></td>
-                                                    <td class="text-<%= preselection.getTypeNiveau(1) %>>"> <%= candidat.getPourcentageCompetence() %> <i class="mdi mdi-arrow-<%= preselection.getTypeArrow(1) %>"></i></td>
-                                                    <td class="text-<%= preselection.getTypeNiveau(2) %>>"> <%= candidat.getPourcentageDiplome() %> <i class="mdi mdi-arrow-<%= preselection.getTypeArrow(2) %>"></i></td>
-                                                    <td class="text-<%= preselection.getTypeNiveau(3) %>>"> <%= candidat.getPourcentageExperience() %> <i class="mdi mdi-arrow-<%= preselection.getTypeArrow(3) %>"></i></td>
-                                                    <td class="text-<%= preselection.getTypeNiveau(4) %>>"> <%= candidat.getScoreGlobale() %> <i class="mdi mdi-arrow-<%= preselection.getTypeArrow(4) %>"></i></td>
-                                                    <td><a href="#" type="button">Test</a></td>
-                                                </tr>
+                                            <tr>
+                                                <td><%= candidat.getIdCandidat() %></td>
+                                                <td><%= candidat.getNomCandidat() %></td>
+                                                <td><%= candidat.getPrenomCandidat() %></td>
+                                                <td><%= candidat.getDateNaissance() %></td>
+                                                <td><%= candidat.getAdresse() %></td>
+                                                <td><%= candidat.getGenre().getLabel() %></td>
+                                                <td><a type="button" class="btn btn-sm btn-outline-primary" href="detailsCandidat?idCandidat=<%= candidat.getIdCandidat() %>">Voir CV</a></td>
+                                            </tr>
                                             <%
                                                     }
                                                 } else {

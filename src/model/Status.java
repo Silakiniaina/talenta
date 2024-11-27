@@ -41,6 +41,7 @@ public class Status {
                 Status d = new Status();
                 d.setIdStatus(rs.getInt(1));
                 d.setLabel(rs.getString(2));
+                d.setCorrespondingColor(rs.getString(3));
                 result.add(d);
             }
         } catch (SQLException e) {
@@ -65,6 +66,7 @@ public class Status {
                  result = new Status();
                  result.setIdStatus(rs.getInt(1));
                  result.setLabel(rs.getString(2));
+                 result.setCorrespondingColor(rs.getString(3));
              }
          } catch (SQLException e) {
              throw e;

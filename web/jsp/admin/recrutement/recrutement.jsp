@@ -35,7 +35,7 @@
                                                 <h6 class="text-muted font-weight-normal">Date Fin : <%= r.getDateFin() %></h6>
                                             </div>
                                             <div class="col-4 col-sm-12 col-xl-4 text-center align-items-center justify-content-betweentext-xl-right">
-                                                <h4 class="mb-0"><%= r.getIdRecrutement() %></h4>  
+                                                <h4 class="mb-0">#<%= r.getIdRecrutement() %></h4>  
                                                 <p class="badge badge-<%= r.getStatus().getCorrespondingColor() %>"><%= r.getStatus().getLabel() %></p>
                                             </div>
                                             <div class="d-flex d-sm-block d-md-flex align-items-center justify-content-center col-md-12 p-0"style="gap:10px;">

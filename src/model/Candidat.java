@@ -73,32 +73,44 @@ public class Candidat {
         return result;
     }
 
-    public static Candidat getById(int id) throws SQLException{
-        Candidat result = null;
-        Connection c = null;
+    public Candidat getById(Connection c) throws SQLException{
+        boolean isNewConnection = false;
         PreparedStatement prstm = null; 
         ResultSet rs = null;
         String query = "SELECT * FROM v_candidat WHERE id_candidat = ?";
         try {
-            c = Database.getConnection();
+            if( c == null){
+                c = Database.getConnection();
+                isNewConnection = true;
+            }
             prstm = c.prepareStatement(query);
-            prstm.setInt(1, id);
+            prstm.setInt(1, this.getIdCandidat());
             rs = prstm.executeQuery();
 
             if (rs.next()) {
-                result = new Candidat();
-                result.setNomCandidat(rs.getString(2));
-                result.setPrenomCandidat(rs.getString(3));
-                result.setDateNaissance(rs.getDate(4));
-                result.setAdresse(rs.getString(5));
-                result.setGenre(rs.getInt(6));
-                result.getCompetences(c);
-                result.getExperiences(c);
-                result.getEducations(c);
+                this.setIdCandidat(rs.getInt(1));
+                this.setNomCandidat(rs.getString(2));
+                this.setPrenomCandidat(rs.getString(3));
+                this.setDateNaissance(rs.getDate(4));
+                this.setAdresse(rs.getString(5));
+                this.setGenre(rs.getInt(6));
+                this.getCompetences(c);
+                this.getExperiences(c);
+                this.getEducations(c);
             }
-            return result;
+            return this;
         } catch (SQLException e) {
             throw e;
+        }finally{
+            if(rs != null){
+                rs.close();
+            }
+            if(prstm != null){
+                prstm.close();
+            }
+            if(c != null && isNewConnection){
+                c.close();
+            }
         }
     }
 
@@ -358,14 +370,13 @@ public class Candidat {
 
     public static void main(String[] args) {
         try {
-            Candidat c = Candidat.getById(1);
-            if(c != null){
-                System.out.println("c n\'est pas null");
-                System.out.println(new Gson().toJson(c.getListCompetence()));
-            }else{
-                System.out.println("c est null");
-            }
-        } catch (SQLException e) {
+           
+            Recrutement r = new Recrutement();
+            r.setIdRecrutement(1);
+
+            r = r.getById(null);
+            System.out.println(new Gson().toJson(r.getListCandidats()));
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
