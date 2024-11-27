@@ -116,7 +116,7 @@
       font: {
         lineHeight: 15,
         style: "normal",
-        color: "rgb(84, 84, 84)"
+        color: "#000"
       },
       shadowSize: 0,
       ticks: [
@@ -141,7 +141,7 @@
       font: {
         lineHeight: 15,
         style: "normal",
-        color: "rgb(84, 84, 84)"
+        color: "#000",
       },
       shadowSize: 0
     },
@@ -165,7 +165,7 @@
         },
         label: 'Product A',
         stack: true,
-        color: '#F36368',
+        color: '#F36368'
       },
       {
         data: d2,
@@ -185,7 +185,7 @@
         stack: true,
         color: '#68B3C8'
       }
-    ], options );
+    ], options);
   }
 
 
@@ -195,7 +195,7 @@
       Tooltips for Flot Charts
   ---------------------------------*/
   if ($(".flot-chart-line").length) {
-    $(".flot-chart-line").bind("plothover", function(event, pos, item) {
+    $(".flot-chart-line").on("bind", "plothover", function(event, pos, item) {
       if (item) {
         var x = item.datapoint[0].toFixed(2),
           y = item.datapoint[1].toFixed(2);

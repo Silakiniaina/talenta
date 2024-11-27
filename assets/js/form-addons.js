@@ -119,7 +119,7 @@
       $('select').barrating('destroy');
     }
 
-    $('.rating-enable').click(function(event) {
+    $('.rating-enable').on("click", function(event) {
       event.preventDefault();
 
       ratingEnable();
@@ -128,7 +128,7 @@
       $('.rating-disable').removeClass('deactivated');
     });
 
-    $('.rating-disable').click(function(event) {
+    $('.rating-disable').on("click", function(event) {
       event.preventDefault();
 
       ratingDisable();

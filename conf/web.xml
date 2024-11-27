@@ -55,12 +55,6 @@
         <servlet-class>servlet.simulation.DetailsSimulationServlet</servlet-class>
     </servlet>
 
-    <servlet>
-        <servlet-name>LoginServlet</servlet-name>
-        <servlet-class>servlet.shared.LoginServlet</servlet-class>
-    </servlet>
-    
-
     <servlet-mapping>
         <servlet-name>RecrutementServlet</servlet-name>
         <url-pattern>/recrutement</url-pattern>
@@ -96,10 +90,6 @@
     <servlet-mapping>
         <servlet-name>PosteServlet</servlet-name>
         <url-pattern>/poste</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>LoginServlet</servlet-name>
-        <url-pattern>/login</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>AddCompetenceServlet</servlet-name>

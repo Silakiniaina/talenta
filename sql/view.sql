@@ -140,14 +140,14 @@ LEFT JOIN experience_totale et ON c.id_candidat = et.id_candidat
 WHERE current_date BETWEEN r.date_debut_recrutement AND r.date_fin_recrutement;
 
 CREATE OR REPLACE VIEW v_recrutement_candidat AS
-SELECT 
-    * 
-FROM recrutement_candidat
-WHERE id_candidat 
-NOT IN (
     SELECT 
-        id_candidat
-    FROM employe 
-);
+        * 
+    FROM recrutement_candidat
+    WHERE id_candidat 
+    NOT IN (
+        SELECT 
+            id_candidat
+        FROM employe 
+    );
 
 

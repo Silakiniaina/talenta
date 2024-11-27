@@ -13,6 +13,7 @@ public class Status {
     
     private int idStatus;
     private String label;
+    private String correspondingColor;
 
     // CONSTRUCTORS
     public Status(){
@@ -88,11 +89,18 @@ public class Status {
     public String getLabel() {
         return label;
     }
+
+    public String getCorrespondingColor() {
+        return correspondingColor;
+    }
     public void setIdStatus(int idStatus) {
         this.idStatus = idStatus;
     }
     public void setLabel(String label) {
         this.label = label;
+    }
+    public void setCorrespondingColor(String correspondingColor) {
+        this.correspondingColor = correspondingColor;
     }
 
     

@@ -65,6 +65,11 @@ INSERT INTO responsable(nom,email,mdp,id_role) VALUES
     ('Sanda','sanda@admin.com','admin',1)
 ;
 
+ UPDATE status SET corresponding_color = 'primary' WHERE id_status= 1;
+ UPDATE status SET corresponding_color = 'warning' WHERE id_status= 2;
+ UPDATE status SET corresponding_color = 'success' WHERE id_status= 3;
+ UPDATE status SET corresponding_color = 'danger' WHERE id_status= 4;
+
 
 INSERT INTO type_diplome(label) VALUES
     ('Licence'),

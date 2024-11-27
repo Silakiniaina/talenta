@@ -11,9 +11,9 @@
     <%@include file="../../shared/head.jsp" %>
     <body>
         <div class="container-scroller">
-            <%@include file="../../shared/sidebarAdmin.jsp" %>
+            <%@include file="../../shared/navbar.jsp" %>
             <div class="container-fluid page-body-wrapper">
-                <%@include file="../../shared/navbar.jsp" %>
+                <%@include file="../../shared/sidebarAdmin.jsp" %>
                 <div class="main-panel">
                     <div class="content-wrapper">
                         <h2>Liste des Recrutements</h2>
@@ -34,14 +34,14 @@
                                                 </div>
                                                 <h6 class="text-muted font-weight-normal">Date Fin : <%= r.getDateFin() %></h6>
                                             </div>
-                                            <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
-                                                <h4 class="mb-0">#<%= r.getIdRecrutement() %></h4>
-                                                <i class="icon-lg mdi mdi-codepen text-primary ml-auto"></i>
+                                            <div class="col-4 col-sm-12 col-xl-4 text-center align-items-center justify-content-betweentext-xl-right">
+                                                <h4 class="mb-0"><%= r.getIdRecrutement() %></h4>  
+                                                <p class="badge badge-<%= r.getStatus().getCorrespondingColor() %>"><%= r.getStatus().getLabel() %></p>
                                             </div>
-                                            <div class="d-flex d-sm-block d-md-flex align-items-center"style="gap:10px;">
-                                                <a href="listeCandidat?idRecrutement=<%=r.getIdRecrutement() %>" type="button" class="btn btn-inverse-primary ">Candidats</a>
-                                                <a href="preselection?idRecrutement=<%=r.getIdRecrutement() %>" type="button" class="btn btn-inverse-secondary ">Selection</a>
-                                                <a href="resultatTest?idRecrutement=<%=r.getIdRecrutement() %>" type="button" class="btn btn-inverse-success ">Resultat</a>
+                                            <div class="d-flex d-sm-block d-md-flex align-items-center justify-content-center col-md-12 p-0"style="gap:10px;">
+                                                <a href="listeCandidat?idRecrutement=<%=r.getIdRecrutement() %>" type="button" class="btn btn-sm btn-outline-primary ">Candidats</a>
+                                                <a href="preselection?idRecrutement=<%=r.getIdRecrutement() %>" type="button" class="btn btn-sm btn-outline-secondary ">Selection</a>
+                                                <a href="resultatTest?idRecrutement=<%=r.getIdRecrutement() %>" type="button" class="btn btn-sm btn-outline-success ">Resultat</a>
                                             </div>
                                         </div>
                                     </div>

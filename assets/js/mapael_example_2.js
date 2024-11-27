@@ -3,152 +3,171 @@ $(function() {
   if ($(".mapael-example-2").length) {
     $(".mapael-example-2").mapael({
       map: {
-        name: "france_departments",
-        defaultArea: {
-          attrs: {
-            fill: "#f4f4e8",
-            stroke: "#00a1fe"
-          },
-          attrsHover: {
-            fill: "#a4e100"
+        name: "france_departments"
+        // Enable zoom on the map
+        , zoom: {
+            enabled: false,
+            maxLevel: 10
+        }
+        // Set default plots and areas style
+        , defaultPlot: {
+            attrs: {
+                fill: "#004a9b"
+                , opacity: 0.6
+            }
+            , attrsHover: {
+                opacity: 1
+            }
+            , text: {
+                attrs: {
+                    fill: "#505444"
+                }
+                , attrsHover: {
+                    fill: "#000"
+                }
+            }
+        }
+        , defaultArea: {
+            attrs: {
+                fill: "#f4f4e8"
+                , stroke: "#ced8d0"
+            }
+            , attrsHover: {
+                fill: "#a4e100"
+            }
+            , text: {
+                attrs: {
+                    fill: "#505444"
+                }
+                , attrsHover: {
+                    fill: "#000"
+                }
+            }
+        }
+    },
+
+    legend: {
+      plot: [
+          {
+              labelAttrs: {
+                  fill: "#4a4a4a"
+              },
+              titleAttrs: {
+                  fill: "#4a4a4a"
+              },
+              cssClass: 'population',
+              mode: 'horizontal',
+              title: "Population",
+              marginBottomTitle: 5,
+              slices: [{
+                  size: 15,
+                  legendSpecificAttrs: {
+                      fill: '#094a9b',
+                      stroke: '#f4f4e8',
+                      "stroke-width": 2
+                  },
+                  label: "< 10",
+                  max: "10000"
+              }, {
+                  size: 22,
+                  legendSpecificAttrs: {
+                      fill: '#094a9b',
+                      stroke: '#f4f4e8',
+                      "stroke-width": 2
+                  },
+                  label: "> 10 and < 100",
+                  min: "10000",
+                  max: "100000"
+              }, {
+                  size: 30,
+                  legendSpecificAttrs: {
+                      fill: '#094a9b',
+                      stroke: '#f4f4e8',
+                      "stroke-width": 2
+                  },
+                  label: "> 100",
+                  min: "100000"
+              }]
           }
-        }
+      ]
+    },
+
+    // Add some plots on the map
+    plots: {
+      'paris': {
+        type: "circle",
+        size: 18,
+        value: [5000, 20],
+        latitude: 48.86,
+        longitude: 2.3444,
+        tooltip: {content: "<span style=\"font-weight:bold;\">City :</span> Paris"},
+        text: {content: "Paris"}
       },
-      legend: {
-        plot: [{
-          labelAttrs: {
-            fill: "#4a4a4a"
-          },
-          titleAttrs: {
-            fill: "#4a4a4a"
-          },
-          cssClass: 'population',
-          mode: 'horizontal',
-          title: "Population",
-          marginBottomTitle: 5,
-          slices: [{
-            size: 25,
-            legendSpecificAttrs: {
-              fill: '#00a1fe'
-            },
-            label: "< 10 000",
-            max: "10000"
-          }, {
-            size: 25,
-            legendSpecificAttrs: {
-              fill: '#00a1fe'
-            },
-            label: "> 10 000 and < 100 000",
-            min: "10000",
-            max: "100000"
-          }, {
-            size: 25,
-            legendSpecificAttrs: {
-              fill: '#00a1fe'
-            },
-            label: "> 100 000",
-            min: "100000"
-          }]
-        }]
+      'limoge': {
+        type: "circle",
+        size: 20,
+        value: [50000, 20],
+        latitude: 45.8188276,
+        longitude: 1.1060351,
+        tooltip: {content: "<span style=\"font-weight:bold;\">City :</span> Limoge"},
+        text: { content: "Limoge"}
       },
-      plots: {
-        'ny': {
-          latitude: 40.717079,
-          longitude: -74.00116,
-          tooltip: {
-            content: "New York"
-          },
-          value: [5000, 20]
-        },
-        'an': {
-          latitude: 61.2108398,
-          longitude: -149.9019557,
-          tooltip: {
-            content: "Anchorage"
-          },
-          value: [50000, 20]
-        },
-        'sf': {
-          latitude: 37.792032,
-          longitude: -122.394613,
-          tooltip: {
-            content: "San Francisco"
-          },
-          value: [150000, 20]
-        },
-        'pa': {
-          latitude: 19.493204,
-          longitude: -154.8199569,
-          tooltip: {
-            content: "Pahoa"
-          },
-          value: [5000, 200]
-        },
-        'la': {
-          latitude: 34.025052,
-          longitude: -118.192006,
-          tooltip: {
-            content: "Los Angeles"
-          },
-          value: [50000, 200]
-        },
-        'dallas': {
-          latitude: 32.784881,
-          longitude: -96.808244,
-          tooltip: {
-            content: "Dallas"
-          },
-          value: [150000, 200]
-        },
-        'miami': {
-          latitude: 25.789125,
-          longitude: -80.205674,
-          tooltip: {
-            content: "Miami"
-          },
-          value: [5000, 2000]
-        },
-        'washington': {
-          latitude: 38.905761,
-          longitude: -77.020746,
-          tooltip: {
-            content: "Washington"
-          },
-          value: [50000, 2000]
-        },
-        'seattle': {
-          latitude: 47.599571,
-          longitude: -122.319426,
-          tooltip: {
-            content: "Seattle"
-          },
-          value: [150000, 2000]
-        },
-        'test1': {
-          latitude: 44.671504,
-          longitude: -110.957968,
-          tooltip: {
-            content: "Test 1"
-          },
-          value: [5000, 2000]
-        },
-        'test2': {
-          latitude: 40.667013,
-          longitude: -101.465781,
-          tooltip: {
-            content: "Test 2"
-          },
-          value: [50000, 200]
-        },
-        'test3': {
-          latitude: 38.362031,
-          longitude: -86.875938,
-          tooltip: {
-            content: "Test 3"
-          },
-          value: [150000, 20]
-        }
+      'lyon': {
+        type: "circle",
+        size: 18,
+        value: [150000, 20],
+        latitude: 45.758888888889,
+        longitude: 4.8413888888889,
+        tooltip: {content: "<span style=\"font-weight:bold;\">City :</span> Lyon"},
+        text: {content: "Lyon"},
+      },
+      'rennes': {
+        type: "circle",
+        size: 20,
+        value: [5000, 200],
+        latitude: 48.114166666667,
+        longitude: -1.6808333333333,
+        tooltip: {content: "<span style=\"font-weight:bold;\">City :</span> Rennes"},
+        text: {content: "Rennes"},
+      },
+      "Moulins": {
+        type: "circle",
+        size: 20,
+        value: [150000, 200],
+        latitude: 46.86,
+        longitude: 3.3444,
+        tooltip: {content: "<span style=\"font-weight:bold;\">City :</span> Moulins"},
+        text: {content: "Moulins"}
+      },
+      "Bergerac": {
+        type: "circle",
+        size: 20,
+        value: [5000, 2000],
+        latitude: 44.8188276,
+        longitude: 1.2060351,
+        tooltip: {content: "<span style=\"font-weight:bold;\">City :</span> Bergerac"},
+        text: {content: "Bergerac"}
+      },
+      "Le Creusot": {
+        type: "circle",
+        size: 20,
+        value: [5000, 2000],
+        latitude: 46.658888888889,
+        longitude: 4.8413888888889,
+        tooltip: {content: "<span style=\"font-weight:bold;\">City :</span> Le Creusot"},
+        text: {content: "Le Creusot"},
+      },
+      "La Roche Sur-Yon": {
+        type: "circle",
+        value: 860000,
+        size: 20,
+        value: [150000, 2000],
+        latitude: 47.114166666667,
+        longitude: -1.6808333333333,
+        tooltip: {content: "<span style=\"font-weight:bold;\">City :</span> La Roche Sur-Yon"},
+        text: {content: "La Roche Sur-Yon"},
       }
+    }
     });
   }
 });

@@ -154,6 +154,28 @@ $(function() {
       ]
     });
   }
+
+  if ($("#morris-donut-dark-example").length) {
+    Morris.Donut({
+      element: 'morris-donut-dark-example',
+      colors: ['#76C1FA', '#F36368', '#63CF72', '#FABA66'],
+      data: [{
+          label: "Download Sales",
+          value: 12
+        },
+        {
+          label: "In-Store Sales",
+          value: 30
+        },
+        {
+          label: "Mail-Order Sales",
+          value: 20
+        }
+      ],
+      labelColor: "#b1b1b5"
+    });
+  }
+
   if ($('#morris-dashboard-taget').length) {
     Morris.Area({
       element: 'morris-dashboard-taget',

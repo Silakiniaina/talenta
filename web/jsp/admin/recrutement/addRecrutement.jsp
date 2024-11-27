@@ -4,9 +4,9 @@
     <%@include file="../../shared/head.jsp" %>
     <body>
         <div class="container-scroller">
-            <%@include file="../../shared/sidebarAdmin.jsp" %>
+            <%@include file="../../shared/navbar.jsp" %>
             <div class="container-fluid page-body-wrapper">
-                <%@include file="../../shared/navbar.jsp" %>
+                <%@include file="../../shared/sidebarAdmin.jsp" %>
                 <div class="main-panel">
                     <div class="content-wrapper">
                         <div class="row">

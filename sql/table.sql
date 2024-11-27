@@ -288,3 +288,5 @@ CREATE TABLE reponse_simulation_candidat (
    FOREIGN KEY(id_attribution) REFERENCES simulation_candidat(id_attribution),
    FOREIGN KEY(id_reponse_candidat) REFERENCES reponse_simulation_possibles(id_reponse_simulation_possibles)
 );
+
+ALTER TABLE status ADD COLUMN corresponding_color VARCHAR(250);

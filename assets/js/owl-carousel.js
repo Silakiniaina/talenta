@@ -33,7 +33,7 @@
       nav: true,
       autoplay: true,
       autoplayTimeout: 5500,
-      navText: ["<i class='mdi mdi-chevron-left'></i>", "<i class='mdi mdi-chevron-right'></i>"]
+      navText: ["<i class='ti-angle-left'></i>", "<i class='ti-angle-right'></i>"]
     });
   }
 

@@ -4,7 +4,7 @@
 
   if ($('#circleProgress1').length) {
     var bar = new ProgressBar.Circle(circleProgress1, {
-      color: '#ffffff',
+      color: '#000',
       // This has to be the same size as the maximum width to
       // prevent clipping
       strokeWidth: 4,
@@ -15,11 +15,11 @@
         autoStyleContainer: false
       },
       from: {
-        color: '#0090e7',
+        color: '#aaa',
         width: 4
       },
       to: {
-        color: '#0090e7',
+        color: '#677ae4',
         width: 4
       },
       // Set default step function for all animate calls
@@ -43,7 +43,7 @@
 
   if ($('#circleProgress2').length) {
     var bar = new ProgressBar.Circle(circleProgress2, {
-      color: '#ffffff',
+      color: '#000',
       // This has to be the same size as the maximum width to
       // prevent clipping
       strokeWidth: 4,
@@ -54,11 +54,11 @@
         autoStyleContainer: false
       },
       from: {
-        color: '#00d25b',
+        color: '#aaa',
         width: 4
       },
       to: {
-        color: '#00d25b',
+        color: '#46c35f',
         width: 4
       },
       // Set default step function for all animate calls
@@ -82,7 +82,7 @@
 
   if ($('#circleProgress3').length) {
     var bar = new ProgressBar.Circle(circleProgress3, {
-      color: '#ffffff',
+      color: '#000',
       // This has to be the same size as the maximum width to
       // prevent clipping
       strokeWidth: 4,
@@ -121,7 +121,7 @@
 
   if ($('#circleProgress4').length) {
     var bar = new ProgressBar.Circle(circleProgress4, {
-      color: '#ffffff',
+      color: '#000',
       // This has to be the same size as the maximum width to
       // prevent clipping
       strokeWidth: 4,
@@ -132,11 +132,11 @@
         autoStyleContainer: false
       },
       from: {
-        color: '#fc424a',
+        color: '#aaa',
         width: 4
       },
       to: {
-        color: '#fc424a',
+        color: '#f2a654',
         width: 4
       },
       // Set default step function for all animate calls
@@ -160,7 +160,7 @@
 
   if ($('#circleProgress5').length) {
     var bar = new ProgressBar.Circle(circleProgress5, {
-      color: '#ffffff',
+      color: '#000',
       // This has to be the same size as the maximum width to
       // prevent clipping
       strokeWidth: 4,
@@ -171,11 +171,11 @@
         autoStyleContainer: false
       },
       from: {
-        color: '#ffab00',
+        color: '#aaa',
         width: 4
       },
       to: {
-        color: '#ffab00',
+        color: '#57c7d4',
         width: 4
       },
       // Set default step function for all animate calls
@@ -199,7 +199,7 @@
 
   if ($('#circleProgress6').length) {
     var bar = new ProgressBar.Circle(circleProgress6, {
-      color: '#ffffff',
+      color: '#000',
       // This has to be the same size as the maximum width to
       // prevent clipping
       strokeWidth: 4,
@@ -210,11 +210,11 @@
         autoStyleContainer: false
       },
       from: {
-        color: '#8f5fe8',
+        color: '#aaa',
         width: 4
       },
       to: {
-        color: '#8f5fe8',
+        color: '#2a2e3b',
         width: 4
       },
       // Set default step function for all animate calls
