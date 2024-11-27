@@ -52,7 +52,7 @@
                                                         <td class="text-<%= preselection.getTypeNiveau(4) %>"> <%= preselection.getScoreGlobale() %> <i class="ti-arrow-<%= preselection.getTypeArrow(4) %>"></i></td>
                                                         <td colspan="2">
                                                             <a type="button" class="btn btn-sm btn-outline-primary" href="#">Simuler</a>
-                                                            <a type="button" class="btn btn-sm btn-outline-danger" href="#">Depreselectionner</a>
+                                                            <a type="button" class="btn btn-sm btn-outline-danger" href="preselectionManagement?candidat=<%= candidat.getIdCandidat() %>&recrutement=<%= recrutement.getIdRecrutement() %>&mode=d">Depreselectionner</a>
                                                         </td>
                                                     </tr>
                                                 <%

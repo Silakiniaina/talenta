@@ -31,7 +31,7 @@ public class PreselectionManagementServlet extends HttpServlet{
                 }else if(mode.equals("e")){
 
                 }else if(mode.equals("d")){
-
+                    pr.depreselectionner(c);
                 }
             }
             resp.sendRedirect("preselection?idRecrutement="+idRecrutement);
