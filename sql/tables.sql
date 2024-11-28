@@ -289,6 +289,7 @@ CREATE TABLE reponse_simulation_candidat (
 CREATE TABLE type_conge(
    id_type_conge INT,
    nom_type VARCHAR(50) NOT NULL,
+   est_conge_paye BOOLEAN DEFAULT true,
    PRIMARY KEY(id_type_conge)
 );
 
