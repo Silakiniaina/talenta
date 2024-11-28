@@ -67,6 +67,13 @@ public class ScUtils {
         return monthlyFactor * period.getMonths();
     }
 
+    private static Period getWorkingPeriod(Date hireDate) {
+        LocalDate localHireDate = hireDate.toLocalDate();
+        LocalDate currentDate = LocalDate.now();
+
+        return Period.between(localHireDate, currentDate);
+    }
+
     private static Employe getEmployeById(int id, Connection conn) throws SQLException {
         Employe emp = null;
 
