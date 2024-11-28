@@ -5,6 +5,8 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Employe {
     
@@ -73,4 +75,35 @@ public class Employe {
         }
         return employe;
     }
+
+    public static List<Employe> getAllReadyForRetraite(Connection con) throws SQLException {
+        List<Employe> result = new ArrayList<>();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        String query = "SELECT * FROM v_employes_age_retraite";
+        
+        try {
+            ps = con.prepareStatement(query);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Employe employe = new Employe();
+                employe.setIdEmploye(rs.getInt("id_employe"));
+                employe.setCandidat(con, rs.getInt("id_employe"));
+                employe.setPoste(rs.getInt("id_poste"));
+                employe.setDateEmbauche(rs.getDate("date_embauche"));
+
+                result.add(employe);
+            }
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
+        }
+
+        return result;
+    }
+
 }

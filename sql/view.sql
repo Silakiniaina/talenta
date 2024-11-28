@@ -176,7 +176,7 @@ WHERE
     c.date_debut IS NOT NULL
     AND c.date_fin IS NOT NULL;
 
----------------------------Liste des employes qui ont l'age legal de retraite
+---------------------------Liste des employes qui ont l'age legal de retraite qui ne sont pas encore retraites
 CREATE OR REPLACE VIEW v_employes_age_retraite AS
 SELECT 
     e.id_employe,
@@ -192,5 +192,9 @@ JOIN
     candidat c ON e.id_candidat = c.id_candidat
 JOIN 
     poste p ON e.id_poste = p.id_poste
+LEFT JOIN 
+    fin_contrat f ON e.id_employe = f.id_employe
 WHERE 
-    EXTRACT(YEAR FROM AGE(NOW(), c.date_naissance)) >= 60;
+    EXTRACT(YEAR FROM AGE(NOW(), c.date_naissance)) >= 60
+    AND f.id_employe IS NULL;
+
