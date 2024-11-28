@@ -8,7 +8,9 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.Period;
 
+import model.Candidat;
 import model.Employe;
+import model.Poste;
 
 public class ScUtils {
 
@@ -50,6 +52,34 @@ public class ScUtils {
         // Check: (2.5 * (NOW - starting date in months)) - conge[obligatoire]
 
         return false;
+
+    private static double getAllCongeCount(Employe emp, Connection conn) throws SQLException {
+        double monthlyFactor = 2.5;
+
+        if (emp.getDateEmbauche() != null) {
+            LocalDate hireDate = emp.getDateEmbauche().toLocalDate();
+            LocalDate currentDate = LocalDate.now();
+            Period period = Period.between(hireDate, currentDate);
+            return monthlyFactor * period.getMonths();
+        }
+
+        try (PreparedStatement stmt = conn.prepareStatement("SELECT date_embauche FROM Employe WHERE id_employe = ?")) {
+            stmt.setInt(1, emp.getIdEmploye());
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                Date sqlHireDate = rs.getDate("date_embauche");
+
+                if (sqlHireDate != null) {
+                    LocalDate hireDate = sqlHireDate.toLocalDate();
+                    LocalDate currentDate = LocalDate.now();
+                    Period period = Period.between(hireDate, currentDate);
+                    return monthlyFactor * period.getMonths();
+                }
+            }
+        }
+    }
+
     }
 
 }
