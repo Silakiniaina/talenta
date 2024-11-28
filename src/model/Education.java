@@ -25,7 +25,7 @@ public class Education {
 
     //ACTION
     public static List<Education> getAllByCandidat(Connection conn, int idCandidat)throws SQLException{
-        List<Education> result = new ArrayList();
+        List<Education> result = new ArrayList<>();
         Connection c = null;
         PreparedStatement prstm = null; 
         ResultSet rs = null;
