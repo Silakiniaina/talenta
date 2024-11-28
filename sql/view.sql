@@ -207,7 +207,8 @@ FROM
 GROUP BY
     e.id_employe;
 
-CREATE OR REPLACE VIEW v_solde_conge_restant AS
+CREATE
+OR REPLACE VIEW v_solde_conge_restant AS
 SELECT
     e.id_employe,
     e.total_jours_conges AS jours_acquis,
@@ -216,3 +217,23 @@ SELECT
 FROM
     v_solde_conge_employe e
     LEFT JOIN v_total_conges_paye_effectues t ON e.id_employe = t.id_employe;
+
+CREATE
+OR REPLACE VIEW v_informations_employe AS
+SELECT
+    c.id_candidat,
+    c.nom,
+    c.prenom,
+    c.date_naissance,
+    c.adresse,
+    c.email,
+    g.label AS genre,
+    -- Get the genre label from the 'genre' table
+    e.jours_acquis,
+    v_scr.jours_pris,
+    v_scr.jours_restants
+FROM
+    candidat c
+    LEFT JOIN employe e ON c.id_candidat = e.id_candidat
+    LEFT JOIN v_solde_conge_restant v_scr ON e.id_employe = v_scr.id_employe
+    LEFT JOIN genre g ON c.id_genre = g.id_genre;
