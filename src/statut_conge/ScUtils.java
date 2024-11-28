@@ -60,11 +60,7 @@ public class ScUtils {
             emp = getEmployeById(emp.getIdEmploye(), conn);
         }
 
-        LocalDate hireDate = emp.getDateEmbauche().toLocalDate();
-        LocalDate currentDate = LocalDate.now();
-        Period period = Period.between(hireDate, currentDate);
-
-        return monthlyFactor * period.getMonths();
+        return monthlyFactor * getWorkingPeriod(emp.getDateEmbauche(), "months");
     }
 
     private static Period getWorkingPeriod(Date hireDate) {
