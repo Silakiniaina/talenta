@@ -156,3 +156,36 @@ FROM
 WHERE
     current_date BETWEEN r.date_debut_recrutement
     AND r.date_fin_recrutement;
+
+-- Reste conge
+CREATE
+OR REPLACE VIEW v_solde_conge_employe AS
+SELECT
+    e.id_employe,
+    e.date_embauche,
+    -- Calculer le nombre total de mois depuis l'embauche
+    EXTRACT(
+        YEAR
+        FROM
+            AGE(NOW(), e.date_embauche)
+    ) * 12 + EXTRACT(
+        MONTH
+        FROM
+            AGE(NOW(), e.date_embauche)
+    ) AS total_mois,
+    -- Calculer le solde de congés
+    (
+        (
+            EXTRACT(
+                YEAR
+                FROM
+                    AGE(NOW(), e.date_embauche)
+            ) * 12 + EXTRACT(
+                MONTH
+                FROM
+                    AGE(NOW(), e.date_embauche)
+            )
+        ) * 2.5
+    ) AS total_jours_conges
+FROM
+    employe e;
