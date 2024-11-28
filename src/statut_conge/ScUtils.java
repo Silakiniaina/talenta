@@ -57,27 +57,14 @@ public class ScUtils {
         double monthlyFactor = 2.5;
 
         if (emp.getDateEmbauche() != null) {
-            LocalDate hireDate = emp.getDateEmbauche().toLocalDate();
-            LocalDate currentDate = LocalDate.now();
-            Period period = Period.between(hireDate, currentDate);
-            return monthlyFactor * period.getMonths();
+            emp = getEmployeById(emp.getIdEmploye(), conn);
         }
 
-        try (PreparedStatement stmt = conn.prepareStatement("SELECT date_embauche FROM Employe WHERE id_employe = ?")) {
-            stmt.setInt(1, emp.getIdEmploye());
-            ResultSet rs = stmt.executeQuery();
+        LocalDate hireDate = emp.getDateEmbauche().toLocalDate();
+        LocalDate currentDate = LocalDate.now();
+        Period period = Period.between(hireDate, currentDate);
 
-            if (rs.next()) {
-                Date sqlHireDate = rs.getDate("date_embauche");
-
-                if (sqlHireDate != null) {
-                    LocalDate hireDate = sqlHireDate.toLocalDate();
-                    LocalDate currentDate = LocalDate.now();
-                    Period period = Period.between(hireDate, currentDate);
-                    return monthlyFactor * period.getMonths();
-                }
-            }
-        }
+        return monthlyFactor * period.getMonths();
     }
 
     private static Employe getEmployeById(int id, Connection conn) throws SQLException {
