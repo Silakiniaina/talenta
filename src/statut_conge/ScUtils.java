@@ -29,10 +29,13 @@ public class ScUtils {
         return getWorkingPeriod(emp.getDateEmbauche(), "years") >= 1;
     }
 
-    private static boolean hasCongeLeft(Employe emp, Connection conn) {
+    private static boolean hasCongeLeft(Employe emp, Connection conn) throws SQLException {
         // Check: (2.5 * (NOW - starting date in months)) - conge[obligatoire]
+        double allCongeCount = getAllCongeCount(emp, conn);
+        double congeTaken = getCongeTaken(emp, conn);
 
-        return false;
+        return ((allCongeCount - congeTaken) != 0);
+    }
 
     private static double getCongeTaken(Employe emp, Connection conn) throws SQLException {
         double congeLeft = 0;
