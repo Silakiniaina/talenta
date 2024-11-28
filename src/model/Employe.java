@@ -2,6 +2,8 @@ package model;
 
 import java.sql.Connection;
 import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Employe {
@@ -45,4 +47,30 @@ public class Employe {
         return dateEmbauche;
     }
 
+    public static Employe getById(Connection con, int idEmploye) throws SQLException {
+        Employe employe = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        String query = "SELECT * FROM employe WHERE id_employe = ?";
+        try {
+            ps = con.prepareStatement(query);
+            ps.setInt(1, idEmploye);
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                employe = new Employe();
+                employe.setIdEmploye(rs.getInt("id_employe"));
+                employe.setCandidat(con, rs.getInt("id_candidat"));
+                employe.setPoste(rs.getInt("id_poste"));
+                employe.setDateEmbauche(rs.getDate("date_embauche"));
+            }
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
+        }
+        return employe;
+    }
 }

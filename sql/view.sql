@@ -156,3 +156,41 @@ FROM
 WHERE
     current_date BETWEEN r.date_debut_recrutement
     AND r.date_fin_recrutement;
+
+
+-----------------------Liste des employes ayant pris un conge
+CREATE OR REPLACE VIEW v_planning_conge AS
+SELECT 
+    e.id_employe,
+    e.id_candidat,
+    e.id_poste,
+    c.id_conge,
+    c.id_type_conge,
+    c.date_debut,
+    c.date_fin
+FROM 
+    conge c
+JOIN 
+    employe e ON c.id_employe = e.id_employe
+WHERE 
+    c.date_debut IS NOT NULL
+    AND c.date_fin IS NOT NULL;
+
+---------------------------Liste des employes qui ont l'age legal de retraite
+CREATE OR REPLACE VIEW v_employes_age_retraite AS
+SELECT 
+    e.id_employe,
+    c.nom,
+    c.prenom,
+    c.date_naissance,
+    e.date_embauche,
+    p.nom_poste,
+    EXTRACT(YEAR FROM AGE(NOW(), c.date_naissance)) AS age
+FROM 
+    employe e
+JOIN 
+    candidat c ON e.id_candidat = c.id_candidat
+JOIN 
+    poste p ON e.id_poste = p.id_poste
+WHERE 
+    EXTRACT(YEAR FROM AGE(NOW(), c.date_naissance)) >= 60;
