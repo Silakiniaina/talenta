@@ -74,6 +74,22 @@ public class ScUtils {
         return Period.between(localHireDate, currentDate);
     }
 
+    private static int getWorkingPeriod(Date hireDate, String unit) {
+        if (unit.equalsIgnoreCase("days")) {
+            return getWorkingPeriod(hireDate).getDays();
+        }
+
+        if (unit.equalsIgnoreCase("months")) {
+            return getWorkingPeriod(hireDate).getMonths();
+        }
+
+        if (unit.equalsIgnoreCase("years")) {
+            return getWorkingPeriod(hireDate).getYears();
+        }
+
+        return -1;
+    }
+
     private static Employe getEmployeById(int id, Connection conn) throws SQLException {
         Employe emp = null;
 
