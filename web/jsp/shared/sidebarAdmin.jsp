@@ -20,8 +20,8 @@
             </a>
             <div class="collapse" id="simulation_drop">
                 <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="simulation">Liste Simulation</a></li>
-                <li class="nav-item"> <a class="nav-link" href="simulation?mode=i">Creation Simulation</a></li>
+                <li class="nav-item"> <a class="nav-link" href="simulations">Liste Simulation</a></li>
+                <li class="nav-item"> <a class="nav-link" href="addSimulation">Creation Simulation</a></li>
                 </ul>
             </div>
         </li>

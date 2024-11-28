@@ -1,17 +1,24 @@
-#!/bin/bash
+@echo off
+setlocal
 
-current_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-bin_dir="$current_dir/bin"
-lib_dir="$current_dir/lib"
-temp_dir="$current_dir/src/temp"
+set current=%~dp0
+set bin=%current%bin
+set lib=%current%lib
+set src=%current%src
+set temp=%current%src\temp
 
-if [ ! -d "$temp_dir" ]; then
-  mkdir "$temp_dir"
-fi
+if not exist "%temp%" (
+    mkdir "%temp%"
+)
 
-find "$current_dir/src" -type f -name "*.java" -exec cp -r {} "$temp_dir" \;
-javac -d "$bin_dir" -cp "$lib_dir/*" "$current_dir"/src/temp/*.java
-rm -R "$current_dir"/src/temp
+for /r "%src%" %%f in (*.java) do (
+    copy "%%f" "%temp%" >nul
+)
 
-echo "Compilation finished"
-java -cp "bin:lib/*" model.Personne
+javac -d "%bin%" -cp "%lib%\*" "%temp%\*.java"
+
+rmdir /s /q "%temp%"
+
+java -cp "%bin%;%lib%\*" model.Candidat
+
+endlocal
