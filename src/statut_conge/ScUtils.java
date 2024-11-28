@@ -17,10 +17,28 @@ public class ScUtils {
     private ScUtils() {
     }
 
+    /**
+     * Checks if an employee can take leave.
+     * 
+     * @param emp  The employee object.
+     * @param conn The database connection.
+     * @return true if the employee has filled one year and has leave remaining,
+     *         false otherwise.
+     * @throws SQLException If a database access error occurs.
+     */
     public static boolean canTakeConge(Employe emp, Connection conn) throws SQLException {
         return hasFilledOneYear(emp, conn) && hasCongeLeft(emp, conn);
     }
 
+    /**
+     * Checks if the employee has completed one year of service.
+     * 
+     * @param emp  The employee object.
+     * @param conn The database connection.
+     * @return true if the employee has completed at least one year of service,
+     *         false otherwise.
+     * @throws SQLException If a database access error occurs.
+     */
     private static boolean hasFilledOneYear(Employe emp, Connection conn) throws SQLException {
         if (emp.getDateEmbauche() != null) {
             emp = getEmployeById(emp.getIdEmploye(), conn);
@@ -29,14 +47,29 @@ public class ScUtils {
         return getWorkingPeriod(emp.getDateEmbauche(), "years") >= 1;
     }
 
+    /**
+     * Checks if the employee has any remaining leave balance.
+     * 
+     * @param emp  The employee object.
+     * @param conn The database connection.
+     * @return true if the employee has leave left, false otherwise.
+     * @throws SQLException If a database access error occurs.
+     */
     private static boolean hasCongeLeft(Employe emp, Connection conn) throws SQLException {
-        // Check: (2.5 * (NOW - starting date in months)) - conge[obligatoire]
         double allCongeCount = getAllCongeCount(emp, conn);
         double congeTaken = getCongeTaken(emp, conn);
 
         return ((allCongeCount - congeTaken) != 0);
     }
 
+    /**
+     * Retrieves the total leave taken by an employee.
+     * 
+     * @param emp  The employee object.
+     * @param conn The database connection.
+     * @return The total leave taken by the employee.
+     * @throws SQLException If a database access error occurs.
+     */
     private static double getCongeTaken(Employe emp, Connection conn) throws SQLException {
         double congeLeft = 0;
 
@@ -53,6 +86,14 @@ public class ScUtils {
         return congeLeft;
     }
 
+    /**
+     * Calculates the total leave count for an employee.
+     * 
+     * @param emp  The employee object.
+     * @param conn The database connection.
+     * @return The total leave count for the employee.
+     * @throws SQLException If a database access error occurs.
+     */
     private static double getAllCongeCount(Employe emp, Connection conn) throws SQLException {
         double monthlyFactor = 2.5;
 
@@ -63,6 +104,12 @@ public class ScUtils {
         return monthlyFactor * getWorkingPeriod(emp.getDateEmbauche(), "months");
     }
 
+    /**
+     * Gets the working period of an employee as a {@link Period} object.
+     * 
+     * @param hireDate The hire date of the employee.
+     * @return The working period as a {@link Period} object.
+     */
     private static Period getWorkingPeriod(Date hireDate) {
         LocalDate localHireDate = hireDate.toLocalDate();
         LocalDate currentDate = LocalDate.now();
@@ -70,6 +117,15 @@ public class ScUtils {
         return Period.between(localHireDate, currentDate);
     }
 
+    /**
+     * Gets the working period of an employee in a specific time unit.
+     * 
+     * @param hireDate The hire date of the employee.
+     * @param unit     The time unit to calculate the period ("days", "months", or
+     *                 "years").
+     * @return The working period in the specified unit, or -1 if the unit is
+     *         invalid.
+     */
     private static int getWorkingPeriod(Date hireDate, String unit) {
         if (unit.equalsIgnoreCase("days")) {
             return getWorkingPeriod(hireDate).getDays();
@@ -86,6 +142,14 @@ public class ScUtils {
         return -1;
     }
 
+    /**
+     * Retrieves an employee by their ID from the database.
+     * 
+     * @param id   The employee ID.
+     * @param conn The database connection.
+     * @return The {@link Employe} object if found, or null if not found.
+     * @throws SQLException If a database access error occurs.
+     */
     private static Employe getEmployeById(int id, Connection conn) throws SQLException {
         Employe emp = null;
 
