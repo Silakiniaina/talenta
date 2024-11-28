@@ -2,6 +2,8 @@ package statut_conge;
 
 import java.sql.Date;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 public class Conge {
 
     private int idConge;
@@ -11,7 +13,7 @@ public class Conge {
     private Date dateDebut;
     private Date dateFin;
 
-    // Constructors
+    /* ------------------------------ Constructors ------------------------------ */
     public Conge() {
     }
 
@@ -28,7 +30,7 @@ public class Conge {
         this.setDateFin(dateFin);
     }
 
-    // Getters and setters
+    /* --------------------------- Getters and setters -------------------------- */
     public int getIdConge() {
         return idConge;
     }
@@ -75,6 +77,42 @@ public class Conge {
 
     public void setDateFin(Date dateFin) {
         this.dateFin = dateFin;
+    }
+
+    /* ---------------------------------- Utils --------------------------------- */
+
+    public void createFromRequest(HttpServletRequest req) throws NumberFormatException, IllegalArgumentException {
+        // NOTICE: Assumes the date is in "yyyy-MM-dd" format
+
+        try {
+            if (req.getParameter("idConge") != null) {
+                this.idConge = Integer.parseInt(req.getParameter("idConge"));
+            }
+
+            if (req.getParameter("idEmploye") != null) {
+                this.idEmploye = Integer.parseInt(req.getParameter("idEmploye"));
+            }
+
+            if (req.getParameter("idContrat") != null) {
+                this.idContrat = Integer.parseInt(req.getParameter("idContrat"));
+            }
+
+            if (req.getParameter("idTypeConge") != null) {
+                this.idTypeConge = Integer.parseInt(req.getParameter("idTypeConge"));
+            }
+
+            if (req.getParameter("dateDebut") != null) {
+                this.dateDebut = Date.valueOf(req.getParameter("dateDebut"));
+            }
+
+            if (req.getParameter("dateFin") != null) {
+                this.dateFin = Date.valueOf(req.getParameter("dateFin"));
+            }
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Invalid parameter format: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid parameter value: " + e.getMessage());
+        }
     }
 
 }
