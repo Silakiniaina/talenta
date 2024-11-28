@@ -13,6 +13,7 @@
         <div class="container-scroller">
             <%@include file="../../shared/navbar.jsp" %>
             <div class="container-fluid page-body-wrapper">
+                <%@include file="../../shared/settingPanel.jsp" %>
                 <%@include file="../../shared/sidebarAdmin.jsp" %>
                 <div class="main-panel">
                     <div class="content-wrapper">

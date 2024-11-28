@@ -2,19 +2,19 @@
     <ul class="nav">
         <li class="nav-item">
             <a class="nav-link" href="#">
-                <i class="icon-grid menu-icon"></i>
+                <i class="ti-grid menu-icon"></i>
                 <span class="menu-title">Dashboard</span>
             </a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="recrutement">
-                <i class="icon-grid menu-icon"></i>
+                <i class="ti-grid menu-icon"></i>
                 <span class="menu-title">Recrutement</span>
             </a>
         </li>
         <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#simulation_drop" aria-expanded="false" aria-controls="simulation_drop">
-                <i class="icon-layout menu-icon"></i>
+                <i class="ti-layout menu-icon"></i>
                 <span class="menu-title">Simulation</span>
                 <i class="menu-arrow"></i>
             </a>
@@ -27,7 +27,7 @@
         </li>
         <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#poste_drop" aria-expanded="false" aria-controls="poste_drop">
-                <i class="icon-layout menu-icon"></i>
+                <i class="ti-layout menu-icon"></i>
                 <span class="menu-title">Poste</span>
                 <i class="menu-arrow"></i>
             </a>
@@ -40,7 +40,7 @@
         </li>
         <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#evaluation_drop" aria-expanded="false" aria-controls="evaluation_drop">
-                <i class="icon-layout menu-icon"></i>
+                <i class="ti-layout menu-icon"></i>
                 <span class="menu-title">Evaluation</span>
                 <i class="menu-arrow"></i>
             </a>
@@ -53,7 +53,7 @@
         </li>
         <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#employe_drop" aria-expanded="false" aria-controls="employe_drop">
-                <i class="icon-layout menu-icon"></i>
+                <i class="ti-layout menu-icon"></i>
                 <span class="menu-title">Employe</span>
                 <i class="menu-arrow"></i>
             </a>

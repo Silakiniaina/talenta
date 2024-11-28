@@ -3,6 +3,7 @@ package servlet.recrutement;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.util.List;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -10,7 +11,10 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.Competence;
+import model.Education;
 import model.Recrutement;
+import model.TypeDiplome;
 
 @WebServlet("/detailsRecrutement")
 public class DetailsRecrutementServlet extends HttpServlet{
@@ -27,8 +31,11 @@ public class DetailsRecrutementServlet extends HttpServlet{
             r.setIdRecrutement(idRecrutement);
             r = r.getById(c);
 
+            List<TypeDiplome> typeDiplomes = TypeDiplome.getAll();
+            List<Competence> competences = Competence.getAll();
+
             req.setAttribute("recrutement", r);
-            RequestDispatcher disp = req.getRequestDispatcher("/WEB-INF/views/recrutement/detailsRecrutement.jsp");
+            RequestDispatcher disp = req.getRequestDispatcher("/WEB-INF/views/admin/recrutement/detailsRecrutement.jsp");
             disp.forward(req, resp);
         } catch (Exception e) {
             e.printStackTrace(out);
