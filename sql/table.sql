@@ -291,3 +291,5 @@ CREATE TABLE reponse_simulation_candidat (
 
 ALTER TABLE status ADD COLUMN corresponding_color VARCHAR(250);
 ALTER TABLE recrutement_candidat ADD COLUMN is_prechosen BOOLEAN DEFAULT FALSE;
+
+DROP TABLE competence_recrutement;
