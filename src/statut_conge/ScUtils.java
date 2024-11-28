@@ -80,6 +80,31 @@ public class ScUtils {
         }
     }
 
+    private static Employe getEmployeById(int id, Connection conn) throws SQLException {
+        Employe emp = null;
+
+        try (PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Employe WHERE id_employe = ?")) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                Candidat candidat = new Candidat();
+                candidat.setIdCandidat(rs.getInt("id_candidat"));
+
+                Poste poste = new Poste();
+                poste.setIdPoste(rs.getInt("id_poste"));
+
+                Date dateEmbauche = rs.getDate("date_embauche");
+
+                emp = new Employe();
+                emp.setIdEmploye(id);
+                emp.setCandidat(conn, id);
+                emp.setPoste(id);
+                emp.setDateEmbauche(dateEmbauche);
+            }
+        }
+
+        return emp;
     }
 
 }
