@@ -285,3 +285,11 @@ CREATE TABLE reponse_simulation_candidat (
     CONSTRAINT reponse_simulation_candidat_id_question_fkey FOREIGN KEY (id_question) REFERENCES question_simulation(id_question_simulation),
     CONSTRAINT reponse_simulation_candidat_id_attribution_fkey FOREIGN KEY (id_attribution) REFERENCES simulation_candidat(id_attribution) ON DELETE CASCADE
 );
+
+
+CREATE TABLE branche_education (
+    id_branche_education SERIAL NOT NULL, 
+    nom_branche VARCHAR(200) NOT NULL, 
+    description_branche TEXT,
+    CONSTRAINT branche_education_pkey PRIMARY KEY (id_branche_education)
+);
