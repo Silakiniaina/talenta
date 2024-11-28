@@ -86,7 +86,7 @@ public class BrancheEducation {
                 c.close();
             }
         }
-    }\
+    }
 
     // GETTERS AND SETTERS
     public int getIdBrancheEducation() {

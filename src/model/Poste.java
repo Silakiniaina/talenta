@@ -15,7 +15,7 @@ public class Poste {
     private int idPoste;
     private String nomPoste;
     private Departement departement;
-    private List<CompetenceRequise> listCompetence;
+    private List<Competence> listCompetence;
 
     // CONSTRUCTOR
     public Poste() {
@@ -45,7 +45,7 @@ public class Poste {
                 d.setIdPoste(rs.getInt(1));
                 d.setNomPoste(rs.getString(2));
                 d.setDepartement(rs.getInt(3));
-                d.setListCompetence(CompetenceRequise.getAllByPoste(d.getIdPoste()));
+                d.setListCompetence(Competence.getAllByPoste(d.getIdPoste()));
                 result.add(d);
             }
         }catch (SQLException e) {
@@ -81,7 +81,7 @@ public class Poste {
                 result.setIdPoste(rs.getInt(1));
                 result.setNomPoste(rs.getString(2));
                 result.setDepartement(rs.getInt(3));
-                result.setListCompetence(CompetenceRequise.getAllByPoste(result.getIdPoste()));
+                result.setListCompetence(Competence.getAllByPoste(result.getIdPoste()));
 
             }
         } catch (SQLException e) {
@@ -136,13 +136,12 @@ public class Poste {
         try {
             c = Database.getConnection();
             c.setAutoCommit(false);
-            for (CompetenceRequise competence : this.getListCompetence()) {
-                String sql = "INSERT INTO competence_requise (id_poste, id_competence, experience) VALUES (?, ?, ?)";
+            for (Competence competence : this.getListCompetence()) {
+                String sql = "INSERT INTO competence_requise_poste (id_poste, id_competence) VALUES (?, ?)";
                 st = c.prepareStatement(sql);
 
                 st.setInt(1, this.getIdPoste());
-                st.setInt(2, competence.getCompetence().getIdCompetence());
-                st.setInt(3, competence.getExperience());
+                st.setInt(2, competence.getIdCompetence());
                 st.executeUpdate();
             }
 
@@ -170,7 +169,7 @@ public class Poste {
     public Departement getDepartement() {
         return departement;
     }
-    public List<CompetenceRequise> getListCompetence(){
+    public List<Competence> getListCompetence(){
         return this.listCompetence;
     }
 
@@ -186,7 +185,7 @@ public class Poste {
         this.departement = Departement.getById(iddepartement);
     }
 
-    public void setListCompetence(List<CompetenceRequise> ls){
+    public void setListCompetence(List<Competence> ls){
         this.listCompetence = ls;
     }
 }

@@ -99,6 +99,41 @@ public class Competence {
         return result;
     }
 
+    public static List<Competence> getAllByPoste(int idPoste) throws SQLException{
+        List<Competence> result = new ArrayList<>();
+        Connection c = null;
+        PreparedStatement prstm = null; 
+        ResultSet rs = null;
+        String query = "SELECT id_competence FROM competence_requise_poste WHERE id_poste = ?";
+        try {
+            c = Database.getConnection();
+            prstm = c.prepareStatement(query);
+            prstm.setInt(1, idPoste);
+            rs = prstm.executeQuery();
+
+            while (rs.next()) {
+                Competence d = new Competence();
+                d.setIdCompetence(rs.getInt(1));
+
+                d = Competence.getById(c, d.getIdCompetence());
+                result.add(d);
+            }
+        } catch (SQLException e) {
+            throw e;
+        }finally{
+            if(rs != null){
+                rs.close();
+            }
+            if(prstm != null){
+                prstm.close();
+            }
+            if(c != null){
+                c.close();
+            }
+        }
+        return result;
+    }
+
     // GETTERS AND SETTERS
     public int getIdCompetence() {
         return idCompetence;
