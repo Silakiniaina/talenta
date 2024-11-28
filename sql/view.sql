@@ -206,3 +206,13 @@ FROM
     LEFT JOIN type_conge tc ON c.id_type_conge = tc.id_type_conge
 GROUP BY
     e.id_employe;
+
+CREATE OR REPLACE VIEW v_solde_conge_restant AS
+SELECT
+    e.id_employe,
+    e.total_jours_conges AS jours_acquis,
+    COALESCE(t.total_jours_conges, 0) AS jours_pris,
+    e.total_jours_conges - COALESCE(t.total_jours_conges, 0) AS jours_restants
+FROM
+    v_solde_conge_employe e
+    LEFT JOIN v_total_conges_paye_effectues t ON e.id_employe = t.id_employe;
