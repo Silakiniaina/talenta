@@ -22,7 +22,7 @@ public class DetailsRecrutementServlet extends HttpServlet{
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         PrintWriter out = resp.getWriter();
-        int idRecrutement = Integer.parseInt(req.getParameter("recrutement"));
+        int idRecrutement = Integer.parseInt(req.getParameter("idRecrutement"));
         try {
             
             Connection c = (Connection)req.getSession().getAttribute("connexion");
@@ -30,9 +30,6 @@ public class DetailsRecrutementServlet extends HttpServlet{
             Recrutement r = new Recrutement();
             r.setIdRecrutement(idRecrutement);
             r = r.getById(c);
-
-            List<TypeDiplome> typeDiplomes = TypeDiplome.getAll();
-            List<Competence> competences = Competence.getAll();
 
             req.setAttribute("recrutement", r);
             RequestDispatcher disp = req.getRequestDispatcher("/WEB-INF/views/admin/recrutement/detailsRecrutement.jsp");

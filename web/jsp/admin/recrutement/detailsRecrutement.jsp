@@ -1,7 +1,9 @@
 <%@ page import="java.util.List" %>
-<%@ page import="model.Candidat" %>
+<%@ page import="model.Recrutement" %>
+<%@ page import="model.Poste" %>
+<%@ page import="model.Competence" %>
 <%
-    List<Candidat> candidats = (List<Candidat>)request.getAttribute("candidats");
+    Recrutement recrutement = (Recrutement)request.getAttribute("recrutement");
 %>
     <%@include file="../../shared/head.jsp" %>
     <body>
@@ -14,7 +16,7 @@
                         <div class="col-lg-12 grid-margin stretch-card" style="flex-direction:column; gap:10px;">
                             <div class="card">
                                 <div class="card-body">
-                                    <h2>Developpeur backend</h2>
+                                    <h2><%= recrutement.getPoste().getNomPoste() %></h2>
                                     <div class="row">
                                         <div class="col-md-4 grid-margin stretch-card">
                                             <div class="card">
@@ -44,10 +46,10 @@
                                         </div>
                                     </div>
                                     <p>
-                                        <b>Date debut : </b> 12 Juillet 2005
+                                        <b>Date debut : </b> <%= recrutement.getDateDebut() %>
                                     </p>
                                     <p>
-                                        <b>Date fin : </b> 12 Juillet 2005
+                                        <b>Date fin : </b> <%= recrutement.getDateFin() %>
                                     </p>
                                 </div>
                             </div>
@@ -63,11 +65,14 @@
                                 <div class="card-body">
                                 <h3 class="card-title">Competence requises</h3>
                                 <ul class="list-star">
-                                    <li>Lorem ipsum dolor sit amet</li>
-                                    <li>Consectetur adipiscing elit</li>
-                                    <li>Integer molestie lorem at massa</li>
-                                    <li>Facilisis in pretium nisl aliquet</li>
-                                    <li>Nulla volutpat aliquam velit&gt;</li>
+                                    <%
+                                        List<Competence> competences = recrutement.getPoste().getListCompetence();
+                                        for(Competence competence : competences){
+                                    %>
+                                        <li><%= competence.getNomCompetence() %></li>
+                                    <% 
+                                        }
+                                    %>
                                 </ul>
                                 </div>
                             </div>

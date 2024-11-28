@@ -148,23 +148,23 @@ VALUES
 INSERT INTO
     competence_requise_poste (id_poste, id_competence, obligatoire)
 VALUES
-    (1, 1, true),
-    (1, 2, true);
+    (1, 6, true),
+    (1, 5, true);
 
 INSERT INTO
     competence_requise_poste (id_poste, id_competence, obligatoire)
 VALUES
-    (1, 3, false);
+    (1, 4, false);
 
 INSERT INTO
     diplome_requis_poste (id_poste, id_type_diplome, obligatoire)
 VALUES
-    (1, 1, true);
+    (1, 5, true);
 
 INSERT INTO
     diplome_requis_poste (id_poste, id_type_diplome, obligatoire)
 VALUES
-    (1, 2, false);
+    (1, 6, false);
 
 INSERT INTO
     simulation(titre, description, id_responsable)

@@ -11,7 +11,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.Competence;
-import model.CompetenceRequise;
 import model.Departement;
 import model.Poste;
 
@@ -46,19 +45,10 @@ public class PosteServlet extends HttpServlet{
         PrintWriter out = resp.getWriter();
         String nom = req.getParameter("nom");
         String dept =  req.getParameter("dept");
-        String[] competences = req.getParameterValues("competences");
-        String[] experiences = req.getParameterValues("experiences");
         try {
             Poste p = new Poste();
             p.setDepartement(Integer.parseInt(dept));
             p.setNomPoste(nom);
-
-            if(competences != null){
-                for(int i=0; i<competences.length; i++){
-                    CompetenceRequise cr = new CompetenceRequise(Integer.parseInt(competences[i]), Integer.parseInt(experiences[i]));
-                    p.getListCompetence().add(cr);
-                }
-            }
 
             p.insert();
             resp.sendRedirect("poste");
