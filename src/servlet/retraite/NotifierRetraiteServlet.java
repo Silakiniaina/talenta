@@ -20,30 +20,34 @@ public class NotifierRetraiteServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         
-        Connection conn= null;
         String idEmployeStr = req.getParameter("idEmploye");
         if (idEmployeStr != null) {
-            try {
-                conn= Database.getConnection();
+            try (Connection conn = Database.getConnection()) { 
+
                 int idEmploye = Integer.parseInt(idEmployeStr);
                 Employe employe = Employe.getById(conn, idEmploye);
-                LocalDate oneMonth= LocalDate.now().plusMonths(1); //1 mois apres la date actuelle
+                LocalDate oneMonth = LocalDate.now().plusMonths(1); // 1 mois après la date actuelle
                 
                 if (employe != null) {
                     NotificationCandidat notification = new NotificationCandidat();
-                    notification.setCandidat(conn, employe.getCandidat().getIdCandidat()); 
-                    notification.setContenuNotification("Votre retraite sera planifie a partir du "+ oneMonth);
+                    notification.setCandidat(conn, employe.getCandidat().getIdCandidat());
+                    notification.setContenuNotification("Votre retraite sera planifiée à partir du " + oneMonth);
                     notification.setTargetLink("/retraite/liste"); 
                     notification.insert();
 
                     resp.sendRedirect(req.getContextPath() + "/retraite/liste");
-                } 
-                else {
+                } else {
 
                     req.setAttribute("errorMessage", "Employé non trouvé.");
                     req.getRequestDispatcher("/WEB-INF/views/error.jsp").forward(req, resp);
                 }
-            } catch (NumberFormatException | SQLException e) {
+                
+            } catch (NumberFormatException e) {
+
+                e.printStackTrace();
+                req.setAttribute("errorMessage", "L'ID de l'employé est invalide.");
+                req.getRequestDispatcher("/WEB-INF/views/error.jsp").forward(req, resp);
+            } catch (SQLException e) {
                 e.printStackTrace();
                 req.setAttribute("errorMessage", "Erreur lors de l'insertion de la notification.");
                 req.getRequestDispatcher("/WEB-INF/views/error.jsp").forward(req, resp);
