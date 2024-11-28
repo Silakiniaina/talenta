@@ -2,7 +2,6 @@
 <%@ page import="model.Simulation" %>
 <%@ page import="java.util.List" %>
 
-<%@ include file="../shared/header.jsp" %>
     <h1>Liste des Simulations Disponibles</h1>
     
     <div class="simulations-list">
