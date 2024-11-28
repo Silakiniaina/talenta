@@ -189,3 +189,20 @@ SELECT
     ) AS total_jours_conges
 FROM
     employe e;
+
+CREATE
+OR REPLACE VIEW v_total_conges_paye_effectues AS
+SELECT
+    e.id_employe,
+    SUM(
+        CASE
+            WHEN tc.est_conge_paye THEN c.date_fin - c.date_debut + 1
+            ELSE 0
+        END
+    ) AS total_jours_conges
+FROM
+    employe e
+    LEFT JOIN conge c ON e.id_employe = c.id_employe
+    LEFT JOIN type_conge tc ON c.id_type_conge = tc.id_type_conge
+GROUP BY
+    e.id_employe;
