@@ -21,7 +21,7 @@ public class BrancheEducation {
         boolean isNewConnection = false;
         PreparedStatement prstm = null; 
         ResultSet rs = null;
-        String query = "SELECT * FROM competence";
+        String query = "SELECT * FROM branche_education";
         try {
             if(c == null){
                 isNewConnection = true;
@@ -52,6 +52,42 @@ public class BrancheEducation {
         }
         return result;
     }
+
+    public BrancheEducation getById(Connection c, int id) throws SQLException{
+        boolean isNewConnection = false;
+        PreparedStatement prstm = null; 
+        ResultSet rs = null;
+        String query = "SELECT * FROM branche_education WHERE id_branche_education = ?";
+        try {
+            if(c == null){
+                isNewConnection = true;
+                c = Database.getConnection();
+            }
+            prstm = c.prepareStatement(query);
+            prstm.setInt(1, id);
+            rs = prstm.executeQuery();
+
+            if (rs.next()) {
+                this.setIdBrancheEducation(rs.getInt(1));
+                this.setNomBranche(rs.getString(2));
+                this.setDescriptionBranche(rs.getString(3));
+            }
+            return this;
+        } catch (SQLException e) {
+            throw e;
+        } finally{
+            if(rs != null){
+                rs.close();
+            }
+            if(prstm != null){
+                prstm.close();
+            }
+            if(c != null && isNewConnection){
+                c.close();
+            }
+        }
+    }\
+
     // GETTERS AND SETTERS
     public int getIdBrancheEducation() {
         return idBrancheEducation;
