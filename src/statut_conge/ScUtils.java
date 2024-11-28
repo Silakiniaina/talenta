@@ -23,29 +23,10 @@ public class ScUtils {
 
     private static boolean hasFilledOneYear(Employe emp, Connection conn) throws SQLException {
         if (emp.getDateEmbauche() != null) {
-            LocalDate hireDate = emp.getDateEmbauche().toLocalDate();
-            LocalDate currentDate = LocalDate.now();
-            Period period = Period.between(hireDate, currentDate);
-            return period.getYears() >= 1;
+            emp = getEmployeById(emp.getIdEmploye(), conn);
         }
 
-        try (PreparedStatement stmt = conn.prepareStatement("SELECT date_embauche FROM Employe WHERE id_employe = ?")) {
-            stmt.setInt(1, emp.getIdEmploye());
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                Date sqlHireDate = rs.getDate("date_embauche");
-
-                if (sqlHireDate != null) {
-                    LocalDate hireDate = sqlHireDate.toLocalDate();
-                    LocalDate currentDate = LocalDate.now();
-                    Period period = Period.between(hireDate, currentDate);
-                    return period.getYears() >= 1;
-                }
-            }
-        }
-
-        return false;
+        return getWorkingPeriod(emp.getDateEmbauche(), "years") >= 1;
     }
 
     private static boolean hasCongeLeft(Employe emp, Connection conn) {
