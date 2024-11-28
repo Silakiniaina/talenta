@@ -1,48 +1,60 @@
-#!/bin/bash
+@echo off
+setlocal
 
-current="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-bin="$current/bin"
-lib="$current/lib"
-src="$current/src"
-temp="$current/src/temp"
 
-if [ ! -d "$temp" ]; then
-  mkdir "$temp"
-fi
+set current=%~dp0
+set bin=%current%bin
+set lib=%current%lib
+set src=%current%src
+set temp=%current%src\temp
 
-find "$src" -type f -name "*.java" -exec cp -r {} "$temp" \;
-javac -d "$bin" -cp "$lib/*" "$temp"/*.java
-rm -R "$temp"
 
-src_dir="bin"
-web_dir="web/jsp"
-lib_dir="lib"
-assets_dir="assets"
-config_dir="conf"
+if not exist "%temp%" (
+    mkdir "%temp%"
+)
 
-target_name="talenta"
 
-#ito no ovaina atao chemin  makany amin'ny webapps ao amin'ny pc anareo 
-target_dir="/opt/apache-tomcat-10.1.23/webapps/"
+for /r "%src%" %%f in (*.java) do (
+    copy "%%f" "%temp%" >nul
+)
 
-rm -rf "temp"
+javac -d "%bin%" -cp "%lib%\*" "%temp%\*.java"
+
+rmdir /s /q "%temp%"
+
+set src_dir=bin
+set web_dir=web\jsp
+set lib_dir=lib
+set assets_dir=assets
+set config_dir=conf
+
+set target_name=talenta
+
+set target_dir=C:\path\to\apache-tomcat-10.1.23\webapps\
+
+if exist "temp" (
+    rmdir /s /q "temp"
+)
 mkdir "temp"
-mkdir "temp/WEB-INF"
-mkdir "temp/WEB-INF/classes"
-mkdir "temp/WEB-INF/lib"
-mkdir "temp/WEB-INF/views"
-mkdir "temp/assets"
+mkdir "temp\WEB-INF"
+mkdir "temp\WEB-INF\classes"
+mkdir "temp\WEB-INF\lib"
+mkdir "temp\WEB-INF\views"
+mkdir "temp\assets"
 
-cp -r "$lib_dir"/* "temp/WEB-INF/lib"
-cp -r "$src_dir"/* "temp/WEB-INF/classes"
-cp -r "$web_dir"/* "temp/WEB-INF/views"
-cp  "$web_dir"/index.jsp "temp/"
-rm "temp/WEB-INF/views/index.jsp"
-cp -r "$config_dir"/* "temp/WEB-INF"
-cp -r "$assets_dir"/* "temp/assets"
+xcopy "%lib_dir%\*" "temp\WEB-INF\lib" /e /i /q
+xcopy "%src_dir%\*" "temp\WEB-INF\classes" /e /i /q
+xcopy "%web_dir%\*" "temp\WEB-INF\views" /e /i /q
+copy "%web_dir%\index.jsp" "temp\"
+del "temp\WEB-INF\views\index.jsp"
+xcopy "%config_dir%\*" "temp\WEB-INF" /e /i /q
+xcopy "%assets_dir%\*" "temp\assets" /e /i /q
 
-jar -cf "$target_name.war" -C temp/ .
+jar -cf "%target_name%.war" -C temp .
 
-cp "$target_name.war" "$target_dir"
-rm "$target_name.war"
-rm -rf "temp"
+copy "%target_name%.war" "%target_dir%"
+
+del "%target_name%.war"
+rmdir /s /q "temp"
+
+endlocal
