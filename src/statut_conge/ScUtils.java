@@ -12,6 +12,9 @@ import model.Employe;
 
 public class ScUtils {
 
+    private ScUtils() {
+    }
+
     public static boolean canTakeConge(Employe emp, Connection conn) throws SQLException {
         return hasFilledOneYear(emp, conn) && hasCongeLeft(emp, conn);
     }
