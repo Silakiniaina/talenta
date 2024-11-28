@@ -82,25 +82,25 @@ VALUES ('Huhu', 2, 3);
 
 INSERT INTO competence_requise_poste (id_poste, id_competence, obligatoire)
 VALUES 
-    (9, 1, true),  
-    (9, 2, true);  
+    (1, 1, true),  
+    (1, 2, true);  
 
 INSERT INTO competence_requise_poste (id_poste, id_competence, obligatoire)
 VALUES 
-    (9, 3, false);
+    (1, 3, false);
 
 INSERT INTO diplome_requis_poste (id_poste, id_type_diplome, obligatoire)
 VALUES 
-    (9, 4, true); 
+    (1, 1, true); 
 
 INSERT INTO diplome_requis_poste (id_poste, id_type_diplome, obligatoire)
 VALUES 
-    (9, 5, false); 
+    (1, 2, false); 
 
 INSERT INTO simulation(titre, description,id_responsable) VALUES
     ('Simulation omby','Project simulation omby', 1)
 ;
 
-INSERT INTO question_simulation(id_simulation, texte_reponse) VALUES
+INSERT INTO question_simulation(id_simulation, texte_question) VALUES
     (1,'WHO ARE YOU')
 ;

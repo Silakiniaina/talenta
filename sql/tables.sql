@@ -257,7 +257,7 @@ CREATE  TABLE question_simulation (
  );
 
 CREATE  TABLE reponse_simulation_possibles ( 
-	id_reponse_simulation_possibles integer DEFAULT nextval('reponse_simulation_possibles_id_reponse_simulation_possible_seq'::regclass) NOT NULL  ,
+	id_reponse_simulation_possibles serial NOT NULL,
 	id_question_simulation integer    ,
 	texte_reponse        text  NOT NULL  ,
 	CONSTRAINT reponse_simulation_possibles_pkey PRIMARY KEY ( id_reponse_simulation_possibles ),
