@@ -34,6 +34,22 @@ public class ScUtils {
 
         return false;
 
+    private static double getCongeTaken(Employe emp, Connection conn) throws SQLException {
+        double congeLeft = 0;
+
+        // TODO: Write query for conge_left
+        try (PreparedStatement stmt = conn.prepareStatement(null)) {
+            stmt.setInt(1, emp.getIdEmploye());
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                congeLeft = rs.getDouble("conge_left");
+            }
+        }
+
+        return congeLeft;
+    }
+
     private static double getAllCongeCount(Employe emp, Connection conn) throws SQLException {
         double monthlyFactor = 2.5;
 
