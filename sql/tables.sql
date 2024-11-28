@@ -285,3 +285,19 @@ CREATE TABLE reponse_simulation_candidat (
     CONSTRAINT reponse_simulation_candidat_id_question_fkey FOREIGN KEY (id_question) REFERENCES question_simulation(id_question_simulation),
     CONSTRAINT reponse_simulation_candidat_id_attribution_fkey FOREIGN KEY (id_attribution) REFERENCES simulation_candidat(id_attribution) ON DELETE CASCADE
 );
+
+CREATE TABLE type_conge(
+   id_type_conge INT,
+   nom_type VARCHAR(50) NOT NULL,
+   PRIMARY KEY(id_type_conge)
+);
+
+CREATE TABLE conge(
+   id_conge INT,
+   id_employe INT REFERENCES employe(id_employe),
+   id_type_conge INT REFERENCES type_conge(id_type_conge),
+   date_debut DATE NOT NULL,
+   date_fin DATE,
+   id_contrat INT REFERENCES contrat(id_contrat),
+   PRIMARY KEY(id_conge)
+);
