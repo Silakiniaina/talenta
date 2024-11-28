@@ -30,6 +30,10 @@ public class Conge {
         this.setDateFin(dateFin);
     }
 
+    public Conge(HttpServletRequest req) throws NumberFormatException, IllegalArgumentException {
+        this.createFromRequest(req);
+    }
+
     /* --------------------------- Getters and setters -------------------------- */
     public int getIdConge() {
         return idConge;
@@ -80,7 +84,6 @@ public class Conge {
     }
 
     /* ---------------------------------- Utils --------------------------------- */
-
     public void createFromRequest(HttpServletRequest req) throws NumberFormatException, IllegalArgumentException {
         // NOTICE: Assumes the date is in "yyyy-MM-dd" format
 
