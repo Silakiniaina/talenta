@@ -58,6 +58,7 @@ public class RecrutementServlet extends HttpServlet{
         String dateFin = req.getParameter("fin");
         int nb = Integer.parseInt(req.getParameter("nombre"));
         int poste = Integer.parseInt(req.getParameter("poste"));
+        String description = req.getParameter("desc");
         try {
             Connection connexion = (Connection)req.getSession().getAttribute("connexion");
 
@@ -66,6 +67,7 @@ public class RecrutementServlet extends HttpServlet{
             r.setDateFin(dateFin);
             r.setNombre(nb);
             r.setPoste(connexion,poste);
+            r.setDescriptionRecrutement(description);
 
             r.insert();
 

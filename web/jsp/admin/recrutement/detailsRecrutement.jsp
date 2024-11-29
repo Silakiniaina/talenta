@@ -1,12 +1,14 @@
 <%@ page import="java.util.List" %>
 <%@ page import="model.Recrutement" %>
 <%@ page import="model.Poste" %>
+<%@ page import="model.Candidat" %>
 <%@ page import="model.Competence" %>
 <%@ page import="model.Education" %>
 <%@ page import="model.Experience" %>
 <%
     Recrutement recrutement = (Recrutement)request.getAttribute("recrutement");
     int nbCandidature = (int)request.getAttribute("nbCandidature");
+    Candidat candidat = (Candidat)request.getSession().getAttribute("candidat");
 %>
     <%@include file="../../shared/head.jsp" %>
     <body>
@@ -41,7 +43,7 @@
                                                     <div class="media">
                                                         <i class="ti-world icon-md text-info d-flex align-self-start mr-3"></i>
                                                         <div class="media-body">
-                                                        <h3>14</h3>
+                                                        <h3><%= recrutement.getNombre() %></h3>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -60,7 +62,7 @@
                                 <div class="card-body">
                                     <h3 class="card-title">Description</h3>
                                     <p>
-                                        Here goes the description
+                                       <%= recrutement.getDescriptionRecrutement() != null ? recrutement.getDescriptionRecrutement() : "" %>
                                     </p>
                                 </div>
                             </div>
@@ -127,7 +129,11 @@
                                     </ul>
                                 </div>
                             </div>
-                            <a href="#" type="button" class="btn btn-success col-md-4">Postuler Maintenant</a>
+                            <% 
+                                if(candidat != null){
+                            %>
+                                <a href="#" type="button" class="btn btn-success col-md-4">Postuler Maintenant</a>
+                            <% } %>
                         </div>
                     </div>
                     <%@ include file="../../shared/footer.jsp" %>

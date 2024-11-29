@@ -94,7 +94,8 @@ public class SimulationCandidat {
         this.candidat = c.getById(con, candidat);
     }
 
-    public void setStatus(int status) throws SQLException{
-        this.status = Status.getById(status);
+    public void setStatus(Connection c, int status) throws SQLException{
+        Status s = new Status();
+        this.status = s.getById(c,status);
     }
 }

@@ -8,3 +8,5 @@ ALTER TABLE experience_candidat DROP COLUMN description_experience;
 ALTER TABLE experience_candidat ADD COLUMN id_specialite INTEGER ;
 ALTER TABLE experience_candidat ADD CONSTRAINT fkey_id_specialite FOREIGN KEY(id_specialite) REFERENCES specialite(id_specialite);
 ALTER TABLE experience_candidat ADD COLUMN entreprise VARCHAR(200);
+
+ALTER TABLE recrutement ADD COLUMN description_recrutement TEXT;
