@@ -6,30 +6,30 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class SimulationCandidat {
+public class TestCandidat {
     
     private int idAttribution;
-    private Simulation simulation;
+    private Test test;
     private Candidat candidat;
     private Status status;
     
     // Constructeurs
-    public SimulationCandidat() {}
+    public TestCandidat() {}
 
     
     // Méthodes DAO
     // public static List<SimulationCandidat> getByCandidat(Connection conn, int candidatId) throws SQLException {
-    //     List<SimulationCandidat> simulations = new ArrayList<>();
-    //     String query = "SELECT * FROM simulation_candidat WHERE id_candidat = ?";
+    //     List<SimulationCandidat> tests = new ArrayList<>();
+    //     String query = "SELECT * FROM test_candidat WHERE id_candidat = ?";
     //     try (PreparedStatement pstmt = conn.prepareStatement(query)) {
     //         pstmt.setInt(1, candidatId);
     //         ResultSet rs = pstmt.executeQuery();
     //         while (rs.next()) {
     //             SimulationCandidat s = new SimulationCandidat();
     //             s.setIdAttribution(rs.getInt("id_attribution"));
-    //             s.setSimulation(rs.getInt("id_simulation"));
+    //             s.setSimulation(rs.getInt("id_test"));
     //             s.setCandidat(conn, candidatId);
-    //             simulations.add(new SimulationCandidat(
+    //             tests.add(new SimulationCandidat(
     //                 ,
     //                 ,
     //                 rs.getInt("id_candidat"),
@@ -37,12 +37,12 @@ public class SimulationCandidat {
     //             ));
     //         }
     //     }
-    //     return simulations;
+    //     return tests;
     // }
     
     public void save(Connection conn) throws SQLException {
         if (this.idAttribution == 0) {
-            String query = "INSERT INTO simulation_candidat (id_simulation, id_candidat, id_status) VALUES (?, ?, ?)";
+            String query = "INSERT INTO test_candidat (id_test, id_candidat, id_status) VALUES (?, ?, ?)";
             try (PreparedStatement pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
                 pstmt.setInt(1, this.getSimulation().getIdSimulation());
                 pstmt.setInt(2, this.getCandidat().getIdCandidat());
@@ -55,7 +55,7 @@ public class SimulationCandidat {
                 }
             }
         } else {
-            String query = "UPDATE simulation_candidat SET id_status = ? WHERE id_attribution = ?";
+            String query = "UPDATE test_candidat SET id_status = ? WHERE id_attribution = ?";
             try (PreparedStatement pstmt = conn.prepareStatement(query)) {
                 pstmt.setInt(1, this.getStatus().getIdStatus());
                 pstmt.setInt(2, this.getIdAttribution());
@@ -68,8 +68,8 @@ public class SimulationCandidat {
         return idAttribution;
     }
 
-    public Simulation getSimulation() {
-        return simulation;
+    public Test getSimulation() {
+        return test;
     }
 
     public Candidat getCandidat() {
@@ -84,8 +84,8 @@ public class SimulationCandidat {
         this.idAttribution = idAttribution;
     }
 
-    public void setSimulation(int simulation) throws SQLException{
-        this.simulation = Simulation.getById(null, simulation);
+    public void setSimulation(int test) throws SQLException{
+        this.test = Test.getById(null, test);
     }
 
     public void setCandidat(Connection con, int candidat) throws SQLException{

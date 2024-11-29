@@ -11,18 +11,18 @@ import java.util.List;
 
 import model.utils.Database;
 
-public class Simulation {
+public class Test {
     private int idSimulation;
     private String titre;
     private String description;
     private Timestamp dateCreation;
     private Admin responsable;
-    private List<QuestionSimulation> questions;
+    private List<QuestionTest> questions;
     
     // Constructeurs
-    public Simulation() {}
+    public Test() {}
     
-    public Simulation(int idSimulation, String titre, String description, Timestamp dateCreation, int idResponsable) throws SQLException{
+    public Test(int idSimulation, String titre, String description, Timestamp dateCreation, int idResponsable) throws SQLException{
         this.setIdSimulation(idSimulation); 
         this.setTitre(titre); 
         this.setDescription(description); 
@@ -31,19 +31,19 @@ public class Simulation {
     }
     
 
-    public static Simulation getById(Connection conn, int id) throws SQLException {
+    public static Test getById(Connection conn, int id) throws SQLException {
         boolean isNewConnection = false;
         if(conn == null){
             isNewConnection = true;
             conn = Database.getConnection();
         }
-        String query = "SELECT * FROM simulation WHERE id_simulation = ?";
+        String query = "SELECT * FROM test WHERE id_test = ?";
         try (PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                Simulation s =  new Simulation(
-                    rs.getInt("id_simulation"),
+                Test s =  new Test(
+                    rs.getInt("id_test"),
                     rs.getString("titre"),
                     rs.getString("description"),
                     rs.getTimestamp("date_creation"),
@@ -60,30 +60,30 @@ public class Simulation {
         return null;
     }
     
-    public static List<Simulation> getAll(Connection conn) throws SQLException {
-        List<Simulation> simulations = new ArrayList<>();
-        String query = "SELECT * FROM simulation";
+    public static List<Test> getAll(Connection conn) throws SQLException {
+        List<Test> tests = new ArrayList<>();
+        String query = "SELECT * FROM test";
         try (Statement stmt = conn.createStatement()) {
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
-                Simulation s = new Simulation(
-                    rs.getInt("id_simulation"),
+                Test s = new Test(
+                    rs.getInt("id_test"),
                     rs.getString("titre"),
                     rs.getString("description"),
                     rs.getTimestamp("date_creation"),
                     rs.getInt("id_responsable")
                 );
                 s.getQuestionSimulation(conn);
-                simulations.add(s);
+                tests.add(s);
             }
         }
-        return simulations;
+        return tests;
     }
     
     public void save(Connection conn) throws SQLException {
         if (this.idSimulation == 0) {
             // Insert
-            String query = "INSERT INTO simulation (titre, description, id_responsable) VALUES (?, ?, ?)";
+            String query = "INSERT INTO test (titre, description, id_responsable) VALUES (?, ?, ?)";
             try (PreparedStatement pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
                 pstmt.setString(1, this.getTitre());
                 pstmt.setString(2, this.getDescription());
@@ -97,7 +97,7 @@ public class Simulation {
             }
         } else {
             // Update
-            String query = "UPDATE simulation SET titre = ?, description = ?, id_responsable = ? WHERE id_simulation = ?";
+            String query = "UPDATE test SET titre = ?, description = ?, id_responsable = ? WHERE id_test = ?";
             try (PreparedStatement pstmt = conn.prepareStatement(query)) {
                 pstmt.setString(1, this.getTitre());
                 pstmt.setString(2, this.getDescription());
@@ -109,7 +109,7 @@ public class Simulation {
     }
     
     public void delete(Connection conn) throws SQLException {
-        String query = "DELETE FROM simulation WHERE id_simulation = ?";
+        String query = "DELETE FROM test WHERE id_test = ?";
         try (PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setInt(1, this.idSimulation);
             pstmt.executeUpdate();
@@ -119,13 +119,13 @@ public class Simulation {
     // Méthodes DAO
     public void getQuestionSimulation(Connection conn) throws SQLException {
         this.setQuestions(new ArrayList<>());
-        String query = "SELECT * FROM question_simulation WHERE id_simulation = ?";
+        String query = "SELECT * FROM question_test WHERE id_test = ?";
         try (PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setInt(1, this.getIdSimulation());
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                this.getQuestions().add(new QuestionSimulation(
-                    rs.getInt("id_question_simulation"),
+                this.getQuestions().add(new QuestionTest(
+                    rs.getInt("id_question_test"),
                     this.getIdSimulation(),
                     rs.getString("texte_question")
                 ));
@@ -174,11 +174,11 @@ public class Simulation {
         this.responsable = Admin.getById(idResponsable);
     }
 
-    public List<QuestionSimulation> getQuestions(){
+    public List<QuestionTest> getQuestions(){
         return this.questions;
     }
 
-    public void setQuestions(List<QuestionSimulation> ls){
+    public void setQuestions(List<QuestionTest> ls){
         this.questions = ls;
     }
 }

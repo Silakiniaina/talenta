@@ -8,30 +8,30 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuestionSimulation {
+public class QuestionTest {
 
-    private int idQuestionSimulation;
-    private int idSimulation;
+    private int idQuestionTest;
+    private int idTest;
     private String texteQuestion;
-    private List<ReponseSimulationPossible> reponsePossible;
+    private List<ReponseTestPossible> reponsePossible;
     
     // Constructeurs
-    public QuestionSimulation() {}
+    public QuestionTest() {}
     
-    public QuestionSimulation(int idQuestionSimulation, int idSimulation, String texteQuestion) throws SQLException{
-        this.setIdQuestionSimulation(idQuestionSimulation); 
-        this.setIdSimulation(idSimulation);
+    public QuestionTest(int idQuestionTest, int idTest, String texteQuestion) throws SQLException{
+        this.setIdQuestionTest(idQuestionTest); 
+        this.setIdTest(idTest);
         this.setTexteQuestion(texteQuestion);
     }
 
     public void getReponsesPossibles(Connection conn) throws SQLException{
         this.setReponsePossible(new ArrayList<>());
-        String query = "SELECT * FROM reponse_simulation_possibles WHERE id_question_simulation = ?"; 
+        String query = "SELECT * FROM reponse_test_possibles WHERE id_question_test = ?"; 
         try (PreparedStatement pstmt = conn.prepareStatement(query)) {
-            pstmt.setInt(1, this.getIdQuestionSimulation());
+            pstmt.setInt(1, this.getIdQuestionTest());
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                this.getReponsePossible().add(new ReponseSimulationPossible(
+                this.getReponsePossible().add(new ReponseTestPossible(
                     rs.getInt(1),
                     rs.getInt(2),
                     rs.getString(3)
@@ -41,57 +41,57 @@ public class QuestionSimulation {
     }
     
     public void save(Connection conn) throws SQLException {
-        if (this.idQuestionSimulation == 0) {
-            String query = "INSERT INTO question_simulation (id_simulation, texte_question) VALUES (?, ?)";
+        if (this.idQuestionTest == 0) {
+            String query = "INSERT INTO question_test (id_test, texte_question) VALUES (?, ?)";
             try (PreparedStatement pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-                pstmt.setInt(1, this.getIdSimulation());
+                pstmt.setInt(1, this.getIdTest());
                 pstmt.setString(2, this.getTexteQuestion());
                 pstmt.executeUpdate();
                 
                 ResultSet rs = pstmt.getGeneratedKeys();
                 if (rs.next()) {
-                    this.idQuestionSimulation = rs.getInt(1);
+                    this.idQuestionTest = rs.getInt(1);
                 }
             }
         } else {
-            String query = "UPDATE question_simulation SET texte_question = ? WHERE id_question_simulation = ?";
+            String query = "UPDATE question_test SET texte_question = ? WHERE id_question_test = ?";
             try (PreparedStatement pstmt = conn.prepareStatement(query)) {
                 pstmt.setString(1, this.getTexteQuestion());
-                pstmt.setInt(2, this.getIdQuestionSimulation());
+                pstmt.setInt(2, this.getIdQuestionTest());
                 pstmt.executeUpdate();
             }
         }
     }
 
-    public int getIdQuestionSimulation() {
-        return idQuestionSimulation;
+    public int getIdQuestionTest() {
+        return idQuestionTest;
     }
 
-    public int getIdSimulation() {
-        return idSimulation;
+    public int getIdTest() {
+        return idTest;
     }
 
     public String getTexteQuestion() {
         return texteQuestion;
     }
 
-    public void setIdQuestionSimulation(int idQuestionSimulation) {
-        this.idQuestionSimulation = idQuestionSimulation;
+    public void setIdQuestionTest(int idQuestionTest) {
+        this.idQuestionTest = idQuestionTest;
     }
 
-    public void setIdSimulation(int idSimulation) throws SQLException{
-        this.idSimulation = idSimulation;
+    public void setIdTest(int idTest) throws SQLException{
+        this.idTest = idTest;
     }
 
     public void setTexteQuestion(String texteQuestion) {
         this.texteQuestion = texteQuestion;
     }
 
-    public void setReponsePossible(List<ReponseSimulationPossible> ls){
+    public void setReponsePossible(List<ReponseTestPossible> ls){
         this.reponsePossible = ls;
     }
 
-    public List<ReponseSimulationPossible> getReponsePossible(){
+    public List<ReponseTestPossible> getReponsePossible(){
         return this.reponsePossible;
     }
 }

@@ -10,9 +10,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.Candidat;
-import model.QuestionSimulation;
-import model.Simulation;
-import model.SimulationCandidat;
+import model.QuestionTest;
+import model.Test;
+import model.TestCandidat;
 import model.utils.Database;
 
 @WebServlet("/passer-simulation")
@@ -24,14 +24,14 @@ public class PasserSimulationServlet extends HttpServlet {
             Connection conn = Database.getConnection();
             
             // Récupérer la simulation
-            Simulation simulation = Simulation.getById(conn, idSimulation);
+            Test simulation = Test.getById(conn, idSimulation);
             if (simulation == null) {
                 response.sendRedirect(request.getContextPath() + "/simulations");
                 return;
             }
             
             // Récupérer les questions
-            List<QuestionSimulation> questions = simulation.getQuestions();
+            List<QuestionTest> questions = simulation.getQuestions();
             
             request.setAttribute("simulation", simulation);
             request.setAttribute("questions", questions);
@@ -49,16 +49,16 @@ public class PasserSimulationServlet extends HttpServlet {
             Candidat candidat = (Candidat) request.getSession().getAttribute("candidat");
             
             // Créer une nouvelle attribution
-            SimulationCandidat simCandidat = new SimulationCandidat();
+            TestCandidat simCandidat = new TestCandidat();
             simCandidat.setSimulation(idSimulation);
             simCandidat.setCandidat(connexion,candidat.getIdCandidat());
             simCandidat.setStatus(connexion,1); // Status "En cours" par exemple
             simCandidat.save(connexion);
             
             // Enregistrer les réponses
-            List<QuestionSimulation> questions = Simulation.getById(connexion, idSimulation).getQuestions();
-            for (QuestionSimulation question : questions) {
-                String reponse = request.getParameter("question_" + question.getIdQuestionSimulation());
+            List<QuestionTest> questions = Test.getById(connexion, idSimulation).getQuestions();
+            for (QuestionTest question : questions) {
+                String reponse = request.getParameter("question_" + question.getIdQuestionTest());
                 if (reponse != null && !reponse.trim().isEmpty()) {
                     // Sauvegarder la réponse...
                 }
