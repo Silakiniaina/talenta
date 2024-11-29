@@ -22,8 +22,10 @@ public class AddCompetenceServlet extends HttpServlet{
         try {
             HttpSession session = req.getSession();
             Candidat c = (Candidat)session.getAttribute("candidat");
+            Connection con = (Connection)session.getAttribute("connexion");
+            Competence compt = new Competence();
             List<Competence> listCompetence = c.getListCompetence();
-            List<Competence> ls = Competence.getAll();
+            List<Competence> ls = compt.getAll(con);
 
             req.setAttribute("allCompetence", ls);
             req.setAttribute("candidat_competence", listCompetence);

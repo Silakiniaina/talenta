@@ -25,14 +25,17 @@ public class Competence {
     }
 
     // CRUD
-    public static List<Competence> getAll() throws SQLException{
+    public List<Competence> getAll(Connection c) throws SQLException{
         List<Competence> result = new ArrayList<>();
-        Connection c = null;
         PreparedStatement prstm = null; 
         ResultSet rs = null;
+        boolean isNewConnection = false;
         String query = "SELECT * FROM competence";
         try {
-            c = Database.getConnection();
+            if(c == null){
+                isNewConnection = true;
+                c = Database.getConnection();
+            }
             prstm = c.prepareStatement(query);
             rs = prstm.executeQuery();
 
@@ -52,7 +55,7 @@ public class Competence {
             if(prstm != null){
                 prstm.close();
             }
-            if(c != null){
+            if(c != null && isNewConnection){
                 c.close();
             }
         }

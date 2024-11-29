@@ -26,7 +26,8 @@ public class PosteServlet extends HttpServlet{
             Connection c = (Connection)req.getSession().getAttribute("connexion");
             if(mode != null && mode.equals("i")){
                 List<Departement> listeDepartements = Departement.getAll();
-                List<Competence> listeCompetences = Competence.getAll();
+                Competence comp = new Competence();
+                List<Competence> listeCompetences = comp.getAll(c);
 
                 req.setAttribute("departements", listeDepartements);
                 req.setAttribute("competences", listeCompetences);

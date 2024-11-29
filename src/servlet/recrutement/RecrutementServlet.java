@@ -25,8 +25,10 @@ public class RecrutementServlet extends HttpServlet{
         RequestDispatcher disp = null;
         String role = req.getParameter("role");
         try {
+            Connection c = (Connection)req.getSession().getAttribute("connexion");
+            Competence comp = new Competence();
             List<Recrutement> listRecrutement = Recrutement.getAll();
-            List<Competence> listCompetences = Competence.getAll();
+            List<Competence> listCompetences = comp.getAll(c);
 
             req.setAttribute("recrutements", listRecrutement);
             req.setAttribute("competences", listCompetences);
