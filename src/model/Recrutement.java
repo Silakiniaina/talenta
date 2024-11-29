@@ -44,7 +44,7 @@ public class Recrutement {
                 d.setDateDebut(rs.getDate(2));
                 d.setDateFin(rs.getDate(3));
                 d.setNombre(rs.getInt(4));
-                d.setPoste(rs.getInt(5));
+                d.setPoste(c,rs.getInt(5));
                 d.setStatus(rs.getInt(6));
                 d.fetchListCandidat(c);
 
@@ -85,7 +85,7 @@ public class Recrutement {
                 this.setDateDebut(rs.getDate(2));
                 this.setDateFin(rs.getDate(3));
                 this.setNombre(rs.getInt(4));
-                this.setPoste(rs.getInt(5));
+                this.setPoste(c,rs.getInt(5));
                 this.fetchListCandidat(c);
             }
             return this;
@@ -256,8 +256,9 @@ public class Recrutement {
     public void setNombre(int nombre) {
         this.nombre = nombre;
     }
-    public void setPoste(int idposte)throws SQLException {
-        this.poste = Poste.getById(idposte);
+    public void setPoste(Connection c,int idposte)throws SQLException {
+        Poste p = new Poste();
+        this.poste = p.getById(c,idposte);
     }
     public void setStatus(int idstatus)throws SQLException{
         this.status = Status.getById(idstatus);

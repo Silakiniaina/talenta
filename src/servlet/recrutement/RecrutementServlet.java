@@ -63,7 +63,7 @@ public class RecrutementServlet extends HttpServlet{
             r.setDateDebut(dateDebut);
             r.setDateFin(dateFin);
             r.setNombre(nb);
-            r.setPoste(poste);
+            r.setPoste(connexion,poste);
 
             r.insert();
 

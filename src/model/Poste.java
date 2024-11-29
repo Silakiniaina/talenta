@@ -16,7 +16,7 @@ public class Poste {
     private String nomPoste;
     private Departement departement;
     private List<Competence> listCompetence;
-    //private List<Education> listEducation;
+    private List<Education> listEducation;
 
     // CONSTRUCTOR
     public Poste() {
@@ -30,14 +30,17 @@ public class Poste {
     }
 
     // CRUD
-    public static List<Poste> getAll() throws SQLException {
+    public List<Poste> getAll(Connection c) throws SQLException {
         List<Poste> result = new ArrayList<>();
-        Connection c = null;
+        boolean isNewConnection = false;
         PreparedStatement prstm = null;
         ResultSet rs = null;
         String query = "SELECT * FROM poste";
         try {
-            c = Database.getConnection();
+            if(c == null){
+                isNewConnection = true;
+                c = Database.getConnection();
+            }
             prstm = c.prepareStatement(query);
             rs = prstm.executeQuery();
 
@@ -58,21 +61,24 @@ public class Poste {
             if(prstm != null){
                 prstm.close();
             }
-            if(c != null){
+            if(c != null && isNewConnection){
                 c.close();
             }
         }
         return result;
     }
 
-    public static Poste getById(int id) throws SQLException {
+    public Poste getById(Connection c, int id) throws SQLException {
         Poste result = null;
-        Connection c = null;
+        boolean isNewConnection = false;
         PreparedStatement prstm = null;
         ResultSet rs = null;
         String query = "SELECT * FROM poste WHERE id_poste = ?";
         try {
-            c = Database.getConnection();
+            if(c == null){
+                isNewConnection = true;
+                c = Database.getConnection();
+            }
             prstm = c.prepareStatement(query);
             prstm.setInt(1, id);
             rs = prstm.executeQuery();
@@ -87,16 +93,29 @@ public class Poste {
             }
         } catch (SQLException e) {
             throw e;
+        }finally{
+            if(rs != null){
+                rs.close();
+            }
+            if(prstm != null){
+                prstm.close();
+            }
+            if(c != null && isNewConnection){
+                c.close();
+            }
         }
         return result;
     }
 
-    public Poste insert() throws SQLException{
-        Connection c = null; 
+    public Poste insert(Connection c) throws SQLException{
+        boolean isNewConnection = false;
         PreparedStatement prstm = null;
         String query = "INSERT INTO poste(nom,id_departement) VALUES (?, ?)";
         try {
-            c = Database.getConnection();
+            if(c == null){
+                isNewConnection = true;
+                c = Database.getConnection();
+            }
             c.setAutoCommit(false);
 
             prstm = c.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);

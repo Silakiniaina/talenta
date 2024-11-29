@@ -25,8 +25,9 @@ public class Employe {
         Candidat c = new Candidat();
         this.candidat = c.getById(con,candidat);
     }
-    public void setPoste(int poste)throws SQLException {
-        this.poste = Poste.getById(poste);
+    public void setPoste(Connection c, int poste)throws SQLException {
+        Poste p = new Poste();
+        this.poste = p.getById(c, poste);
     }
     public void setDateEmbauche(Date dateEmbauche) {
         this.dateEmbauche = dateEmbauche;

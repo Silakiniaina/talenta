@@ -2,6 +2,7 @@ package servlet.candidat;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class PosteServlet extends HttpServlet{
         String mode = req.getParameter("mode");
         RequestDispatcher disp = null; 
         try {
+            Connection c = (Connection)req.getSession().getAttribute("connexion");
             if(mode != null && mode.equals("i")){
                 List<Departement> listeDepartements = Departement.getAll();
                 List<Competence> listeCompetences = Competence.getAll();
@@ -30,7 +32,8 @@ public class PosteServlet extends HttpServlet{
                 req.setAttribute("competences", listeCompetences);
                 disp = req.getRequestDispatcher("/WEB-INF/views/admin/poste/addPoste.jsp");
             }else{
-                List<Poste> listPoste = Poste.getAll();
+                Poste p = new Poste();
+                List<Poste> listPoste = p.getAll(c);
                 req.setAttribute("postes", listPoste);
                 disp = req.getRequestDispatcher("/WEB-INF/views/admin/poste/poste.jsp");
             }
@@ -46,11 +49,12 @@ public class PosteServlet extends HttpServlet{
         String nom = req.getParameter("nom");
         String dept =  req.getParameter("dept");
         try {
+            Connection c = (Connection)req.getSession().getAttribute("connexion");
             Poste p = new Poste();
             p.setDepartement(Integer.parseInt(dept));
             p.setNomPoste(nom);
 
-            p.insert();
+            p.insert(c);
             resp.sendRedirect("poste");
         } catch (SQLException e) {
             e.printStackTrace(out);

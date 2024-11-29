@@ -15,9 +15,8 @@ public class EducationCandidat {
     private int idEducation;
     private Date dateDebut; 
     private Date dateFin;
-    private TypeDiplome typeDiplome;
     private String nomEcole;
-    private BrancheEducation brancheEducation;
+    private Education education;
 
     // CONSTRUCTOR
     public EducationCandidat(){
@@ -50,9 +49,8 @@ public class EducationCandidat {
                 d.setIdEducation(rs.getInt(1));
                 d.setDateDebut(rs.getDate(3));
                 d.setDateFin(rs.getDate(4));
-                d.setTypeDiplome(rs.getInt(5));
                 d.setNomEcole(rs.getString(6));
-                d.setBrancheEducation(c, rs.getInt(7));
+                d.setEducation(c, rs.getInt(5), rs.getInt(7));
                 result.add(d);
             }
             return result;
@@ -81,22 +79,19 @@ public class EducationCandidat {
     public Date getDateFin() {
         return dateFin;
     }
-    public TypeDiplome getTypeDiplome() {
-        return typeDiplome;
+    public Education getEducation() {
+        return education;
     }
     public String getNomEcole() {
         return nomEcole;
     }
-    public BrancheEducation getBrancheEducation(){
-        return this.brancheEducation;
-    }
 
-    public void setBrancheEducation(Connection c, int id)throws SQLException{
-        BrancheEducation b = new BrancheEducation();
-        b.setIdBrancheEducation(id);
+    public void setEducation(Connection c, int idBrache, int idType)throws SQLException{
+        Education e = new Education();
+        e.setBrancheEducation(c,idBrache);
+        e.setTypeDiplome(c, idType);
 
-        b = b.getById(c, id);
-        this.setBrancheEducation(c, id);
+        this.education = e;
     }
     public void setIdEducation(int idEducation) {
         this.idEducation = idEducation;
@@ -106,9 +101,6 @@ public class EducationCandidat {
     }
     public void setDateFin(Date dateFin) {
         this.dateFin = dateFin;
-    }
-    public void setTypeDiplome(int typeDiplome) throws SQLException{
-        this.typeDiplome = TypeDiplome.getById(typeDiplome);
     }
     public void setNomEcole(String nomEcole) {
         this.nomEcole = nomEcole;
