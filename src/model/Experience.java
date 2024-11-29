@@ -15,9 +15,6 @@ public class Experience {
     private int dureeMois;
     private boolean obligatoire;
 
-    public static List<Experience> getAllByCandidat(Connection conn, int idCandidat)throws SQLException{
-        List<Experience> result = new ArrayList<>();
-        Connection c = null;
     public List<Experience> getAllByPoste(Connection c, int idPoste) throws SQLException{
         List<Experience> result = new ArrayList<>();
         boolean isNewConnection = false;
