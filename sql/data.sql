@@ -7,26 +7,33 @@ VALUES
     ('FINANCE');
 
 INSERT INTO
-    poste(nom, id_departement)
+    poste(nom, id_departement,annees_experience_requises)
 VALUES
-    ('Developpeur backend', 1),
-    ('Developpeur frontent', 1),
-    ('Integrateur', 1),
-    ('Designer', 1);
+    ('Developpeur backend', 1,3),
+    ('Developpeur frontent', 1,3),
+    ('Integrateur', 1,4),
+    ('Designer', 1, 0);
+
+INSERT INTO 
+    categorie_competence(label)
+VALUES
+    ('Soft Skill'),
+    ('Hard Skill')
+;
 
 INSERT INTO
-    competence (label)
+    competence (label,id_categorie_competence)
 VALUES
-    ('Communication'),
-    ('Gestion de projet'),
-    ('Analyse de données'),
-    ('Développement web'),
-    ('Gestion des relations clients'),
-    ('Marketing digital'),
-    ('Résolution de problèmes'),
-    ('Leadership'),
-    ('Travail en équipe'),
-    ('Créativité');
+    ('Communication',1),
+    ('Gestion de projet',2),
+    ('Analyse de données',2),
+    ('Développement web',2),
+    ('Gestion des relations clients',1),
+    ('Marketing digital',2),
+    ('Résolution de problèmes',1),
+    ('Leadership',1),
+    ('Travail en équipe',1),
+    ('Créativité',1);
 
 INSERT INTO
     genre(label)
@@ -37,41 +44,10 @@ VALUES
 INSERT INTO
     type_questionaire (label)
 VALUES
-    ('Compétences Techniques');
-
-INSERT INTO
-    type_questionaire (label)
-VALUES
-    ('Aptitudes Interpersonnelles');
-
-INSERT INTO
-    questionaire (question, id_type_questionaire)
-VALUES
-    ('Maîtrisez-vous Java ?', 1);
-
-INSERT INTO
-    questionaire (question, id_type_questionaire)
-VALUES
-    (
-        'Avez-vous de l expérience en gestion de projet ?',
-        1
-    );
-
-INSERT INTO
-    questionaire (question, id_type_questionaire)
-VALUES
-    (
-        'Êtes-vous à l aise pour travailler en équipe ?',
-        2
-    );
-
-INSERT INTO
-    questionaire (question, id_type_questionaire)
-VALUES
-    (
-        'Comment évaluez-vous votre capacité à résoudre des conflits ?',
-        2
-    );
+    ('Compétences Techniques'),
+    ('Competences Theoriques'),
+    ('Aptitudes Interpersonnelles')
+;
 
 INSERT INTO
     type_contrat(label)
@@ -80,19 +56,12 @@ VALUES
     ('CDI');
 
 INSERT INTO
-    status(label)
+    status(label,corresponding_color)
 VALUES
-    ('Sheduled'),
-    ('In progress'),
-    ('Finished'),
-    ('Blocked');
-
-INSERT INTO
-    competence_requise(id_poste, id_competence, experience)
-VALUES
-    (3, 1, 0),
-    (3, 2, 3),
-    (3, 3, 1);
+    ('Sheduled','info'),
+    ('In progress','warning'),
+    ('Finished','success'),
+    ('Blocked','danger');
 
 INSERT INTO
     role_talenta(nom_role)
@@ -105,34 +74,6 @@ INSERT INTO
 VALUES
     ('Sanda', 'sanda@admin.com', 'admin', 1);
 
-UPDATE
-    status
-SET
-    corresponding_color = 'primary'
-WHERE
-    id_status = 1;
-
-UPDATE
-    status
-SET
-    corresponding_color = 'warning'
-WHERE
-    id_status = 2;
-
-UPDATE
-    status
-SET
-    corresponding_color = 'success'
-WHERE
-    id_status = 3;
-
-UPDATE
-    status
-SET
-    corresponding_color = 'danger'
-WHERE
-    id_status = 4;
-
 INSERT INTO
     type_diplome(label)
 VALUES
@@ -140,38 +81,24 @@ VALUES
     ('Master'),
     ('Doctorat');
 
-INSERT INTO
-    poste (nom, id_departement, annees_experience_requises)
-VALUES
-    ('Huhu', 2, 3);
+INSERT INTO 
+    branche_education(nom_branche)
+VALUES  
+    ('Developpement'),
+    ('Web'),
+    ('Finance'),
+    ('Agricole')
+;
 
 INSERT INTO
     competence_requise_poste (id_poste, id_competence, obligatoire)
 VALUES
     (1, 6, true),
-    (1, 5, true);
-
-INSERT INTO
-    competence_requise_poste (id_poste, id_competence, obligatoire)
-VALUES
+    (1, 5, true),
     (1, 4, false);
 
 INSERT INTO
-    diplome_requis_poste (id_poste, id_type_diplome, obligatoire)
+    diplome_requis_poste(id_poste, id_type_diplome, obligatoire, id_branche_education)
 VALUES
-    (1, 5, true);
-
-INSERT INTO
-    diplome_requis_poste (id_poste, id_type_diplome, obligatoire)
-VALUES
-    (1, 6, false);
-
-INSERT INTO
-    simulation(titre, description, id_responsable)
-VALUES
-    ('Simulation omby', 'Project simulation omby', 1);
-
-INSERT INTO
-    question_simulation(id_simulation, texte_question)
-VALUES
-    (1, 'WHO ARE YOU');
+    (1, 1, true,2),
+    (1, 2, false,1);

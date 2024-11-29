@@ -22,7 +22,7 @@ public class EducationCandidat {
     // CONSTRUCTOR
     public EducationCandidat(){
 
-    }
+    } 
 
     //ACTION
     public List<EducationCandidat> getAllByCandidat(Connection conn, int idCandidat)throws SQLException{

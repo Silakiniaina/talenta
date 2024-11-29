@@ -1,6 +1,8 @@
 bin/
 lib/ 
 
+src/model/utils/Database.java
+
 *.class
 *.txt
 *.py
