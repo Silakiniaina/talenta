@@ -11,7 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.Conge;
 
-@WebServlet("/conge/planning")
+@WebServlet("/conge-planning")
 public class PlanningServlet extends HttpServlet {
 
     @Override
@@ -20,7 +20,7 @@ public class PlanningServlet extends HttpServlet {
 
             List<Conge> planningConges = Conge.getPlanning();
             req.setAttribute("planningConges", planningConges);
-            req.getRequestDispatcher("/WEB-INF/views/conge/planningConge.jsp").forward(req, resp);
+            req.getRequestDispatcher("/WEB-INF/views/admin/conge/planningConge.jsp").forward(req, resp);
 
         } catch (SQLException e) {
             e.printStackTrace(resp.getWriter());
