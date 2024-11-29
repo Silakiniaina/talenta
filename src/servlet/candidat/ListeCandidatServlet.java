@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.Recrutement;
+
 public class ListeCandidatServlet extends HttpServlet{
     
     @Override
@@ -24,9 +25,9 @@ public class ListeCandidatServlet extends HttpServlet{
             r.setIdRecrutement(Integer.parseInt(idRecrutement));
             r = r.getById(connexion);
 
-            //List<Candidat> ls = r.getListCandidats();
+            List<Candidat> ls = r.getListCandidats();
 
-            req.setAttribute("candidats", null);
+            req.setAttribute("candidats", ls);
             RequestDispatcher disp = req.getRequestDispatcher("/WEB-INF/views/admin/recrutement/listeCandidat.jsp");
             disp.forward(req, resp);
         } catch (Exception e) {

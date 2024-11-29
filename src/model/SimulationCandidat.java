@@ -90,11 +90,11 @@ public class SimulationCandidat {
 
     public void setCandidat(Connection con, int candidat) throws SQLException{
         Candidat c = new Candidat();
-        c.setIdCandidat(candidat);
-        this.candidat = c.getById(con);
+        this.candidat = c.getById(con, candidat);
     }
 
-    public void setStatus(int status) throws SQLException{
-        this.status = Status.getById(status);
+    public void setStatus(Connection c, int status) throws SQLException{
+        Status s = new Status();
+        this.status = s.getById(c,status);
     }
 }

@@ -1,4 +1,3 @@
-<a href="recrutement?role=candidat">Recrutement</a>
-<a href="addCompetence">Add competence</a>
-<a href="notifCandidat">Notification</a>
-<a href="chat">Chat</a>
+<%@ include file="../shared/head.jsp" %>
+<%@ include file="../shared/sidebarCandidat.jsp" %>
+<%@ include file="../shared/script.jsp" %>

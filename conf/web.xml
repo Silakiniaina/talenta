@@ -38,10 +38,6 @@
         <servlet-class>servlet.candidat.AddCompetenceServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>NotificationServlet</servlet-name>
-        <servlet-class>servlet.candidat.NotificationServlet</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>ChatServlet</servlet-name>
         <servlet-class>servlet.candidat.ChatServlet</servlet-class>
     </servlet>
@@ -86,10 +82,6 @@
     <servlet-mapping>
         <servlet-name>AddCompetenceServlet</servlet-name>
         <url-pattern>/addCompetence</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>NotificationServlet</servlet-name>
-        <url-pattern>/notifCandidat</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ChatServlet</servlet-name>

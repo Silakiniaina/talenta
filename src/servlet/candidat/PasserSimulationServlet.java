@@ -52,7 +52,7 @@ public class PasserSimulationServlet extends HttpServlet {
             SimulationCandidat simCandidat = new SimulationCandidat();
             simCandidat.setSimulation(idSimulation);
             simCandidat.setCandidat(connexion,candidat.getIdCandidat());
-            simCandidat.setStatus(1); // Status "En cours" par exemple
+            simCandidat.setStatus(connexion,1); // Status "En cours" par exemple
             simCandidat.save(connexion);
             
             // Enregistrer les réponses

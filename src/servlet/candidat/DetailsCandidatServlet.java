@@ -26,7 +26,7 @@ public class DetailsCandidatServlet extends HttpServlet{
 
             Candidat c = new Candidat();
             c.setIdCandidat(Integer.parseInt(idCandidat));
-            c = c.getById(connexion);
+            c = c.getById(connexion, Integer.parseInt(idCandidat));
 
             req.setAttribute("candidat", c);
             RequestDispatcher disp = req.getRequestDispatcher("/WEB-INF/views/candidat/detailsCandidat.jsp");

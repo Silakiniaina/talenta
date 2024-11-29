@@ -13,8 +13,7 @@
                             <div class="col-md-6 grid-margin stretch-card">
                                 <div class="card">
                                     <div class="card-body">
-                                        <h4 class="card-title">Default form</h4>
-                                        <p class="card-description"> Basic form layout </p>
+                                        <h4 class="card-title">Annonce de Recrutement</h4>
                                         <form class="forms-sample" action="recrutement" method="post">
                                             <input type="hidden" name="poste" value="<%= idPoste %>">
                                             <div class="form-group">
@@ -28,6 +27,10 @@
                                             <div class="form-group">
                                                 <label for="nombre">Nombre : </label>
                                                 <input type="number" name="nombre" class="form-control" id="nombre" placeholder="Nombre poste">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="desc">Description : </label>
+                                                <textarea  name="desc" class="form-control" id="desc" placeholder="Description"></textarea>
                                             </div>
                                             <button type="submit" class="btn btn-primary mr-2">Valider</button>
                                         </form>

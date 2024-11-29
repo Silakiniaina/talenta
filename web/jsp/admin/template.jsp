@@ -12,47 +12,18 @@
                 <div class="main-panel">
                     <div class="content-wrapper">
                         <div class="col-lg-12 grid-margin stretch-card">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h4 class="card-title">List des candidatures</h4>
-                                    <div class="table-responsive">
-                                    <table class="table table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Nom</th>
-                                                <th>Prenom</th>
-                                                <th>Date Naissance</th>
-                                                <th>Genre</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <%
-                                                if (candidats != null && !candidats.isEmpty()) {
-                                                    for (Candidat candidat : candidats) {
-                                            %>
-                                            <tr>
-                                                <td><%= candidat.getIdCandidat() %></td>
-                                                <td><%= candidat.getNomCandidat() %></td>
-                                                <td><%= candidat.getPrenomCandidat() %></td>
-                                                <td><%= candidat.getDateNaissance() %></td>
-                                                <td><%= candidat.getAdresse() %></td>
-                                                <td><%= candidat.getGenre().getLabel() %></td>
-                                                <td><a type="button" class="btn btn-sm btn-outline-primary" href="detailsCandidat?idCandidat=<%= candidat.getIdCandidat() %>">Voir CV</a></td>
-                                            </tr>
-                                            <%
-                                                    }
-                                                } else {
-                                            %>
-                                            <tr>
-                                                <td colspan="7">Aucun candidat présélectionné trouvé.</td>
-                                            </tr>
-                                            <%
-                                                }
-                                            %>
-                                        </tbody>
-                                    </table>
+                            <div class="col-md-4 grid-margin grid-margin-md-0 stretch-card">
+                                <div class="card">
+                                    <div class="card-body">
+                                    <h4 class="card-title">List with icon</h4>
+                                    <p class="card-description">Add class <code>.list-star</code> to <code>&lt;ul&gt;</code></p>
+                                    <ul class="list-star">
+                                        <li>Lorem ipsum dolor sit amet</li>
+                                        <li>Consectetur adipiscing elit</li>
+                                        <li>Integer molestie lorem at massa</li>
+                                        <li>Facilisis in pretium nisl aliquet</li>
+                                        <li>Nulla volutpat aliquam velit&gt;</li>
+                                    </ul>
                                     </div>
                                 </div>
                             </div>

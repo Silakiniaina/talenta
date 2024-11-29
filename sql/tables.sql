@@ -302,3 +302,31 @@ CREATE TABLE conge(
    id_contrat INT REFERENCES contrat(id_contrat),
    PRIMARY KEY(id_conge)
 );
+
+
+
+CREATE TABLE branche_education (
+    id_branche_education SERIAL NOT NULL, 
+    nom_branche VARCHAR(200) NOT NULL, 
+    description_branche TEXT,
+    CONSTRAINT branche_education_pkey PRIMARY KEY (id_branche_education)
+);
+
+CREATE table specialite (
+    id_specialite SERIAL NOT NULL, 
+    nom_specialite VARCHAR(200) NOT NULL, 
+    description_specialite TEXT, 
+    id_branche_education INTEGER NOT NULL, 
+    CONSTRAINT specialite_pkey PRIMARY KEY(id_specialite),
+    CONSTRAINT specialite_id_branche_education_fkey FOREIGN KEY(id_branche_education) REFERENCES branche_education(id_branche_education)
+);
+
+CREATE TABLE experience_requise_poste(
+    id_poste INTEGER NOT NULL, 
+    id_specialite INTEGER NOT NULL, 
+    duree INTEGER NOT NULL, 
+    obligatoire BOOLEAN DEFAULT TRUE,
+    CONSTRAINT experience_requise_poste_id_poste_fkey FOREIGN KEY(id_poste) REFERENCES poste(id_poste),
+    CONSTRAINT experience_requise_poste_id_specialite_fkey FOREIGN KEY(id_specialite) REFERENCES specialite(id_specialite),
+    CONSTRAINT experience_requise_poste_duree_chk CHECK(duree >= 0)
+);

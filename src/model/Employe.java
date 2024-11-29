@@ -23,11 +23,11 @@ public class Employe {
     }
     public void setCandidat(Connection con, int candidat) throws SQLException{
         Candidat c = new Candidat();
-        c.setIdCandidat(candidat);
-        this.candidat = c.getById(con);
+        this.candidat = c.getById(con,candidat);
     }
-    public void setPoste(int poste)throws SQLException {
-        this.poste = Poste.getById(poste);
+    public void setPoste(Connection c, int poste)throws SQLException {
+        Poste p = new Poste();
+        this.poste = p.getById(c, poste);
     }
     public void setDateEmbauche(Date dateEmbauche) {
         this.dateEmbauche = dateEmbauche;
