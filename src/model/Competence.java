@@ -59,30 +59,26 @@ public class Competence {
         return result;
     }
 
-    public static Competence getById(Connection conn ,int id) throws SQLException{
-       Competence result = null;
-        Connection c = null;
+    public Competence getById(Connection c ,int id) throws SQLException{
         PreparedStatement prstm = null; 
         ResultSet rs = null;
         boolean isNewConnection = false;
         String query = "SELECT * FROM competence WHERE id_competence = ?";
         try {
-            if(conn == null){
+            if(c == null){
                 c = Database.getConnection();
                 isNewConnection = true;
-            }else{
-                c = conn;
             }
             prstm = c.prepareStatement(query);
             prstm.setInt(1, id);
             rs = prstm.executeQuery();
 
             if(rs.next()) {
-                result = new Competence();
-                result.setIdCompetence(rs.getInt(1));
-                result.setNomCompetence(rs.getString(2));
-                result.setTypeCompetence(rs.getInt(3));
+                this.setIdCompetence(rs.getInt(1));
+                this.setNomCompetence(rs.getString(2));
+                this.setTypeCompetence(rs.getInt(3));
             }
+            return this;
         } catch (SQLException e) {
             throw e;
         }finally{
@@ -96,17 +92,19 @@ public class Competence {
                 c.close();
             }
         }
-        return result;
     }
 
-    public static List<Competence> getAllByPoste(int idPoste) throws SQLException{
+    public List<Competence> getAllByPoste(Connection c, int idPoste) throws SQLException{
         List<Competence> result = new ArrayList<>();
-        Connection c = null;
+        boolean isNewConnection = false;
         PreparedStatement prstm = null; 
         ResultSet rs = null;
         String query = "SELECT id_competence FROM competence_requise_poste WHERE id_poste = ?";
         try {
-            c = Database.getConnection();
+            if(c == null){
+                isNewConnection = true;
+                c = Database.getConnection();
+            }
             prstm = c.prepareStatement(query);
             prstm.setInt(1, idPoste);
             rs = prstm.executeQuery();
@@ -115,7 +113,7 @@ public class Competence {
                 Competence d = new Competence();
                 d.setIdCompetence(rs.getInt(1));
 
-                d = Competence.getById(c, d.getIdCompetence());
+                d = d.getById(c, d.getIdCompetence());
                 result.add(d);
             }
         } catch (SQLException e) {
@@ -127,7 +125,7 @@ public class Competence {
             if(prstm != null){
                 prstm.close();
             }
-            if(c != null){
+            if(c != null && isNewConnection){
                 c.close();
             }
         }

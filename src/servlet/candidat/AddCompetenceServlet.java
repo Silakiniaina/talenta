@@ -2,6 +2,7 @@ package servlet.candidat;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
 import java.util.List;
 
 import jakarta.servlet.RequestDispatcher;
@@ -40,9 +41,13 @@ public class AddCompetenceServlet extends HttpServlet{
         try {
             HttpSession session = req.getSession(false);
             Candidat c = (Candidat)session.getAttribute("candidat");
-            Competence comp = Competence.getById(null, Integer.parseInt(competence));
+            Connection con = (Connection)session.getAttribute("connexion");
+
+
+            Competence comp = new Competence();
+            comp = comp.getById(con, Integer.parseInt(competence));
             c.insertCompetence(comp);
-            c.getCompetences(null);
+            c.getCompetences(con);
 
             resp.sendRedirect("addCompetence");
         } catch (Exception e) {

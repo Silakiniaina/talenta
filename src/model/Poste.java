@@ -44,12 +44,13 @@ public class Poste {
             prstm = c.prepareStatement(query);
             rs = prstm.executeQuery();
 
+            Competence comp = new Competence();
             while (rs.next()) {
                 Poste d = new Poste();
                 d.setIdPoste(rs.getInt(1));
                 d.setNomPoste(rs.getString(2));
                 d.setDepartement(rs.getInt(3));
-                d.setListCompetence(Competence.getAllByPoste(d.getIdPoste()));
+                d.setListCompetence(comp.getAllByPoste(c,d.getIdPoste()));
                 result.add(d);
             }
         }catch (SQLException e) {
@@ -83,12 +84,14 @@ public class Poste {
             prstm.setInt(1, id);
             rs = prstm.executeQuery();
 
+            
             if (rs.next()) {
+                Competence comp = new Competence();
                 result = new Poste();
                 result.setIdPoste(rs.getInt(1));
                 result.setNomPoste(rs.getString(2));
                 result.setDepartement(rs.getInt(3));
-                result.setListCompetence(Competence.getAllByPoste(result.getIdPoste()));
+                result.setListCompetence(comp.getAllByPoste(c,result.getIdPoste()));
 
             }
         } catch (SQLException e) {
@@ -192,6 +195,9 @@ public class Poste {
     public List<Competence> getListCompetence(){
         return this.listCompetence;
     }
+    public List<Education> getListEducation(){
+        return this.listEducation;
+    }
 
     public void setIdPoste(int idPoste) {
         this.idPoste = idPoste;
@@ -207,5 +213,9 @@ public class Poste {
 
     public void setListCompetence(List<Competence> ls){
         this.listCompetence = ls;
+    }
+
+    public void setListEducation(List<Education> ls){
+        this.listEducation = ls;
     }
 }

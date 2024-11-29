@@ -287,8 +287,9 @@ public class Candidat {
             Competence d = null;
             this.setListCompetence(new ArrayList<>());
 
+            Competence comp = new Competence();
             while (rs.next()) {
-                d = Competence.getById(c, rs.getInt(1));
+                d = comp.getById(c, rs.getInt(1));
                 this.getListCompetence().add(d);
             }
         } catch (SQLException e) {
