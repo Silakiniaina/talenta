@@ -10,7 +10,7 @@ import java.util.List;
 
 import model.utils.Database;
 
-public class Experience {
+public class ExperienceCandidat {
     
     private int idExperience;
     private Date dateDebut;
@@ -18,13 +18,13 @@ public class Experience {
     private String description;
 
     // CONSTRUCTOR
-    public Experience(){
+    public ExperienceCandidat(){
 
     }
 
 
-    public static List<Experience> getAllByCandidat(Connection conn, int idCandidat)throws SQLException{
-        List<Experience> result = new ArrayList();
+    public List<ExperienceCandidat> getAllByCandidat(Connection conn, int idCandidat)throws SQLException{
+        List<ExperienceCandidat> result = new ArrayList();
         Connection c = null;
         PreparedStatement prstm = null; 
         ResultSet rs = null;
@@ -42,9 +42,9 @@ public class Experience {
             prstm.setInt(1, idCandidat);
             rs = prstm.executeQuery();
 
-            Experience d = null;
+            ExperienceCandidat d = null;
             while (rs.next()) {
-                d = new Experience();
+                d = new ExperienceCandidat();
                 d.setIdExperience(rs.getInt(1));
                 d.setDateDebut(rs.getDate(3));
                 d.setDateFin(rs.getDate(4));

@@ -23,7 +23,7 @@ public class Candidat {
     private String adresse;
     private Genre genre;
     private List<Competence> listCompetence;
-    private List<Experience> listExperience;
+    private List<ExperienceCandidat> listExperience;
     private List<EducationCandidat> listEducation;
 
     // CONSTRUCTORS
@@ -308,7 +308,8 @@ public class Candidat {
     }
 
     public void getExperiences(Connection c)throws SQLException{
-        this.setListExperience(Experience.getAllByCandidat(c,this.getIdCandidat()));
+        ExperienceCandidat e = new ExperienceCandidat();
+        this.setListExperience(e.getAllByCandidat(c,this.getIdCandidat()));
     }
 
     public void getEducations(Connection c)throws SQLException{
@@ -341,7 +342,7 @@ public class Candidat {
         return adresse;
     
     }
-    public List<Experience> getListExperience(){
+    public List<ExperienceCandidat> getListExperience(){
         return this.listExperience;
     }
 
@@ -376,7 +377,7 @@ public class Candidat {
         return listCompetence;
     }   
 
-    public void setListExperience(List<Experience> ls){
+    public void setListExperience(List<ExperienceCandidat> ls){
         this.listExperience = ls;
     }
 
