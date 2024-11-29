@@ -63,8 +63,7 @@ public class RecrutementCandidat {
     }
     public void setCandidat(Connection con, int candidat) throws SQLException{
         Candidat c = new Candidat();
-        c.setIdCandidat(candidat);
-        this.candidat = c.getById(con);
+        this.candidat = c.getById(con,candidat);
     }
     public void setCandidat(Candidat d){
         this.candidat = d;

@@ -10,22 +10,23 @@ import java.util.List;
 
 import model.utils.Database;
 
-public class Education {
+public class EducationCandidat {
     
     private int idEducation;
     private Date dateDebut; 
     private Date dateFin;
     private TypeDiplome typeDiplome;
     private String nomEcole;
+    private BrancheEducation brancheEducation;
 
     // CONSTRUCTOR
-    public Education(){
+    public EducationCandidat(){
 
     }
 
     //ACTION
-    public static List<Education> getAllByCandidat(Connection conn, int idCandidat)throws SQLException{
-        List<Education> result = new ArrayList();
+    public List<EducationCandidat> getAllByCandidat(Connection conn, int idCandidat)throws SQLException{
+        List<EducationCandidat> result = new ArrayList();
         Connection c = null;
         PreparedStatement prstm = null; 
         ResultSet rs = null;
@@ -43,14 +44,15 @@ public class Education {
             prstm.setInt(1, idCandidat);
             rs = prstm.executeQuery();
 
-            Education d = null;
+            EducationCandidat d = null;
             while (rs.next()) {
-                d = new Education();
+                d = new EducationCandidat();
                 d.setIdEducation(rs.getInt(1));
                 d.setDateDebut(rs.getDate(3));
                 d.setDateFin(rs.getDate(4));
                 d.setTypeDiplome(rs.getInt(5));
                 d.setNomEcole(rs.getString(6));
+                d.setBrancheEducation(c, rs.getInt(7));
                 result.add(d);
             }
             return result;
@@ -85,7 +87,17 @@ public class Education {
     public String getNomEcole() {
         return nomEcole;
     }
+    public BrancheEducation getBrancheEducation(){
+        return this.brancheEducation;
+    }
 
+    public void setBrancheEducation(Connection c, int id)throws SQLException{
+        BrancheEducation b = new BrancheEducation();
+        b.setIdBrancheEducation(id);
+
+        b = b.getById(c, id);
+        this.setBrancheEducation(c, id);
+    }
     public void setIdEducation(int idEducation) {
         this.idEducation = idEducation;
     }

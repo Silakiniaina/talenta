@@ -24,7 +24,7 @@ public class Candidat {
     private Genre genre;
     private List<Competence> listCompetence;
     private List<Experience> listExperience;
-    private List<Education> listEducation;
+    private List<EducationCandidat> listEducation;
 
     // CONSTRUCTORS
     public Candidat(){
@@ -43,14 +43,17 @@ public class Candidat {
     }
 
     // ACTIONS
-    public static List<Candidat> getAll() throws SQLException{
+    public List<Candidat> getAll(Connection c) throws SQLException{
         List<Candidat> result = new ArrayList<>();
-        Connection c = null;
         PreparedStatement prstm = null; 
         ResultSet rs = null;
+        boolean isNewConnection = false;
         String query = "SELECT * FROM v_candidat";
         try {
-            c = Database.getConnection();
+            if(c == null){
+                isNewConnection = true;
+                c = Database.getConnection(); 
+            }
             prstm = c.prepareStatement(query);
             rs = prstm.executeQuery();
 
@@ -70,10 +73,21 @@ public class Candidat {
         } catch (SQLException e) {
             throw e;
         }
+        finally{
+            if(rs != null){
+                rs.close();
+            }
+            if(prstm != null){
+                prstm.close();
+            }
+            if(c != null && isNewConnection){
+                c.close();
+            }
+        }
         return result;
     }
 
-    public Candidat getById(Connection c) throws SQLException{
+    public Candidat getById(Connection c, int id) throws SQLException{
         boolean isNewConnection = false;
         PreparedStatement prstm = null; 
         ResultSet rs = null;
@@ -84,7 +98,7 @@ public class Candidat {
                 isNewConnection = true;
             }
             prstm = c.prepareStatement(query);
-            prstm.setInt(1, this.getIdCandidat());
+            prstm.setInt(1, id);
             rs = prstm.executeQuery();
 
             if (rs.next()) {
@@ -297,7 +311,8 @@ public class Candidat {
     }
 
     public void getEducations(Connection c)throws SQLException{
-        this.setListEducation(Education.getAllByCandidat(c,this.getIdCandidat()));
+        EducationCandidat e = new EducationCandidat();
+        this.setListEducation(e.getAllByCandidat(c,this.getIdCandidat()));
     }
 
 
@@ -329,7 +344,7 @@ public class Candidat {
         return this.listExperience;
     }
 
-    public List<Education> getListEducation(){
+    public List<EducationCandidat> getListEducation(){
         return this.listEducation;
     }
 
@@ -364,7 +379,7 @@ public class Candidat {
         this.listExperience = ls;
     }
 
-    public void setListEducation(List<Education> ls){
+    public void setListEducation(List<EducationCandidat> ls){
         this.listEducation = ls;
     }
 

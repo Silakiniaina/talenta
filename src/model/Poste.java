@@ -16,6 +16,7 @@ public class Poste {
     private String nomPoste;
     private Departement departement;
     private List<Competence> listCompetence;
+    //private List<Education> listEducation;
 
     // CONSTRUCTOR
     public Poste() {

@@ -159,8 +159,7 @@ public class Recrutement {
 
             while (rs.next()) {
                 Candidat cd = new Candidat();
-                cd.setIdCandidat(rs.getInt(1));
-                result.add(cd.getById(c));
+                result.add(cd.getById(c, rs.getInt(1)));
             }
             this.setListCandidats(result);
         } catch (SQLException e) {
@@ -212,6 +211,7 @@ public class Recrutement {
             }
         }
     }
+
     // GETTERS AND SETTERS
     public int getIdRecrutement() {
         return idRecrutement;

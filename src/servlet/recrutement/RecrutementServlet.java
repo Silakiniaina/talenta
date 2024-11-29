@@ -67,7 +67,9 @@ public class RecrutementServlet extends HttpServlet{
 
             r.insert();
 
-            List<Candidat> candidats = Candidat.getAll();
+            Candidat c = new Candidat();
+
+            List<Candidat> candidats = c.getAll(connexion);
             for(Candidat candidat : candidats){
                 NotificationCandidat nc = new NotificationCandidat();
                 nc.setCandidat(connexion,candidat.getIdCandidat());
