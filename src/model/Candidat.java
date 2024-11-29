@@ -312,6 +312,40 @@ public class Candidat {
         this.setListExperience(e.getAllByCandidat(c,this.getIdCandidat()));
     }
 
+    public boolean hasPostuler(Recrutement r) throws SQLException{
+        Connection c = null; 
+        PreparedStatement prstm = null; 
+        ResultSet rs = null; 
+        String sql = "SELECT * FROM recrutement_candidat WHERE id_candidat = ? AND id_recrutement = ?";
+        boolean result = false;
+        try {
+            c = Database.getConnection();
+            prstm = c.prepareStatement(sql);
+            prstm.setInt(1, this.getIdCandidat());
+            prstm.setInt(2, r.getIdRecrutement());
+
+            rs = prstm.executeQuery();
+
+            if(rs.next()){
+                result = true;
+            }
+            return result;
+        } catch (SQLException e) {
+            throw e;
+        }finally{
+            if(rs != null){
+                rs.close();
+            }
+            if(prstm != null){
+                prstm.close();
+            }
+            if(c != null){
+                c.close();
+            }
+        }
+    }
+
+
     public void getEducations(Connection c)throws SQLException{
         EducationCandidat e = new EducationCandidat();
         this.setListEducation(e.getAllByCandidat(c,this.getIdCandidat()));

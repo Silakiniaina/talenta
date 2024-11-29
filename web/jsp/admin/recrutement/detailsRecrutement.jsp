@@ -131,9 +131,15 @@
                             </div>
                             <% 
                                 if(candidat != null){
+                                    if(candidat.hasPostuler(recrutement)){
                             %>
-                                <a href="#" type="button" class="btn btn-success col-md-4">Postuler Maintenant</a>
-                            <% } %>
+                                <h3>Candidature deja envoy</h3>
+                                    <% }else{ %>
+                                <a href="candidat?idRecrutement=<%= recrutement.getIdRecrutement() %>" type="button" class="btn btn-success col-md-4">Postuler Maintenant</a>
+                            <% 
+                                    }
+                                }
+                            %>
                         </div>
                     </div>
                     <%@ include file="../../shared/footer.jsp" %>

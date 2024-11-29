@@ -153,6 +153,4 @@ FROM
     LEFT JOIN diplomes_match dm ON c.id_candidat = dm.id_candidat
     AND r.id_recrutement = dm.id_recrutement
     LEFT JOIN experience_totale et ON c.id_candidat = et.id_candidat
-WHERE
-    current_date BETWEEN r.date_debut_recrutement
-    AND r.date_fin_recrutement;
+;
