@@ -293,3 +293,12 @@ CREATE TABLE branche_education (
     description_branche TEXT,
     CONSTRAINT branche_education_pkey PRIMARY KEY (id_branche_education)
 );
+
+CREATE table specialite (
+    id_specialite SERIAL NOT NULL, 
+    nom_specialite VARCHAR(200) NOT NULL, 
+    description_specialite TEXT, 
+    id_branche_education INTEGER NOT NULL, 
+    CONSTRAINT specialite_pkey PRIMARY KEY(id_specialite),
+    CONSTRAINT specialite_id_branche_education_fkey FOREIGN KEY(id_branche_education) REFERENCES branche_education(id_branche_education)
+);
