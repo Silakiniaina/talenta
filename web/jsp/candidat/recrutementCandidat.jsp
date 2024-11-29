@@ -11,10 +11,10 @@
     <%@include file="../shared/head.jsp" %>
     <body>
         <div class="container-scroller">
-            <%@include file="../shared/navbar.jsp" %>
+            <%@include file="../shared/navbarCandidat.jsp" %>
             <div class="container-fluid page-body-wrapper">
                 <%@include file="../shared/settingPanel.jsp" %>
-                <%@include file="../shared/sidebarAdmin.jsp" %>
+                <%@include file="../shared/sidebarCandidat.jsp" %>
                 <div class="main-panel">
                     <div class="content-wrapper">
                         <h2>Liste des Recrutements</h2>
@@ -40,7 +40,7 @@
                                                 <p class="badge badge-<%= r.getStatus().getCorrespondingColor() %>"><%= r.getStatus().getLabel() %></p>
                                             </div>
                                             <div class="d-flex d-sm-block d-md-flex align-items-center justify-content-center col-md-12 p-0"style="gap:10px;">
-                                                <a href="detailsRecrutement?idRecrutement=<%=r.getIdRecrutement() %>" type="button" class="btn btn-lg btn-outline-success ">Details</a>
+                                                <a href="detailsRecrutement?idRecrutement=<%=r.getIdRecrutement() %>" type="button" class="btn btn-sm btn-outline-success ">Details</a>
                                             </div>
                                         </div>
                                     </div>

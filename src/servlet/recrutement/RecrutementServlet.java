@@ -11,6 +11,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import model.Candidat;
 import model.Competence;
 import model.NotificationCandidat;
@@ -34,6 +35,11 @@ public class RecrutementServlet extends HttpServlet{
             req.setAttribute("competences", listCompetences);
 
             if(role != null){
+                HttpSession session = req.getSession();
+                Candidat candidat = (Candidat)session.getAttribute("candidat");
+                List<NotificationCandidat> notifications = NotificationCandidat.getAllByCandidat(candidat.getIdCandidat());
+
+                req.setAttribute("notifications", notifications);
                 disp = req.getRequestDispatcher("/WEB-INF/views/candidat/recrutementCandidat.jsp");
             }else{
                 if(mode != null && mode.equals("i")){
