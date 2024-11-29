@@ -3,8 +3,6 @@ package servlet.shared;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import com.google.gson.Gson;
-
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -54,7 +52,6 @@ public class LoginServlet extends HttpServlet{
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        PrintWriter out  = resp.getWriter();
         String type = req.getParameter("role");
         RequestDispatcher disp = req.getRequestDispatcher("/WEB-INF/views/shared/login.jsp");
         try {

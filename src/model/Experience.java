@@ -24,7 +24,7 @@ public class Experience {
 
 
     public static List<Experience> getAllByCandidat(Connection conn, int idCandidat)throws SQLException{
-        List<Experience> result = new ArrayList();
+        List<Experience> result = new ArrayList<>();
         Connection c = null;
         PreparedStatement prstm = null; 
         ResultSet rs = null;

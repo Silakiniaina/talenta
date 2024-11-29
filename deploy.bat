@@ -39,7 +39,7 @@ mkdir "temp/WEB-INF"
 mkdir "temp/WEB-INF/classes"
 mkdir "temp/WEB-INF/lib"
 
-echo D | xcopy /q/y/s %web-dir% "temp/WEB-INF/jsp"
+echo D | xcopy /q/y/s %web-dir% "temp/WEB-INF/views"
 echo D | xcopy /q/y/s %assets-dir% "temp/assets"
 echo D | xcopy /q/s/y %bin-dir% "temp/WEB-INF/classes"
 echo D | xcopy /q/s/y %lib-dir% "temp/WEB-INF/lib"
