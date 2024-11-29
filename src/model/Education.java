@@ -14,6 +14,10 @@ public class Education {
     private TypeDiplome typeDiplome;
     private BrancheEducation brancheEducation;
 
+    //ACTION
+    public static List<Education> getAllByCandidat(Connection conn, int idCandidat)throws SQLException{
+        List<Education> result = new ArrayList<>();
+        Connection c = null;
     // ACTION
     public List<Education> getAllByPoste(Connection c, int idPoste) throws SQLException{
         List<Education> result = new ArrayList<>();

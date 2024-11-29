@@ -1,5 +1,5 @@
-/bin
-/lib
+bin/
+lib/ 
 
 *.class
 *.txt
@@ -7,6 +7,9 @@
 *.loo
 *.lo1
 *.jar
+*.war
 *.drawio
 *.bkp
-*.drawio.dtmp
+
+tmp/
+temp/
