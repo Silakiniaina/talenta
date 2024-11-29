@@ -18,6 +18,7 @@ public class EducationCandidat {
     private String nomEcole;
     private Education education;
 
+
     // CONSTRUCTOR
     public EducationCandidat(){
 

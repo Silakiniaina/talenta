@@ -15,7 +15,8 @@ public class ExperienceCandidat {
     private int idExperience;
     private Date dateDebut;
     private Date dateFin;
-    private String description;
+    private Specialite specialite;
+    private String entreprise;
 
     // CONSTRUCTOR
     public ExperienceCandidat(){
@@ -48,7 +49,8 @@ public class ExperienceCandidat {
                 d.setIdExperience(rs.getInt(1));
                 d.setDateDebut(rs.getDate(3));
                 d.setDateFin(rs.getDate(4));
-                d.setDescription(rs.getString(5));
+                d.setSpecialite(c, rs.getInt(5));
+                d.setEntreprise(rs.getString(6));
                 result.add(d);
             }
             return result;
@@ -118,9 +120,13 @@ public class ExperienceCandidat {
     public Date getDateFin() {
         return dateFin;
     }
-    public String getDescription() {
-        return description;
+    public Specialite getSpecialite(){
+        return this.specialite;
     }
+    public String getEntreprise(){
+        return this.entreprise;
+    }
+
     public void setIdExperience(int idExperience) {
         this.idExperience = idExperience;
     }
@@ -130,7 +136,11 @@ public class ExperienceCandidat {
     public void setDateFin(Date dateFin) {
         this.dateFin = dateFin;
     }
-    public void setDescription(String description) {
-        this.description = description;
+    public void setSpecialite(Connection c , int id)throws SQLException{
+        Specialite s = new Specialite();
+        this.specialite = s.getById(c, id);
+    }
+    public void setEntreprise(String str){
+        this.entreprise = str;
     }
 }
