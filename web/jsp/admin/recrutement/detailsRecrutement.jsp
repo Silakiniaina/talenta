@@ -2,6 +2,7 @@
 <%@ page import="model.Recrutement" %>
 <%@ page import="model.Poste" %>
 <%@ page import="model.Competence" %>
+<%@ page import="model.Education" %>
 <%
     Recrutement recrutement = (Recrutement)request.getAttribute("recrutement");
     int nbCandidature = (int)request.getAttribute("nbCandidature");
@@ -79,14 +80,17 @@
                             </div>
                             <div class="card">
                                 <div class="card-body">
-                                <h3 class="card-title">Education requises</h3>
-                                <ul class="list-arrow">
-                                    <li>Lorem ipsum dolor sit amet</li>
-                                    <li>Consectetur adipiscing elit</li>
-                                    <li>Integer molestie lorem at massa</li>
-                                    <li>Facilisis in pretium nisl aliquet</li>
-                                    <li>Nulla volutpat aliquam velit&gt;</li>
-                                </ul>
+                                    <h3 class="card-title">Education requises</h3>
+                                    <ul class="list-arrow">
+                                        <%
+                                            List<Education> educations = recrutement.getPoste().getListEducation();
+                                            for(Education education : educations){
+                                        %>
+                                        <li><%= education.getTypeDiplome().getLabel() %> en <%= education.getBrancheEducation().getNomBranche() %></li>
+                                        <% 
+                                            }
+                                        %>
+                                    </ul>
                                 </div>
                             </div>
                             <div class="card">

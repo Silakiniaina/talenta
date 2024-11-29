@@ -45,12 +45,14 @@ public class Poste {
             rs = prstm.executeQuery();
 
             Competence comp = new Competence();
+            Education edu = new Education();
             while (rs.next()) {
                 Poste d = new Poste();
                 d.setIdPoste(rs.getInt(1));
                 d.setNomPoste(rs.getString(2));
                 d.setDepartement(rs.getInt(3));
                 d.setListCompetence(comp.getAllByPoste(c,d.getIdPoste()));
+                d.setListEducation(edu.getAllByPoste(c, d.getIdPoste()));
                 result.add(d);
             }
         }catch (SQLException e) {
@@ -87,11 +89,14 @@ public class Poste {
             
             if (rs.next()) {
                 Competence comp = new Competence();
+                Education edu = new Education();
                 result = new Poste();
+
                 result.setIdPoste(rs.getInt(1));
                 result.setNomPoste(rs.getString(2));
                 result.setDepartement(rs.getInt(3));
                 result.setListCompetence(comp.getAllByPoste(c,result.getIdPoste()));
+                result.setListEducation(edu.getAllByPoste(c, result.getIdPoste()));
 
             }
         } catch (SQLException e) {
