@@ -3,6 +3,7 @@
 <%@ page import="model.Poste" %>
 <%@ page import="model.Competence" %>
 <%@ page import="model.Education" %>
+<%@ page import="model.Experience" %>
 <%
     Recrutement recrutement = (Recrutement)request.getAttribute("recrutement");
     int nbCandidature = (int)request.getAttribute("nbCandidature");
@@ -65,29 +66,20 @@
                             </div>
                             <div class="card">
                                 <div class="card-body">
-                                <h3 class="card-title">Competence requises</h3>
-                                <ul class="list-star">
-                                    <%
-                                        List<Competence> competences = recrutement.getPoste().getListCompetence();
-                                        for(Competence competence : competences){
-                                    %>
-                                        <li><%= competence.getNomCompetence() %></li>
-                                    <% 
-                                        }
-                                    %>
-                                </ul>
-                                </div>
-                            </div>
-                            <div class="card">
-                                <div class="card-body">
-                                    <h3 class="card-title">Education requises</h3>
-                                    <ul class="list-arrow">
+                                    <h3 class="card-title">Compétences requises</h3>
+                                    <ul class="list-star">
                                         <%
-                                            List<Education> educations = recrutement.getPoste().getListEducation();
-                                            for(Education education : educations){
+                                            List<Competence> competences = recrutement.getPoste().getListCompetence();
+                                            if (competences == null || competences.isEmpty()) {
                                         %>
-                                        <li><%= education.getTypeDiplome().getLabel() %> en <%= education.getBrancheEducation().getNomBranche() %></li>
+                                            <li>Aucune compétence requise pour ce poste</li>
                                         <% 
+                                            } else {
+                                                for (Competence competence : competences) {
+                                        %>
+                                            <li><%= competence.getNomCompetence() %></li>
+                                        <% 
+                                                }
                                             }
                                         %>
                                     </ul>
@@ -95,14 +87,44 @@
                             </div>
                             <div class="card">
                                 <div class="card-body">
-                                <h4 class="card-title">Experience requises</h4>
-                                <ul class="list-ticked">
-                                    <li>Lorem ipsum dolor sit amet</li>
-                                    <li>Consectetur adipiscing elit</li>
-                                    <li>Integer molestie lorem at massa</li>
-                                    <li>Facilisis in pretium nisl aliquet</li>
-                                    <li>Nulla volutpat aliquam velit&gt;</li>
-                                </ul>
+                                    <h3 class="card-title">Éducation requise</h3>
+                                    <ul class="list-arrow">
+                                        <%
+                                            List<Education> educations = recrutement.getPoste().getListEducation();
+                                            if (educations == null || educations.isEmpty()) {
+                                        %>
+                                            <li>Aucune éducation requise pour ce poste</li>
+                                        <% 
+                                            } else {
+                                                for (Education education : educations) {
+                                        %>
+                                            <li><%= education.getTypeDiplome().getLabel() %> en <%= education.getBrancheEducation().getNomBranche() %></li>
+                                        <% 
+                                                }
+                                            }
+                                        %>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title">Expériences requises</h4>
+                                    <ul class="list-ticked">
+                                        <%
+                                            List<Experience> experiences = recrutement.getPoste().getListExperience();
+                                            if (experiences == null || experiences.isEmpty()) {
+                                        %>
+                                            <li>Aucune expérience requise pour ce poste</li>
+                                        <% 
+                                            } else {
+                                                for (Experience experience : experiences) {
+                                        %>
+                                            <li><%= experience.getDureeMois() %> mois d'expérience en <%= experience.getSpecialite().getNomSpecialite() %> (<%= experience.isObligatoire() ? "Obligatoire" : "Facultatif" %>)</li>
+                                        <% 
+                                                }
+                                            }
+                                        %>
+                                    </ul>
                                 </div>
                             </div>
                             <a href="#" type="button" class="btn btn-success col-md-4">Postuler Maintenant</a>

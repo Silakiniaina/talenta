@@ -17,6 +17,7 @@ public class Poste {
     private Departement departement;
     private List<Competence> listCompetence;
     private List<Education> listEducation;
+    private List<Experience> listExperience;
 
     // CONSTRUCTOR
     public Poste() {
@@ -46,6 +47,7 @@ public class Poste {
 
             Competence comp = new Competence();
             Education edu = new Education();
+            Experience exp = new Experience();
             while (rs.next()) {
                 Poste d = new Poste();
                 d.setIdPoste(rs.getInt(1));
@@ -53,6 +55,7 @@ public class Poste {
                 d.setDepartement(rs.getInt(3));
                 d.setListCompetence(comp.getAllByPoste(c,d.getIdPoste()));
                 d.setListEducation(edu.getAllByPoste(c, d.getIdPoste()));
+                d.setListExperience(exp.getAllByPoste(c, d.getIdPoste()));
                 result.add(d);
             }
         }catch (SQLException e) {
@@ -72,7 +75,6 @@ public class Poste {
     }
 
     public Poste getById(Connection c, int id) throws SQLException {
-        Poste result = null;
         boolean isNewConnection = false;
         PreparedStatement prstm = null;
         ResultSet rs = null;
@@ -90,15 +92,17 @@ public class Poste {
             if (rs.next()) {
                 Competence comp = new Competence();
                 Education edu = new Education();
-                result = new Poste();
+                Experience exp = new Experience();
 
-                result.setIdPoste(rs.getInt(1));
-                result.setNomPoste(rs.getString(2));
-                result.setDepartement(rs.getInt(3));
-                result.setListCompetence(comp.getAllByPoste(c,result.getIdPoste()));
-                result.setListEducation(edu.getAllByPoste(c, result.getIdPoste()));
+                this.setIdPoste(rs.getInt(1));
+                this.setNomPoste(rs.getString(2));
+                this.setDepartement(rs.getInt(3));
+                this.setListCompetence(comp.getAllByPoste(c,this.getIdPoste()));
+                this.setListEducation(edu.getAllByPoste(c, this.getIdPoste()));
+                this.setListExperience(exp.getAllByPoste(c,this.getIdPoste()));
 
             }
+            return this;
         } catch (SQLException e) {
             throw e;
         }finally{
@@ -112,7 +116,6 @@ public class Poste {
                 c.close();
             }
         }
-        return result;
     }
 
     public Poste insert(Connection c) throws SQLException{
@@ -222,5 +225,13 @@ public class Poste {
 
     public void setListEducation(List<Education> ls){
         this.listEducation = ls;
+    }
+
+    public List<Experience> getListExperience() {
+        return listExperience;
+    }
+
+    public void setListExperience(List<Experience> listExperience) {
+        this.listExperience = listExperience;
     }
 }
