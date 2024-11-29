@@ -4,6 +4,7 @@
 <%@ page import="model.Competence" %>
 <%
     Recrutement recrutement = (Recrutement)request.getAttribute("recrutement");
+    int nbCandidature = (int)request.getAttribute("nbCandidature");
 %>
     <%@include file="../../shared/head.jsp" %>
     <body>
@@ -25,7 +26,7 @@
                                                     <div class="media">
                                                         <i class="ti-world icon-md text-info d-flex align-self-start mr-3"></i>
                                                         <div class="media-body">
-                                                        <h3>34</h3>
+                                                        <h3><%= nbCandidature %></h3>
                                                         </div>
                                                     </div>
                                                 </div>

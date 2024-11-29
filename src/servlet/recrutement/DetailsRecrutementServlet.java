@@ -31,7 +31,10 @@ public class DetailsRecrutementServlet extends HttpServlet{
             r.setIdRecrutement(idRecrutement);
             r = r.getById(c);
 
+            int nbCandidature = r.getNombreCandidature(c);
+
             req.setAttribute("recrutement", r);
+            req.setAttribute("nbCandidature", nbCandidature);
             RequestDispatcher disp = req.getRequestDispatcher("/WEB-INF/views/admin/recrutement/detailsRecrutement.jsp");
             disp.forward(req, resp);
         } catch (Exception e) {

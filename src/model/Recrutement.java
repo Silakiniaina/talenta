@@ -178,6 +178,40 @@ public class Recrutement {
         }
     }
 
+    public int getNombreCandidature(Connection c) throws SQLException{
+        int result = 0;
+        PreparedStatement prstm = null; 
+        ResultSet rs = null; 
+        boolean isNewConnection = false;
+        String sql = "SELECT DISTINCT COUNT(id_candidat) FROM recrutement_candidat WHERE id_recrutement = ?";
+        try {
+            if(c == null){
+                isNewConnection = true;
+                c = Database.getConnection();
+            }
+            prstm = c.prepareStatement(sql);
+            prstm.setInt( 1, this.getIdRecrutement());
+
+            rs = prstm.executeQuery();
+            if(rs.next()){
+                result = rs.getInt(1);
+            }
+
+            return result;
+        } catch (SQLException e) {
+            throw e;
+        } finally{
+            if(rs != null){
+                rs.close();
+            }
+            if(prstm != null){
+                prstm.close();
+            }
+            if(c != null && isNewConnection){
+                c.close();
+            }
+        }
+    }
     // GETTERS AND SETTERS
     public int getIdRecrutement() {
         return idRecrutement;
