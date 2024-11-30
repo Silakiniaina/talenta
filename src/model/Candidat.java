@@ -26,6 +26,7 @@ public class Candidat {
     private List<Experience> listExperience;
     private List<Education> listEducation;
 
+    
     // CONSTRUCTORS
     public Candidat(){
         this.setListCompetence(new ArrayList<>());
@@ -99,6 +100,48 @@ public class Candidat {
                 this.getEducations(c);
             }
             return this;
+        } catch (SQLException e) {
+            throw e;
+        }finally{
+            if(rs != null){
+                rs.close();
+            }
+            if(prstm != null){
+                prstm.close();
+            }
+            if(c != null && isNewConnection){
+                c.close();
+            }
+        }
+    }
+
+    public static Candidat getById(Connection c, int idCandidat) throws SQLException{
+        Candidat candidat= new Candidat();
+        boolean isNewConnection = false;
+        PreparedStatement prstm = null; 
+        ResultSet rs = null;
+        String query = "SELECT * FROM candidat WHERE id_candidat = ?";
+        try {
+            if( c == null){
+                c = Database.getConnection();
+                isNewConnection = true;
+            }
+            prstm = c.prepareStatement(query);
+            prstm.setInt(1, idCandidat);
+            rs = prstm.executeQuery();
+
+            if (rs.next()) {
+                candidat.setIdCandidat(rs.getInt(1));
+                candidat.setNomCandidat(rs.getString(2));
+                candidat.setPrenomCandidat(rs.getString(3));
+                candidat.setDateNaissance(rs.getDate(4));
+                candidat.setAdresse(rs.getString(5));
+                candidat.setGenre(rs.getInt(6));
+                candidat.getCompetences(c);
+                candidat.getExperiences(c);
+                candidat.getEducations(c);
+            }
+            return candidat;
         } catch (SQLException e) {
             throw e;
         }finally{
@@ -379,5 +422,9 @@ public class Candidat {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void setGenre(Genre genre) {
+        this.genre = genre;
     }
 }

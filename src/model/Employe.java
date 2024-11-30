@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.utils.Database;
+
 public class Employe {
     
     private int idEmploye;
@@ -29,6 +31,9 @@ public class Employe {
         Candidat c = new Candidat();
         c.setIdCandidat(candidat);
         this.candidat = c.getById(con);
+    }
+    public void setCandidat(int candidat, Connection con) throws SQLException{
+        this.candidat = Candidat.getById(con, candidat);
     }
     public void setPoste(int poste)throws SQLException {
         this.poste = Poste.getById(poste);
@@ -63,7 +68,7 @@ public class Employe {
             if (rs.next()) {
                 employe = new Employe();
                 employe.setIdEmploye(rs.getInt("id_employe"));
-                employe.setCandidat(con, rs.getInt("id_candidat"));
+                employe.setCandidat(rs.getInt("id_candidat"), con);
                 employe.setPoste(rs.getInt("id_poste"));
                 employe.setDateEmbauche(rs.getDate("date_embauche"));
             }
@@ -90,7 +95,37 @@ public class Employe {
             while (rs.next()) {
                 Employe employe = new Employe();
                 employe.setIdEmploye(rs.getInt("id_employe"));
-                employe.setCandidat(con, rs.getInt("id_employe"));
+                employe.setCandidat(rs.getInt("id_employe"), con);
+                employe.setPoste(rs.getInt("id_poste"));
+                employe.setDateEmbauche(rs.getDate("date_embauche"));
+
+                result.add(employe);
+            }
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
+        }
+
+        return result;
+    }
+
+    public static List<Employe> getAll(Connection con) throws SQLException {
+        List<Employe> result = new ArrayList<>();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        String query = "SELECT * FROM employe";
+        
+        try {
+            ps = con.prepareStatement(query);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Employe employe = new Employe();
+                employe.setIdEmploye(rs.getInt("id_employe"));
+                employe.setCandidat(rs.getInt("id_employe"), con);
                 employe.setPoste(rs.getInt("id_poste"));
                 employe.setDateEmbauche(rs.getDate("date_embauche"));
 
