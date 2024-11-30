@@ -295,6 +295,48 @@ public class Candidat {
         }
     }
 
+    public static Candidat loginEmploye(String email, String password) throws SQLException{
+        Candidat result = null; 
+        Connection c = null; 
+        PreparedStatement prstm = null;
+        ResultSet rs = null; 
+        String query = "SELECT * FROM v_employe WHERE email = ? AND mdp = ? ";
+        try {
+            c = Database.getConnection();
+            prstm = c.prepareStatement(query);
+            prstm.setString(1, email);
+            prstm.setString(2, password);
+
+            rs = prstm.executeQuery();
+
+            if(rs.next()){
+                result = new Candidat();
+                result.setIdCandidat(rs.getInt(1));
+                result.setNomCandidat(rs.getString(2));
+                result.setPrenomCandidat(rs.getString(3));
+                result.setDateNaissance(rs.getDate(4));
+                result.setAdresse(rs.getString(5));
+                result.setGenre(rs.getInt(6));
+                result.getCompetences(c);
+                result.getExperiences(c);
+                result.getEducations(c);
+            }
+            return result;
+        } catch (SQLException e) {
+            throw e;
+        }finally{
+            if(rs != null){
+                rs.close();
+            }
+            if(prstm != null){
+                prstm.close();
+            }
+            if(c != null){
+                c.close();
+            }
+        }
+    }
+
     public void getCompetences(Connection conn)throws SQLException{
         Connection c = null;
         PreparedStatement prstm = null; 
