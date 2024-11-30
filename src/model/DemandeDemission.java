@@ -3,7 +3,10 @@ package model;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import model.utils.Database;
 
@@ -66,6 +69,41 @@ public class DemandeDemission {
             if (prstm != null) prstm.close();
             if (c != null) c.close();
         }
+    }
+
+    public static List<DemandeDemission> getAll() throws SQLException {
+        List<DemandeDemission> demandes = new ArrayList<>();
+        Connection c = null;
+        PreparedStatement prstm = null;
+        ResultSet rs = null;
+        
+        String query = "SELECT * FROM v_listeDemandeDemission";
+
+        try {
+            c = Database.getConnection();
+            prstm = c.prepareStatement(query);
+            rs = prstm.executeQuery();
+
+            while (rs.next()) {
+
+                int idDemande = rs.getInt("id_demande");
+                Candidat candidat = Candidat.getById(c, rs.getInt("id_candidat"));
+                java.sql.Date dateDepot = rs.getDate("date_depot");
+                String motif = rs.getString("motif");
+
+                DemandeDemission demande = new DemandeDemission(candidat, dateDepot, motif);
+                demande.setId(idDemande);
+                demandes.add(demande);
+            }
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (rs != null) rs.close();
+            if (prstm != null) prstm.close();
+            if (c != null) c.close();
+        }
+
+        return demandes;
     }
 
 }
