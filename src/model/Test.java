@@ -12,28 +12,29 @@ import java.util.List;
 import model.utils.Database;
 
 public class Test {
-    private int idSimulation;
+    private int idTest;
     private String titre;
     private String description;
     private Timestamp dateCreation;
     private Admin responsable;
     private List<QuestionTest> questions;
-    
+
     // Constructeurs
-    public Test() {}
-    
-    public Test(int idSimulation, String titre, String description, Timestamp dateCreation, int idResponsable) throws SQLException{
-        this.setIdSimulation(idSimulation); 
-        this.setTitre(titre); 
-        this.setDescription(description); 
+    public Test() {
+    }
+
+    public Test(int idTest, String titre, String description, Timestamp dateCreation, int idResponsable)
+            throws SQLException {
+        this.setIdTest(idTest);
+        this.setTitre(titre);
+        this.setDescription(description);
         this.setDateCreation(dateCreation);
         this.setResponsable(idResponsable);
     }
-    
 
     public static Test getById(Connection conn, int id) throws SQLException {
         boolean isNewConnection = false;
-        if(conn == null){
+        if (conn == null) {
             isNewConnection = true;
             conn = Database.getConnection();
         }
@@ -42,24 +43,23 @@ public class Test {
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                Test s =  new Test(
-                    rs.getInt("id_test"),
-                    rs.getString("titre"),
-                    rs.getString("description"),
-                    rs.getTimestamp("date_creation"),
-                    rs.getInt("id_responsable")
-                );
+                Test s = new Test(
+                        rs.getInt("id_test"),
+                        rs.getString("titre"),
+                        rs.getString("description"),
+                        rs.getTimestamp("date_creation"),
+                        rs.getInt("id_responsable"));
                 s.getQuestionSimulation(conn);
                 return s;
             }
-        }finally{
-            if(isNewConnection && conn != null){
+        } finally {
+            if (isNewConnection && conn != null) {
                 conn.close();
             }
         }
         return null;
     }
-    
+
     public static List<Test> getAll(Connection conn) throws SQLException {
         List<Test> tests = new ArrayList<>();
         String query = "SELECT * FROM test";
@@ -67,51 +67,53 @@ public class Test {
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
                 Test s = new Test(
-                    rs.getInt("id_test"),
-                    rs.getString("titre"),
-                    rs.getString("description"),
-                    rs.getTimestamp("date_creation"),
-                    rs.getInt("id_responsable")
-                );
+                        rs.getInt("id_test"),
+                        rs.getString("titre"),
+                        rs.getString("description"),
+                        rs.getTimestamp("date_creation"),
+                        rs.getInt("id_responsable"));
                 s.getQuestionSimulation(conn);
                 tests.add(s);
             }
         }
         return tests;
     }
-    
-    public void save(Connection conn) throws SQLException {
-        if (this.idSimulation == 0) {
-            // Insert
-            String query = "INSERT INTO test (titre, description, id_responsable) VALUES (?, ?, ?)";
-            try (PreparedStatement pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-                pstmt.setString(1, this.getTitre());
-                pstmt.setString(2, this.getDescription());
-                pstmt.setInt(3, this.getResponsable().getIdAdmin());
-                pstmt.executeUpdate();
-                
-                ResultSet rs = pstmt.getGeneratedKeys();
-                if (rs.next()) {
-                    this.idSimulation = rs.getInt(1);
-                }
+
+    public void insert(Connection conn) throws SQLException {
+        PreparedStatement prstm = null;
+        boolean isNewConnection = false;
+        String query = "INSERT INTO test (titre, description, id_responsable, date_creation) VALUES (?, ?, ?, ?)";
+        try {
+            if (conn == null) {
+                conn = Database.getConnection();
+                isNewConnection = true;
             }
-        } else {
-            // Update
-            String query = "UPDATE test SET titre = ?, description = ?, id_responsable = ? WHERE id_test = ?";
-            try (PreparedStatement pstmt = conn.prepareStatement(query)) {
-                pstmt.setString(1, this.getTitre());
-                pstmt.setString(2, this.getDescription());
-                pstmt.setInt(3, this.getResponsable().getIdAdmin());
-                pstmt.setInt(4, this.getIdSimulation());
-                pstmt.executeUpdate();
+            conn.setAutoCommit(false);
+            prstm = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            prstm.setString(1, this.getTitre());
+            prstm.setString(2, this.getDescription());
+            prstm.setInt(3, this.getResponsable().getIdAdmin());
+            prstm.setTimestamp(4, this.getDateCreation());
+            prstm.executeUpdate();
+
+            conn.commit();
+        } catch (SQLException e) {
+            conn.rollback();
+            throw e;
+        } finally {
+            if (prstm != null) {
+                prstm.close();
+            }
+            if (conn != null && isNewConnection) {
+                conn.close();
             }
         }
     }
-    
+
     public void delete(Connection conn) throws SQLException {
         String query = "DELETE FROM test WHERE id_test = ?";
         try (PreparedStatement pstmt = conn.prepareStatement(query)) {
-            pstmt.setInt(1, this.idSimulation);
+            pstmt.setInt(1, this.idTest);
             pstmt.executeUpdate();
         }
     }
@@ -121,64 +123,63 @@ public class Test {
         this.setQuestions(new ArrayList<>());
         String query = "SELECT * FROM question_test WHERE id_test = ?";
         try (PreparedStatement pstmt = conn.prepareStatement(query)) {
-            pstmt.setInt(1, this.getIdSimulation());
+            pstmt.setInt(1, this.getIdTest());
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 this.getQuestions().add(new QuestionTest(
-                    rs.getInt("id_question_test"),
-                    this.getIdSimulation(),
-                    rs.getString("texte_question")
-                ));
+                        rs.getInt("id_question_test"),
+                        this.getIdTest(),
+                        rs.getString("texte_question")));
             }
         }
     }
-    
+
     // GETTERS AND SETTERS
-    public int getIdSimulation() {
-        return idSimulation;
+    public int getIdTest() {
+        return idTest;
     }
-    
+
     public String getTitre() {
         return titre;
     }
-    
+
     public String getDescription() {
         return description;
     }
-    
+
     public Timestamp getDateCreation() {
         return dateCreation;
     }
-    
+
     public Admin getResponsable() {
         return responsable;
     }
-    
-    public void setIdSimulation(int idSimulation) {
-        this.idSimulation = idSimulation;
+
+    public void setIdTest(int idTest) {
+        this.idTest = idTest;
     }
-    
+
     public void setTitre(String titre) {
         this.titre = titre;
     }
-    
+
     public void setDescription(String description) {
         this.description = description;
     }
-    
+
     public void setDateCreation(Timestamp dateCreation) {
         this.dateCreation = dateCreation;
     }
-    
-    public void setResponsable(int idResponsable) throws SQLException{
+
+    public void setResponsable(int idResponsable) throws SQLException {
         this.responsable = Admin.getById(idResponsable);
     }
 
-    public List<QuestionTest> getQuestions(){
+    public List<QuestionTest> getQuestions() {
         return this.questions;
     }
 
-    public void setQuestions(List<QuestionTest> ls){
+    public void setQuestions(List<QuestionTest> ls) {
         this.questions = ls;
     }
 }

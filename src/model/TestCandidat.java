@@ -44,7 +44,7 @@ public class TestCandidat {
         if (this.idAttribution == 0) {
             String query = "INSERT INTO test_candidat (id_test, id_candidat, id_status) VALUES (?, ?, ?)";
             try (PreparedStatement pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-                pstmt.setInt(1, this.getSimulation().getIdSimulation());
+                pstmt.setInt(1, this.getSimulation().getIdTest());
                 pstmt.setInt(2, this.getCandidat().getIdCandidat());
                 pstmt.setInt(3, this.getStatus().getIdStatus());
                 pstmt.executeUpdate();

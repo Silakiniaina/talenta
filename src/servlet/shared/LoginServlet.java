@@ -37,6 +37,8 @@ public class LoginServlet extends HttpServlet{
             }else if(mode != null && mode.equals("admin")){
                 Admin d = Admin.login(email, mdp);
                 if(d != null){
+                    req.getSession(false).setAttribute("admin", d);
+
                     disp = req.getRequestDispatcher("/WEB-INF/views/admin/accueilAdmin.jsp");
                     disp.forward(req, resp);
                 }else{

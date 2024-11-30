@@ -15,13 +15,13 @@
         <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#simulation_drop" aria-expanded="false" aria-controls="simulation_drop">
                 <i class="ti-layout menu-icon"></i>
-                <span class="menu-title">Simulation</span>
+                <span class="menu-title">Test</span>
                 <i class="menu-arrow"></i>
             </a>
             <div class="collapse" id="simulation_drop">
                 <ul class="nav flex-column sub-menu">
                 <li class="nav-item"> <a class="nav-link" href="simulations">Liste Simulation</a></li>
-                <li class="nav-item"> <a class="nav-link" href="addSimulation">Creation Simulation</a></li>
+                <li class="nav-item"> <a class="nav-link" href="addTest">Creation Test</a></li>
                 </ul>
             </div>
         </li>
