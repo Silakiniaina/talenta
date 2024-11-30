@@ -65,10 +65,28 @@
             </div>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="conge-planning">
-                <i class="icon-grid menu-icon"></i>
+            <a class="nav-link" data-toggle="collapse" href="#Conge_drop" aria-expanded="false" aria-controls="Conge_drop">
+                <i class="icon-layout menu-icon"></i>
                 <span class="menu-title">Conges</span>
+                <i class="menu-arrow"></i>
             </a>
+            <div class="collapse" id="finContrat_drop">
+                <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="conge-planning">Planning</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#finContrat_drop" aria-expanded="false" aria-controls="finContrat_drop">
+                <i class="icon-layout menu-icon"></i>
+                <span class="menu-title">Fin Contrat</span>
+                <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="finContrat_drop">
+                <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="addFinContrat-form">Ajouter</a></li>
+                </ul>
+            </div>
         </li>
     </ul>
 </nav>
