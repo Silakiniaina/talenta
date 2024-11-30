@@ -38,8 +38,8 @@
                                                     <td><%= demande.getDepot() %></td>
                                                     <td><%= demande.getMotif() %></td>
                                                     <td>
-                                                        <a href="demission-traitement?etat=approved&demandeId=<%= demande.getId() %>">Approuver</a> | 
-                                                        <a href="demission-traitement?etat=refused&demandeId=<%= demande.getId() %>">Refuser</a>
+                                                        <a href="demission-traitement?etat=approuvee&demandeId=<%= demande.getId() %>&idCandidat=<%= demande.getCandidat().getIdCandidat() %>">Approuver</a> | 
+                                                        <a href="demission-traitement?etat=refusee&demandeId=<%= demande.getId() %>&idCandidat=<%= demande.getCandidat().getIdCandidat() %>">Refuser</a>
                                                     </td>
                                                 </tr>
                                                 <% 

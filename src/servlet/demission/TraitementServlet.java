@@ -13,7 +13,10 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.Candidat;
 import model.DemandeDemission;
+import model.NotificationCandidat;
+import model.utils.Database;
 
 
 @WebServlet("/demission-traitement")
@@ -26,10 +29,20 @@ public class TraitementServlet extends HttpServlet {
 
         String id= request.getParameter("demandeId");
         int idDemande= Integer.parseInt(id);
-        String demande= (String) request.getParameter("etat");
+        String demande= request.getParameter("etat");
+        String idC= request.getParameter("idCandidat");
+        out.println(idC);
+        int idCandidat= Integer.parseInt(idC);
         out.println(demande);
-        try {
+        try (Connection conn= Database.getConnection()){
             DemandeDemission.updateEtat(idDemande, demande);
+
+            NotificationCandidat notif= new NotificationCandidat();
+            notif.setCandidat(conn, idCandidat);
+            notif.setContenuNotification("Votre demission a ete "+ demande);
+            notif.setTargetLink(""); 
+            notif.insert();
+
             request.getRequestDispatcher("demission-liste").forward(request, response);
         } 
         catch (SQLException e) {
