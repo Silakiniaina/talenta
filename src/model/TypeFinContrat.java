@@ -83,4 +83,33 @@ public class TypeFinContrat {
         return result;
     }
 
+    public static TypeFinContrat getByLabel(String label) throws SQLException {
+        TypeFinContrat result = null;
+        Connection c = null;
+        PreparedStatement prstm = null;
+        ResultSet rs = null;
+        String query = "SELECT * FROM type_fin_contrat WHERE label = ?"; // Recherche par label
+    
+        try {
+            c = Database.getConnection();
+            prstm = c.prepareStatement(query);
+            prstm.setString(1, label); // Paramètre de type String pour le label
+            rs = prstm.executeQuery();
+    
+            if (rs.next()) {
+                result = new TypeFinContrat();
+                result.setId(rs.getInt("id_type_fin_contrat"));
+                result.setLabel(rs.getString("label"));
+            }
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (rs != null) rs.close();
+            if (prstm != null) prstm.close();
+            if (c != null) c.close();
+        }
+        return result;
+    }
+    
+
 }

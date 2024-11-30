@@ -150,4 +150,34 @@ public class Employe {
         return result;
     }
 
+    public static Employe getEmployeByIdCandidat(Connection con, int idCandidat) throws SQLException {
+        Employe employe = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+    
+        String query = "SELECT * FROM employe WHERE id_candidat = ?";
+    
+        try {
+            ps = con.prepareStatement(query);
+            ps.setInt(1, idCandidat); 
+            rs = ps.executeQuery();
+    
+            if (rs.next()) {
+                employe = new Employe();
+                employe.setIdEmploye(rs.getInt("id_employe"));
+                employe.setCandidat(rs.getInt("id_candidat"), con);
+                employe.setPoste(rs.getInt("id_poste"));
+                employe.setDateEmbauche(rs.getDate("date_embauche"));
+            }
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
+        }
+    
+        return employe;
+    }
+    
+
 }
