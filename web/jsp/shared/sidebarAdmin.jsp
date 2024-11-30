@@ -85,6 +85,7 @@
             <div class="collapse" id="finContrat_drop">
                 <ul class="nav flex-column sub-menu">
                 <li class="nav-item"> <a class="nav-link" href="addFinContrat-form">Ajouter</a></li>
+                <li class="nav-item"> <a class="nav-link" href="retraite-liste">Liste retraite</a></li>
                 </ul>
             </div>
         </li>
