@@ -18,8 +18,8 @@ public class ListeTestServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             Connection conn = Database.getConnection();
-            List<Test> simulations = Test.getAll(conn);
-            request.setAttribute("simulations", simulations);
+            List<Test> tests = Test.getAll(conn);
+            request.setAttribute("tests", tests);
             request.getRequestDispatcher("/WEB-INF/views/test/liste.jsp").forward(request, response);
         } catch (Exception e) {
             throw new ServletException(e);
