@@ -125,7 +125,7 @@ public class Employe {
             while (rs.next()) {
                 Employe employe = new Employe();
                 employe.setIdEmploye(rs.getInt("id_employe"));
-                employe.setCandidat(rs.getInt("id_employe"), con);
+                employe.setCandidat(rs.getInt("id_candidat"), con);
                 employe.setPoste(rs.getInt("id_poste"));
                 employe.setDateEmbauche(rs.getDate("date_embauche"));
 

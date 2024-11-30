@@ -6,6 +6,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.google.gson.Gson;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -23,14 +25,14 @@ public class ListEmployeServlet extends HttpServlet {
         PrintWriter out= resp.getWriter();
         try (Connection conn = Database.getConnection()) {
             
-            List<Employe> employes = Employe.getAllReadyForRetraite(conn);
-            out.println(employes);
-            out.println("lalala");
+            List<Employe> employes = Employe.getAll(conn);
+            // Gson gson= new Gson();
+            // out.println(gson.toJson(employes));
             List<TypeFinContrat> typesContrat = TypeFinContrat.getAll();
-
+            // out.println(gson.toJson(typesContrat));
             req.setAttribute("employes", employes);
             req.setAttribute("typesContrat", typesContrat);
-            // req.getRequestDispatcher("/WEB-INF/views/admin/finContrat/addFinContrat.jsp").forward(req, resp);
+            req.getRequestDispatcher("/WEB-INF/views/admin/finContrat/addFinContrat.jsp").forward(req, resp);
 
         } catch (SQLException e) {
             e.printStackTrace(resp.getWriter());

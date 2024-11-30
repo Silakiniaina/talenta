@@ -28,8 +28,7 @@ public class AddFinContratServlet extends HttpServlet {
             String depot= req.getParameter("depot");
 
             if (idEmployeStr != null && !idEmployeStr.isEmpty() && 
-                typeContratStr != null && !typeContratStr.isEmpty() && 
-                motif != null && !motif.isEmpty() && 
+                typeContratStr != null && !typeContratStr.isEmpty() &&
                 depot != null && !depot.isEmpty()) {
 
                 conn = Database.getConnection();
@@ -42,7 +41,7 @@ public class AddFinContratServlet extends HttpServlet {
 
                 finContrat.insert(conn);
 
-                resp.sendRedirect(req.getContextPath() + "/finContrat-add");
+                resp.sendRedirect(req.getContextPath() + "/addFinContrat-form");
             } else {
                 // req.setAttribute("errorMessage", "Tous les champs sont requis.");
                 // req.getRequestDispatcher("/WEB-INF/views/error.jsp").forward(req, resp);
@@ -59,4 +58,7 @@ public class AddFinContratServlet extends HttpServlet {
             }
         }
     }
+
+
+
 }

@@ -22,13 +22,7 @@ List<TypeFinContrat> typesContrat = (List<TypeFinContrat>) request.getAttribute(
                                         <div class="card-body">
                                             <h4 class="card-title">Ajouter une fin de contrat </h4>
                                            
-                                    <% for(Employe e : employes) 
-                                    { 
-                                        out.println(e.getCandidat().getNomCandidat());
-                                        
-                                    } 
-                                    out.println("lalala"); %>
-                                    <form class="forms-sample" action="/retraite-add" method="post">
+                                    <form class="forms-sample" action="finContrat-add" method="post">
                                         <div class="form-group">
                                             <label for="employe">Employe :</label>
                                             <select class="form-control" id="employe" name="employe">
@@ -49,6 +43,7 @@ List<TypeFinContrat> typesContrat = (List<TypeFinContrat>) request.getAttribute(
                                         </div>
                                         <div class="form-group">
                                             <label for="motif">Motif :</label>
+                                            <h6 style="font-size: xx-small;"> Juste remplir "retraite" si retraite </h6>
                                             <input type="text" class="form-control" id="motif" name="motif" placeholder="Motif de la retraite" required>
                                         </div>
                                         <div class="form-group">
