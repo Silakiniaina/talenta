@@ -65,12 +65,12 @@
             </div>
         </li>
         <li class="nav-item">
-            <a class="nav-link" data-toggle="collapse" href="#Conge_drop" aria-expanded="false" aria-controls="Conge_drop">
+            <a class="nav-link" data-toggle="collapse" href="#conge_drop" aria-expanded="false" aria-controls="conge_drop">
                 <i class="icon-layout menu-icon"></i>
                 <span class="menu-title">Conges</span>
                 <i class="menu-arrow"></i>
             </a>
-            <div class="collapse" id="finContrat_drop">
+            <div class="collapse" id="conge_drop">
                 <ul class="nav flex-column sub-menu">
                 <li class="nav-item"> <a class="nav-link" href="conge-planning">Planning</a></li>
                 </ul>
