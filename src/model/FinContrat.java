@@ -11,8 +11,7 @@ public class FinContrat {
     Employe employe;
     TypeFinContrat type;
     String motif;
-    Date preavis;
-    Date dateFin;
+    Date dateDepot;
 
     public int getIdFinContrat() {
         return idFinContrat;
@@ -38,36 +37,28 @@ public class FinContrat {
     public void setMotif(String motif) {
         this.motif = motif;
     }
-    public Date getPreavis() {
-        return preavis;
+    public Date getDateDepot() {
+        return dateDepot;
     }
-    public void setPreavis(Date preavis) {
-        this.preavis = preavis;
-    }
-    public Date getDateFin() {
-        return dateFin;
-    }
-    public void setDateFin(Date dateFin) {
-        this.dateFin = dateFin;
+    public void setDateDepot(Date DateDepot) {
+        this.dateDepot = DateDepot;
     }
 
-    public FinContrat (Connection con, int idEmploye, int idType, String motif, Date preavis, Date fin) throws SQLException{
+    public FinContrat (Connection con, int idEmploye, int idType, String motif, Date depot) throws SQLException{
         this.setEmploye(con, idEmploye);
         this.setType(idType);
         this.setMotif(motif);
-        this.setPreavis(preavis);
-        this.setDateFin(fin);
+        this.setDateDepot(depot);
     }
 
     public void insert(Connection conn) throws SQLException {
-        String query = "INSERT INTO fin_contrat (id_employe, id_type_fin_contrat, motif, date_preavis, date_fin) VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO fin_contrat (id_employe, id_type_fin_contrat, motif, date_depot) VALUES (?, ?, ?, ?)";
 
         try (PreparedStatement prstm = conn.prepareStatement(query)) {
             prstm.setInt(1, this.employe.getIdEmploye());
             prstm.setInt(2, this.type.getId());
             prstm.setString(3, this.motif);
-            prstm.setDate(4, this.preavis);
-            prstm.setDate(5, this.dateFin);
+            prstm.setDate(4, this.dateDepot);
 
             prstm.executeUpdate();
         } catch (SQLException e) {
