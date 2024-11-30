@@ -16,6 +16,7 @@ public class DemandeDemission {
     Candidat candidat;
     Date depot;
     String motif;
+    String etat;
 
     public DemandeDemission(Candidat candidat, Date depot, String motif) {
         this.candidat = candidat;
@@ -46,6 +47,12 @@ public class DemandeDemission {
     }
     public void setMotif(String motif) {
         this.motif = motif;
+    }
+    public String getEtat(){
+        return this.etat;
+    }
+    public void setEtat(){
+        this.etat= etat;
     }
 
     public void insert() throws SQLException {
@@ -104,6 +111,28 @@ public class DemandeDemission {
         }
 
         return demandes;
+    }
+
+    public static void updateEtat(int idDemande, String etat) throws SQLException {
+        Connection c = null;
+        PreparedStatement prstm = null;
+
+        String query = "UPDATE demande_demission SET etat = ? WHERE id_demande = ?";
+
+        try {
+            c = Database.getConnection();
+            prstm = c.prepareStatement(query);
+
+            prstm.setString(1, etat); 
+            prstm.setInt(2, idDemande); 
+
+            prstm.executeUpdate();
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (prstm != null) prstm.close();
+            if (c != null) c.close();
+        }
     }
 
 }

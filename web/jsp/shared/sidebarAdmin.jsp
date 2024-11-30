@@ -89,5 +89,11 @@
                 </ul>
             </div>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" href="demission-liste">
+                <i class="icon-grid menu-icon"></i>
+                <span class="menu-title">Demissions</span>
+            </a>
+        </li>
     </ul>
 </nav>
