@@ -16,6 +16,7 @@ public class Employe {
     private Candidat candidat;
     private Poste poste;
     private Date dateEmbauche;
+    int age;
 
     // CONSTRUCTORS
     public Employe(){
@@ -52,6 +53,13 @@ public class Employe {
     }
     public Date getDateEmbauche() {
         return dateEmbauche;
+    }
+
+    public void setAge(int age){
+        this.age= age;
+    }
+    public int getAge(){
+        return this.age;
     }
 
     public static Employe getById(Connection con, int idEmploye) throws SQLException {
@@ -95,9 +103,10 @@ public class Employe {
             while (rs.next()) {
                 Employe employe = new Employe();
                 employe.setIdEmploye(rs.getInt("id_employe"));
-                employe.setCandidat(rs.getInt("id_employe"), con);
+                employe.setCandidat(rs.getInt("id_candidat"), con);
                 employe.setPoste(rs.getInt("id_poste"));
                 employe.setDateEmbauche(rs.getDate("date_embauche"));
+                employe.setAge(rs.getInt("age"));
 
                 result.add(employe);
             }

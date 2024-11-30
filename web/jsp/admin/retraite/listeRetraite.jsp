@@ -6,38 +6,54 @@
 <%
     List<Employe> employesRetraite = (List<Employe>) request.getAttribute("employesRetraite");
 %>
-
-<%@ include file="../shared/header.jsp" %>
-
-<h1>Liste des employés prêts pour la retraite</h1>
-
-<table border="1">
-    <thead>
-        <tr>
-            <th>ID Employé</th>
-            <th>Nom</th>
-            <th>Date de Naissance</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        <% 
-            for (Employe employe : employesRetraite) {
-        %>
-            <tr>
-                <td><%= employe.getIdEmploye() %></td>
-                <td><%= employe.getCandidat().getNom() + " " + employe.getCandidat().getPrenom() %></td>
-                <td><%= employe.getCandidat().getDateNaissance() %></td>
-                <td>
-                    <form action="notifier-retraite" method="post">
-                        <input type="hidden" name="idEmploye" value="<%= employe.getIdEmploye() %>">
-                        <button type="submit">Notifier</button>
-                    </form>
-                </td>
-            </tr>
-        <% 
-            }
-        %>
-    </tbody>
-</table>
-
+<%@ include file="../../shared/head.jsp" %>
+<body>
+    <div class="container-scroller">
+        <%@ include file="../../shared/navbar.jsp" %>
+        <div class="container-fluid page-body-wrapper">
+            <%@ include file="../../shared/sidebarAdmin.jsp" %>
+            <div class="main-panel">
+                <div class="content-wrapper">
+                    <div class="row">
+                        <div class="col-lg-12 grid-margin stretch-card">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h2>Liste des employes prets pour la retraite</h2>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>ID Employe</th>
+                                                    <th>Nom</th>
+                                                    <th>Date de Naissance</th>
+                                                    <th>Age</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% 
+                                                    for (Employe employe : employesRetraite) {
+                                                %>
+                                                    <tr>
+                                                        <td><%= employe.getIdEmploye() %></td>
+                                                        <td><%= employe.getCandidat().getNomCandidat() + " " + employe.getCandidat().getPrenomCandidat() %></td>
+                                                        <td><%= employe.getCandidat().getDateNaissance() %></td>
+                                                        <td><%= employe.getAge() %></td>
+                                                    </tr>
+                                                <% 
+                                                    }
+                                                %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <%@ include file="../../shared/footer.jsp" %>
+            </div>
+        </div>
+    </div>
+    <%@ include file="../../shared/script.jsp" %>
+</body>
+</html>
