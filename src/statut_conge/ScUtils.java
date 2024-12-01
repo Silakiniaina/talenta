@@ -32,8 +32,24 @@ public class ScUtils {
 
     private static boolean postIsEmpty(Employe emp, Connection conn) throws SQLException {
         // Check: count(employe total) - count(employe en congé) < threshold
+        int threshold = 6;
 
-        return true;
+        return getCountEmploye(emp.getPoste().getIdPoste(), conn) < threshold;
+    }
+
+    private static int getCountEmploye(int postId, Connection conn) throws SQLException {
+        String query = "SELECT COUNT(id) AS total FROM Employe WHERE id_poste = ?";
+
+        try (PreparedStatement statement = conn.prepareStatement(query)) {
+            statement.setInt(1, postId);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                return resultSet.getInt("total");
+            }
+        }
+
+        return -1;
     }
 
     /**
