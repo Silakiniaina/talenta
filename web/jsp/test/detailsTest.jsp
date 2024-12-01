@@ -62,8 +62,9 @@
                                                         if (questionTest.getReponsePossible() != null) {
                                                             for(ReponseTestPossible reponse : questionTest.getReponsePossible()) { 
                                                         %>
-                                                            <li href="#" class="list-group-item list-group-item-action">
-                                                                <%= reponse.getTexteReponse() %>
+                                                            <li class="d-flex align-center list-group-item list-group-item-action <%= reponse.isAttendue() ? "text-success" : "" %>" style="justify-content: space-between;text-align:center;">
+                                                                <p> <%= reponse.getTexteReponse() %></p>
+                                                                <a type="button" href="addReponseAttendue?idTest=<%= test.getIdTest() %>&idQuestion=<%= questionTest.getIdQuestionTest() %>&idReponse=<%= reponse.getIdReponseTestPossible() %>"  class="btn btn-sm btn-success">Attendue ?</a>
                                                             </li>
                                                         <% 
                                                             } 
@@ -89,7 +90,7 @@
                                                                 </div>
                                                                 <div class="modal-body">
                                                                     <form class="forms-sample" action="addReponseTest" method="POST">
-                                                                         <input type="hidden" name="idTest" value="<%= test.getIdTest() %>">
+                                                                        <input type="hidden" name="idTest" value="<%= test.getIdTest() %>">
                                                                         <input type="hidden" name="idQuestion" value="<%= questionTest.getIdQuestionTest() %>">
                                                                         <div class="form-group">
                                                                             <label for="reponse">Réponse</label>
@@ -97,7 +98,7 @@
                                                                         </div>
                                                                         <div class="form-check form-check-flat form-check-primary">
                                                                             <label class="form-check-label">
-                                                                                <input type="checkbox" class="form-check-input" name="estAttendue">
+                                                                                <input type="checkbox" class="form-check-input" name="estAttendue" value="true">
                                                                                 Est une réponse attendue
                                                                                 <i class="input-helper"></i>
                                                                             </label>

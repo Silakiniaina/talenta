@@ -10,3 +10,5 @@ ALTER TABLE experience_candidat ADD CONSTRAINT fkey_id_specialite FOREIGN KEY(id
 ALTER TABLE experience_candidat ADD COLUMN entreprise VARCHAR(200);
 
 ALTER TABLE recrutement ADD COLUMN description_recrutement TEXT;
+
+ALTER TABLE reponse_test_possibles ADD COLUMN est_reponse_attendue boolean DEFAULT false;
