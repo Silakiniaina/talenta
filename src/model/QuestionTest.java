@@ -75,6 +75,77 @@ public class QuestionTest {
         }
     }
 
+    public QuestionTest getById(Connection c, int id) throws SQLException{
+        PreparedStatement prstm = null;
+        boolean isNewConnection = false; 
+        ResultSet rs = null;
+        String query = "SELECT * FROM question_test WHERE id_question_test = ?";
+        try {
+            if(c == null){
+                c = Database.getConnection();
+                isNewConnection = true;
+            }
+            prstm = c.prepareStatement(query);
+            prstm.setInt(1, id);
+            rs = prstm.executeQuery();
+
+            if(rs.next()) {
+                this.setIdQuestionTest(rs.getInt(1));
+                this.setIdTest(rs.getInt(2));
+                this.setTexteQuestion(rs.getString(3));
+                this.fetchListReponse(c);
+            }
+            return this;
+        } catch (SQLException e) {
+            throw e;
+        }finally{
+            if(rs != null){
+                rs.close();
+            }
+            if(prstm != null){
+                prstm.close();
+            }
+            if(c != null && isNewConnection){
+                c.close();
+            }
+        }
+    }
+
+    public void fetchListReponse(Connection c) throws SQLException{
+        List<ReponseTestPossible> result = new ArrayList<>();
+        boolean isNewConnection = false;
+        PreparedStatement prstm = null; 
+        ResultSet rs = null;
+        String query = "SELECT id_reponse_test_possibles FROM reponse_test_possibles WHERE id_question_test = ?";
+        try {
+            if(c == null){
+                c = Database.getConnection();
+                isNewConnection = true;
+            }
+            prstm = c.prepareStatement(query);
+            prstm.setInt(1, this.getIdQuestionTest());
+            rs = prstm.executeQuery();
+
+            while (rs.next()) {
+                ReponseTestPossible cd = new ReponseTestPossible();
+                result.add(cd.getById(c, rs.getInt(1)));
+            }
+            this.setReponsePossible(result);
+        } catch (SQLException e) {
+            throw e;
+        }finally{
+            if(rs != null){
+                rs.close();
+            }
+            if(prstm != null){
+                prstm.close();
+            }
+            if(c != null && isNewConnection){
+                c.close();
+            }
+        }
+    }
+
     public int getIdQuestionTest() {
         return idQuestionTest;
     }

@@ -121,15 +121,13 @@ public class Test {
     // Méthodes DAO
     public void getQuestionSimulation(Connection conn) throws SQLException {
         this.setQuestions(new ArrayList<>());
-        String query = "SELECT * FROM question_test WHERE id_test = ?";
+        String query = "SELECT id_question_test FROM question_test WHERE id_test = ?";
         try (PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setInt(1, this.getIdTest());
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                this.getQuestions().add(new QuestionTest(
-                        rs.getInt("id_question_test"),
-                        this.getIdTest(),
-                        rs.getString("texte_question")));
+                QuestionTest qt = new QuestionTest();
+                this.getQuestions().add(qt.getById(conn, rs.getInt(1)));
             }
         }
     }

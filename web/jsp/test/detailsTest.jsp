@@ -62,9 +62,9 @@
                                                         if (questionTest.getReponsePossible() != null) {
                                                             for(ReponseTestPossible reponse : questionTest.getReponsePossible()) { 
                                                         %>
-                                                            <a href="#" class="list-group-item list-group-item-action">
+                                                            <li href="#" class="list-group-item list-group-item-action">
                                                                 <%= reponse.getTexteReponse() %>
-                                                            </a>
+                                                            </li>
                                                         <% 
                                                             } 
                                                         }
@@ -89,10 +89,11 @@
                                                                 </div>
                                                                 <div class="modal-body">
                                                                     <form class="forms-sample" action="addReponseTest" method="POST">
+                                                                         <input type="hidden" name="idTest" value="<%= test.getIdTest() %>">
                                                                         <input type="hidden" name="idQuestion" value="<%= questionTest.getIdQuestionTest() %>">
                                                                         <div class="form-group">
                                                                             <label for="reponse">Réponse</label>
-                                                                            <input type="text" class="form-control" id="reponse" name="reponse" placeholder="Saisir la réponse">
+                                                                            <input type="text" class="form-control" id="reponse" name="texte_reponse" placeholder="Saisir la réponse">
                                                                         </div>
                                                                         <div class="form-check form-check-flat form-check-primary">
                                                                             <label class="form-check-label">
