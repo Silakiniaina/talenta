@@ -8,6 +8,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.utils.Database;
+
 public class QuestionTest {
 
     private int idQuestionTest;
@@ -40,25 +42,35 @@ public class QuestionTest {
         }
     }
     
-    public void save(Connection conn) throws SQLException {
-        if (this.idQuestionTest == 0) {
-            String query = "INSERT INTO question_test (id_test, texte_question) VALUES (?, ?)";
-            try (PreparedStatement pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-                pstmt.setInt(1, this.getIdTest());
-                pstmt.setString(2, this.getTexteQuestion());
-                pstmt.executeUpdate();
-                
-                ResultSet rs = pstmt.getGeneratedKeys();
-                if (rs.next()) {
-                    this.idQuestionTest = rs.getInt(1);
-                }
+    public void insert(Connection con) throws SQLException {
+        PreparedStatement prst = null; 
+        boolean isNewConnection = false;
+        String query = "INSERT INTO question_test (id_test, texte_question) VALUES (?, ?)";
+
+        try {
+            if(con == null){
+                isNewConnection = true;
+                con = Database.getConnection();
             }
-        } else {
-            String query = "UPDATE question_test SET texte_question = ? WHERE id_question_test = ?";
-            try (PreparedStatement pstmt = conn.prepareStatement(query)) {
-                pstmt.setString(1, this.getTexteQuestion());
-                pstmt.setInt(2, this.getIdQuestionTest());
-                pstmt.executeUpdate();
+
+            con.setAutoCommit(false);
+
+            prst = con.prepareStatement(query);
+            prst.setInt(1,this.getIdTest());
+            prst.setString(2, this.getTexteQuestion());
+
+            prst.executeUpdate();
+
+            con.commit();
+        } catch (SQLException e) {
+            con.rollback();
+            throw e;
+        } finally{
+            if(prst != null){
+                prst.close();
+            }
+            if(con != null && isNewConnection){
+                con.close();
             }
         }
     }

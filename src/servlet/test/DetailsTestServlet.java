@@ -19,13 +19,13 @@ public class DetailsTestServlet extends HttpServlet{
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         PrintWriter out = resp.getWriter();
-        String idSimulation = req.getParameter("idSimulation");
+        String test = req.getParameter("test");
         try {
             Connection c = Database.getConnection();
-            Test s = Test.getById(c, Integer.parseInt(idSimulation));
+            Test s = Test.getById(c, Integer.parseInt(test));
 
-            req.setAttribute("simulation", s);
-            RequestDispatcher disp = req.getRequestDispatcher("/WEB-INF/views/test/detailsSimulation.jsp");
+            req.setAttribute("test", s);
+            RequestDispatcher disp = req.getRequestDispatcher("/WEB-INF/views/test/detailsTest.jsp");
             disp.forward(req, resp);
         } catch (Exception e) {
             e.printStackTrace(out);

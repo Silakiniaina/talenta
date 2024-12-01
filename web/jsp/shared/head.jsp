@@ -10,5 +10,6 @@
   <link rel="stylesheet" href="assets/vendors/codemirror/ambiance.css">
   <link rel="stylesheet" href="assets/vendors/pwstabs/jquery.pwstabs.min.css">
   <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/vendors/feather/feather.css">
   <link rel="shortcut icon" href="assets/images/favicon.png" />
 </head>
