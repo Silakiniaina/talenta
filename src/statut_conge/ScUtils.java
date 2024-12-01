@@ -31,7 +31,6 @@ public class ScUtils {
     }
 
     private static boolean postIsEmpty(Employe emp, Date startingDate, Connection conn) throws SQLException {
-        // Check: count(employe total) - count(employe en congé) < threshold
         int threshold = 6;
         int idPoste = emp.getPoste().getIdPoste();
 
@@ -39,11 +38,12 @@ public class ScUtils {
     }
 
     private static int getCountEmployeEnConge(int postId, Date startingDate, Connection conn) throws SQLException {
-        String query = "SELECT COUNT(id) AS total FROM v_conge_actif WHERE date_debut <= ? AND date_fin >= ?";
+        String query = "SELECT COUNT(id) AS total FROM v_conge_actif WHERE id_poste = ? AND date_debut <= ? AND date_fin >= ?";
 
         try (PreparedStatement statement = conn.prepareStatement(query)) {
-            statement.setObject(1, startingDate);
+            statement.setInt(1, postId);
             statement.setObject(2, startingDate);
+            statement.setObject(3, startingDate);
 
             ResultSet resultSet = statement.executeQuery();
 
