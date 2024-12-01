@@ -155,9 +155,9 @@ public class ScUtils {
      */
     private static double getCongeTaken(Employe emp, Connection conn) throws SQLException {
         double congeLeft = 0;
+        String query = "SELECT total_conge FROM v_conge_pris WHERE id_employe = ?";
 
-        // TODO: Write query for conge_left
-        try (PreparedStatement stmt = conn.prepareStatement(null)) {
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, emp.getIdEmploye());
             ResultSet rs = stmt.executeQuery();
 
