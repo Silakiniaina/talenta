@@ -27,10 +27,10 @@ public class ScUtils {
      * @throws SQLException If a database access error occurs.
      */
     public static boolean canTakeConge(Employe emp, Date startingDate, Connection conn) throws SQLException {
-        return hasFilledOneYear(emp, conn) && hasCongeLeft(emp, conn) && !postIsEmpty(emp, startingDate, conn);
+        return hasFilledOneYear(emp, conn) && hasCongeLeft(emp, conn) && !isPosteEmpty(emp, startingDate, conn);
     }
 
-    private static boolean postIsEmpty(Employe emp, Date startingDate, Connection conn) throws SQLException {
+    private static boolean isPosteEmpty(Employe emp, Date startingDate, Connection conn) throws SQLException {
         int threshold = 6;
         int idPoste = emp.getPoste().getIdPoste();
 
