@@ -37,6 +37,23 @@ public class ScUtils {
         return getCountEmploye(emp.getPoste().getIdPoste(), conn) < threshold;
     }
 
+    private static int getCountEmployeEnConge(int postId, Date startingDate, Connection conn) throws SQLException {
+        String query = "SELECT COUNT(id) AS total FROM v_conge_actif WHERE date_debut <= ? AND date_fin >= ?";
+
+        try (PreparedStatement statement = conn.prepareStatement(query)) {
+            statement.setObject(1, startingDate);
+            statement.setObject(2, startingDate);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                return resultSet.getInt("total");
+            }
+        }
+
+        return -1;
+    }
+
     private static int getCountEmploye(int postId, Connection conn) throws SQLException {
         String query = "SELECT COUNT(id) AS total FROM Employe WHERE id_poste = ?";
 
