@@ -27,7 +27,13 @@ public class ScUtils {
      * @throws SQLException If a database access error occurs.
      */
     public static boolean canTakeConge(Employe emp, Connection conn) throws SQLException {
-        return hasFilledOneYear(emp, conn) && hasCongeLeft(emp, conn);
+        return hasFilledOneYear(emp, conn) && hasCongeLeft(emp, conn) && !postIsEmpty(emp, conn);
+    }
+
+    private static boolean postIsEmpty(Employe emp, Connection conn) throws SQLException {
+        // Check: count(employe total) - count(employe en congé) < threshold
+
+        return true;
     }
 
     /**
