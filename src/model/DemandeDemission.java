@@ -94,7 +94,7 @@ public class DemandeDemission {
             while (rs.next()) {
 
                 int idDemande = rs.getInt("id_demande");
-                Candidat candidat = Candidat.getById(c, rs.getInt("id_candidat"));
+                Candidat candidat = Candidat.getById(rs.getInt("id_candidat"), c);
                 java.sql.Date dateDepot = rs.getDate("date_depot");
                 String motif = rs.getString("motif");
 

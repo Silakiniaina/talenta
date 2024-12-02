@@ -129,7 +129,7 @@ public class Candidat {
         }
     }
 
-    public static Candidat getById(Connection c, int idCandidat) throws SQLException{
+    public static Candidat getById(int idCandidat, Connection c) throws SQLException{
         Candidat candidat= new Candidat();
         boolean isNewConnection = false;
         PreparedStatement prstm = null; 

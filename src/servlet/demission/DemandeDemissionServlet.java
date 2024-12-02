@@ -39,7 +39,7 @@ public class DemandeDemissionServlet extends HttpServlet {
                 c= (Candidat) session.getAttribute("candidat");
             }
 
-            c= Candidat.getById(conn, 3);
+            //c= Candidat.getById(conn, 3);
             
             if (c!=null ) {
 

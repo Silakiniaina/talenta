@@ -4,14 +4,8 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
-
-import model.utils.Database;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,7 +68,7 @@ public class Employe {
                 employe.setCandidat(conn,candidat.getIdCandidat());
                 Poste poste = new Poste();
                 poste.setIdPoste(rs.getInt("id_poste"));
-                employe.setPoste(poste.getIdPoste());
+                employe.setPoste(conn, poste.getIdPoste());
             }
         }
         return employe;
@@ -145,7 +139,7 @@ public class Employe {
                 Employe e = new Employe();
                 e.setIdEmploye(rs.getInt(1));
                 e.setCandidat(c,rs.getInt(2));
-                e.setPoste(rs.getInt(3));
+                e.setPoste(c, rs.getInt(3));
                 e.setDateEmbauche(rs.getDate(4));
                 result.add(e);
             }
@@ -200,8 +194,8 @@ public class Employe {
             if (rs.next()) {
                 employe = new Employe();
                 employe.setIdEmploye(rs.getInt("id_employe"));
-                employe.setCandidat(rs.getInt("id_candidat"), con);
-                employe.setPoste(rs.getInt("id_poste"));
+                employe.setCandidat(con, rs.getInt("id_candidat"));
+                employe.setPoste(con, rs.getInt("id_poste"));
                 employe.setDateEmbauche(rs.getDate("date_embauche"));
             }
         } catch (SQLException e) {
@@ -227,8 +221,8 @@ public class Employe {
             while (rs.next()) {
                 Employe employe = new Employe();
                 employe.setIdEmploye(rs.getInt("id_employe"));
-                employe.setCandidat(rs.getInt("id_candidat"), con);
-                employe.setPoste(rs.getInt("id_poste"));
+                employe.setCandidat(con, rs.getInt("id_candidat"));
+                employe.setPoste(con, rs.getInt("id_poste"));
                 employe.setDateEmbauche(rs.getDate("date_embauche"));
                 employe.setAge(rs.getInt("age"));
 
@@ -258,8 +252,8 @@ public class Employe {
             while (rs.next()) {
                 Employe employe = new Employe();
                 employe.setIdEmploye(rs.getInt("id_employe"));
-                employe.setCandidat(rs.getInt("id_candidat"), con);
-                employe.setPoste(rs.getInt("id_poste"));
+                employe.setCandidat(con, rs.getInt("id_candidat"));
+                employe.setPoste(con, rs.getInt("id_poste"));
                 employe.setDateEmbauche(rs.getDate("date_embauche"));
 
                 result.add(employe);
@@ -289,8 +283,8 @@ public class Employe {
             if (rs.next()) {
                 employe = new Employe();
                 employe.setIdEmploye(rs.getInt("id_employe"));
-                employe.setCandidat(rs.getInt("id_candidat"), con);
-                employe.setPoste(rs.getInt("id_poste"));
+                employe.setCandidat(con, rs.getInt("id_candidat"));
+                employe.setPoste(con, rs.getInt("id_poste"));
                 employe.setDateEmbauche(rs.getDate("date_embauche"));
             }
         } catch (SQLException e) {
