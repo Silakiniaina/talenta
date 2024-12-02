@@ -26,6 +26,7 @@ public class Candidat {
     private List<ExperienceCandidat> listExperience;
     private List<EducationCandidat> listEducation;
 
+    
     // CONSTRUCTORS
     public Candidat(){
         this.setListCompetence(new ArrayList<>());
@@ -113,6 +114,48 @@ public class Candidat {
                 this.getEducations(c);
             }
             return this;
+        } catch (SQLException e) {
+            throw e;
+        }finally{
+            if(rs != null){
+                rs.close();
+            }
+            if(prstm != null){
+                prstm.close();
+            }
+            if(c != null && isNewConnection){
+                c.close();
+            }
+        }
+    }
+
+    public static Candidat getById(int idCandidat, Connection c) throws SQLException{
+        Candidat candidat= new Candidat();
+        boolean isNewConnection = false;
+        PreparedStatement prstm = null; 
+        ResultSet rs = null;
+        String query = "SELECT * FROM candidat WHERE id_candidat = ?";
+        try {
+            if( c == null){
+                c = Database.getConnection();
+                isNewConnection = true;
+            }
+            prstm = c.prepareStatement(query);
+            prstm.setInt(1, idCandidat);
+            rs = prstm.executeQuery();
+
+            if (rs.next()) {
+                candidat.setIdCandidat(rs.getInt(1));
+                candidat.setNomCandidat(rs.getString(2));
+                candidat.setPrenomCandidat(rs.getString(3));
+                candidat.setDateNaissance(rs.getDate(4));
+                candidat.setAdresse(rs.getString(5));
+                candidat.setGenre(rs.getInt(6));
+                candidat.getCompetences(c);
+                candidat.getExperiences(c);
+                candidat.getEducations(c);
+            }
+            return candidat;
         } catch (SQLException e) {
             throw e;
         }finally{
@@ -230,6 +273,48 @@ public class Candidat {
         PreparedStatement prstm = null;
         ResultSet rs = null; 
         String query = "SELECT * FROM v_candidat WHERE email = ? AND mdp = ? ";
+        try {
+            c = Database.getConnection();
+            prstm = c.prepareStatement(query);
+            prstm.setString(1, email);
+            prstm.setString(2, password);
+
+            rs = prstm.executeQuery();
+
+            if(rs.next()){
+                result = new Candidat();
+                result.setIdCandidat(rs.getInt(1));
+                result.setNomCandidat(rs.getString(2));
+                result.setPrenomCandidat(rs.getString(3));
+                result.setDateNaissance(rs.getDate(4));
+                result.setAdresse(rs.getString(5));
+                result.setGenre(rs.getInt(6));
+                result.getCompetences(c);
+                result.getExperiences(c);
+                result.getEducations(c);
+            }
+            return result;
+        } catch (SQLException e) {
+            throw e;
+        }finally{
+            if(rs != null){
+                rs.close();
+            }
+            if(prstm != null){
+                prstm.close();
+            }
+            if(c != null){
+                c.close();
+            }
+        }
+    }
+
+    public static Candidat loginEmploye(String email, String password) throws SQLException{
+        Candidat result = null; 
+        Connection c = null; 
+        PreparedStatement prstm = null;
+        ResultSet rs = null; 
+        String query = "SELECT * FROM v_employe WHERE email = ? AND mdp = ? ";
         try {
             c = Database.getConnection();
             prstm = c.prepareStatement(query);
@@ -430,5 +515,9 @@ public class Candidat {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void setGenre(Genre genre) {
+        this.genre = genre;
     }
 }

@@ -237,3 +237,71 @@ FROM
     LEFT JOIN employe e ON c.id_candidat = e.id_candidat
     LEFT JOIN v_solde_conge_restant v_scr ON e.id_employe = v_scr.id_employe
     LEFT JOIN genre g ON c.id_genre = g.id_genre;
+
+
+-----------------------Liste des employes ayant pris un conge
+CREATE OR REPLACE VIEW v_planning_conge AS
+SELECT 
+    e.id_employe,
+    e.id_candidat,
+    e.id_poste,
+    c.id_conge,
+    c.id_type_conge,
+    c.date_debut,
+    c.date_fin
+FROM 
+    conge c
+JOIN 
+    employe e ON c.id_employe = e.id_employe
+WHERE 
+    c.date_debut IS NOT NULL
+    AND c.date_fin IS NOT NULL;
+
+---------------------------Liste des employes qui ont l'age legal de retraite qui ne sont pas encore retraites
+CREATE OR REPLACE VIEW v_employes_age_retraite AS
+SELECT 
+    e.id_employe,
+    c.id_candidat as id_candidat,
+    c.nom as candidat,
+    c.prenom,
+    c.date_naissance,
+    e.date_embauche,
+    p.id_poste as id_poste,
+    EXTRACT(YEAR FROM AGE(NOW(), c.date_naissance)) AS age
+FROM 
+    employe e
+JOIN 
+    candidat c ON e.id_candidat = c.id_candidat
+JOIN 
+    poste p ON e.id_poste = p.id_poste
+LEFT JOIN 
+    fin_contrat f ON e.id_employe = f.id_employe
+WHERE 
+    EXTRACT(YEAR FROM AGE(NOW(), c.date_naissance)) >= 60
+    AND f.id_employe IS NULL;
+
+---------------------------Liste des candidats employes
+CREATE
+OR REPLACE view v_employe AS
+SELECT
+    *
+FROM
+    candidat
+WHERE
+    id_candidat IN (
+        SELECT
+            id_candidat
+        FROM
+            employe
+);
+
+-------------------------------Liste des demandes de demission pas encore approuves ou declines
+CREATE OR REPLACE VIEW v_listeDemandeDemission AS
+SELECT dd.id_demande, dd.id_candidat, dd.date_depot, dd.motif
+FROM demande_demission dd
+LEFT JOIN fin_contrat fc ON dd.id_candidat = fc.id_employe
+WHERE fc.id_employe IS NULL
+AND dd.etat IS NULL;
+
+
+
