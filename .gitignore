@@ -15,3 +15,5 @@ src/model/utils/Database.java
 
 tmp/
 temp/
+
+.vscode/

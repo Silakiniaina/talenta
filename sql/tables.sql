@@ -324,6 +324,105 @@ CREATE TABLE
 		CONSTRAINT reponse_test_possibles_id_question_test_fkey FOREIGN KEY (id_question_test) REFERENCES question_test (id_question_test) ON DELETE CASCADE
 	);
 
+CREATE TABLE reponse_simulation_candidat (
+    id_reponse serial NOT NULL,
+    id_attribution integer,
+    id_question integer,
+    id_reponse_candidat integer NOT NULL,
+    date_soumission timestamp DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT reponse_simulation_candidat_pkey PRIMARY KEY (id_reponse),
+    CONSTRAINT reponse_simulation_candidat_id_reponse_candidat_fkey FOREIGN KEY (id_reponse_candidat) REFERENCES reponse_simulation_possibles(id_reponse_simulation_possibles),
+    CONSTRAINT reponse_simulation_candidat_id_attribution_fkey1 FOREIGN KEY (id_attribution) REFERENCES simulation_candidat(id_attribution),
+    CONSTRAINT reponse_simulation_candidat_id_question_fkey FOREIGN KEY (id_question) REFERENCES question_simulation(id_question_simulation),
+    CONSTRAINT reponse_simulation_candidat_id_attribution_fkey FOREIGN KEY (id_attribution) REFERENCES simulation_candidat(id_attribution) ON DELETE CASCADE
+);
+
+-- CREATE TABLE type_conge(
+--     id_type_conge serial PRIMARY KEY,
+--     nom_type VARCHAR(20)
+-- );
+
+-- CREATE TABLE conge(
+--     id_conge SERIAL PRIMARY KEY,
+--     id_employe integer REFERENCES employe(id_employe),
+--     id_type_conge integer REFERENCES type_conge(id_type_conge),
+--     date_debut DATE,
+--     date_fin DATE
+-- );
+
+CREATE TABLE type_fin_contrat(
+    id_type_fin_contrat SERIAL PRIMARY KEY,
+    label VARCHAR(20)
+);
+
+CREATE TABLE fin_contrat(
+    id_fin_contrat SERIAL PRIMARY KEY,
+    id_employe INT REFERENCES employe(id_employe),
+    id_type_fin_contrat INT REFERENCES type_fin_contrat(id_type_fin_contrat),
+    motif VARCHAR(100),
+    date_depot DATE
+);
+
+CREATE TABLE notification_admin (
+    id_notification serial NOT NULL,
+    contenu_notification varchar(256) NOT NULL,
+    date_notification timestamp DEFAULT CURRENT_TIMESTAMP,
+    date_vue_notification timestamp,
+    target_link varchar(256),
+    CONSTRAINT notification_admin_pkey PRIMARY KEY (id_notification)
+);
+
+CREATE TABLE demande_demission(
+    id_demande SERIAL PRIMARY KEY,
+    id_candidat INT REFERENCES candidat(id_candidat),
+    date_depot DATE,
+    motif VARCHAR(100),
+    etat VARCHAR(10));
+    
+CREATE TABLE type_conge(
+   id_type_conge INT,
+   nom_type VARCHAR(50) NOT NULL,
+   est_conge_paye BOOLEAN DEFAULT true,
+   PRIMARY KEY(id_type_conge)
+);
+
+CREATE TABLE conge(
+   id_conge INT,
+   id_employe INT REFERENCES employe(id_employe),
+   id_type_conge INT REFERENCES type_conge(id_type_conge),
+   date_debut DATE NOT NULL,
+   date_fin DATE,
+   id_contrat INT REFERENCES contrat(id_contrat),
+   PRIMARY KEY(id_conge)
+);
+
+
+
+CREATE TABLE branche_education (
+    id_branche_education SERIAL NOT NULL, 
+    nom_branche VARCHAR(200) NOT NULL, 
+    description_branche TEXT,
+    CONSTRAINT branche_education_pkey PRIMARY KEY (id_branche_education)
+);
+
+CREATE table specialite (
+    id_specialite SERIAL NOT NULL, 
+    nom_specialite VARCHAR(200) NOT NULL, 
+    description_specialite TEXT, 
+    id_branche_education INTEGER NOT NULL, 
+    CONSTRAINT specialite_pkey PRIMARY KEY(id_specialite),
+    CONSTRAINT specialite_id_branche_education_fkey FOREIGN KEY(id_branche_education) REFERENCES branche_education(id_branche_education)
+);
+
+CREATE TABLE experience_requise_poste(
+    id_poste INTEGER NOT NULL, 
+    id_specialite INTEGER NOT NULL, 
+    duree INTEGER NOT NULL, 
+    obligatoire BOOLEAN DEFAULT TRUE,
+    CONSTRAINT experience_requise_poste_id_poste_fkey FOREIGN KEY(id_poste) REFERENCES poste(id_poste),
+    CONSTRAINT experience_requise_poste_id_specialite_fkey FOREIGN KEY(id_specialite) REFERENCES specialite(id_specialite),
+    CONSTRAINT experience_requise_poste_duree_chk CHECK(duree >= 0)
+);
 CREATE TABLE
 	reponse_test_candidat (
 		id_reponse serial NOT NULL,
