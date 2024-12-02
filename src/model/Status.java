@@ -26,14 +26,17 @@ public class Status {
     }
 
     // CRUD
-    public static List<Status> getAll() throws SQLException{
+    public List<Status> getAll(Connection c) throws SQLException{
         List<Status> result = new ArrayList<>();
-        Connection c = null;
+        boolean isNewConnection = false;
         PreparedStatement prstm = null; 
         ResultSet rs = null;
         String query = "SELECT * FROM status";
         try {
-            c = Database.getConnection();
+            if(c == null){
+                isNewConnection = true;
+                c = Database.getConnection();
+            }
             prstm = c.prepareStatement(query);
             rs = prstm.executeQuery();
 
@@ -44,30 +47,42 @@ public class Status {
                 d.setCorrespondingColor(rs.getString(3));
                 result.add(d);
             }
+            return result;
         } catch (SQLException e) {
             throw e;
+        }finally{
+            if(rs != null){
+                rs.close();
+            }
+            if(prstm != null){
+                prstm.close();
+            }
+            if(c != null && isNewConnection){
+                c.close();
+            }
         }
-        return result;
     }
 
-    public static Status getById(int id) throws SQLException{
-         Status result = null;
-         Connection c = null;
+    public Status getById(Connection c,int id) throws SQLException{
          PreparedStatement prstm = null; 
          ResultSet rs = null;
+         boolean isNewConnection = false;
          String query = "SELECT * FROM status WHERE id_status = ?";
          try {
-             c = Database.getConnection();
+            if(c == null){
+                isNewConnection = true;
+                c = Database.getConnection();
+            }
              prstm = c.prepareStatement(query);
              prstm.setInt(1, id);
              rs = prstm.executeQuery();
  
              if(rs.next()) {
-                 result = new Status();
-                 result.setIdStatus(rs.getInt(1));
-                 result.setLabel(rs.getString(2));
-                 result.setCorrespondingColor(rs.getString(3));
+                 this.setIdStatus(rs.getInt(1));
+                 this.setLabel(rs.getString(2));
+                 this.setCorrespondingColor(rs.getString(3));
              }
+             return this;
          } catch (SQLException e) {
              throw e;
          }finally{
@@ -77,11 +92,10 @@ public class Status {
             if(prstm != null){
                 prstm.close();
             }
-            if(c != null){
+            if(c != null && isNewConnection){
                 c.close();
             }
         }
-         return result;
      }
 
     // GETTERS AND SETTERS

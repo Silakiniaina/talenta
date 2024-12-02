@@ -1,7 +1,6 @@
 package model;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,49 +10,32 @@ import java.util.List;
 import model.utils.Database;
 
 public class Education {
-    
-    private int idEducation;
-    private Date dateDebut; 
-    private Date dateFin;
+
     private TypeDiplome typeDiplome;
-    private String nomEcole;
+    private BrancheEducation brancheEducation;
 
-    // CONSTRUCTOR
-    public Education(){
-
-    }
-
-    //ACTION
-    public static List<Education> getAllByCandidat(Connection conn, int idCandidat)throws SQLException{
-        List<Education> result = new ArrayList();
-        Connection c = null;
+    // ACTION
+    public List<Education> getAllByPoste(Connection c, int idPoste) throws SQLException{
+        List<Education> result = new ArrayList<>();
+        boolean isNewConnection = false;
         PreparedStatement prstm = null; 
         ResultSet rs = null;
-        boolean isNewConnection = false;
-        String query = "SELECT id_education_candidat FROM education_candidat WHERE id_candidat = ?";
+        String query = "SELECT id_type_diplome, id_branche_education FROM diplome_requis_poste WHERE id_poste = ?";
         try {
-
-            if(conn == null){
-                c = Database.getConnection();
+            if(c == null){
                 isNewConnection = true;
-            }else{
-                c = conn;
+                c = Database.getConnection();
             }
             prstm = c.prepareStatement(query);
-            prstm.setInt(1, idCandidat);
+            prstm.setInt(1, idPoste);
             rs = prstm.executeQuery();
 
-            Education d = null;
             while (rs.next()) {
-                d = new Education();
-                d.setIdEducation(rs.getInt(1));
-                d.setDateDebut(rs.getDate(3));
-                d.setDateFin(rs.getDate(4));
-                d.setTypeDiplome(rs.getInt(5));
-                d.setNomEcole(rs.getString(6));
+                Education d = new Education();
+                d.setTypeDiplome(c, rs.getInt(1));
+                d.setBrancheEducation(c, rs.getInt(2));
                 result.add(d);
             }
-            return result;
         } catch (SQLException e) {
             throw e;
         }finally{
@@ -67,39 +49,24 @@ public class Education {
                 c.close();
             }
         }
+        return result;
     }
-    
+
     // GETTERS AND SETTERS
-    public int getIdEducation() {
-        return idEducation;
-    }
-    public Date getDateDebut() {
-        return dateDebut;
-    }
-    public Date getDateFin() {
-        return dateFin;
-    }
     public TypeDiplome getTypeDiplome() {
         return typeDiplome;
     }
-    public String getNomEcole() {
-        return nomEcole;
+    public BrancheEducation getBrancheEducation() {
+        return brancheEducation;
     }
 
-    public void setIdEducation(int idEducation) {
-        this.idEducation = idEducation;
+    public void setTypeDiplome(Connection c, int typeDiplome) throws SQLException{
+        TypeDiplome d = new TypeDiplome();
+        this.typeDiplome = d.getById(c, typeDiplome);
     }
-    public void setDateDebut(Date dateDebut) {
-        this.dateDebut = dateDebut;
-    }
-    public void setDateFin(Date dateFin) {
-        this.dateFin = dateFin;
-    }
-    public void setTypeDiplome(int typeDiplome) throws SQLException{
-        this.typeDiplome = TypeDiplome.getById(typeDiplome);
-    }
-    public void setNomEcole(String nomEcole) {
-        this.nomEcole = nomEcole;
+    public void setBrancheEducation(Connection c,int brancheEducation) throws SQLException{
+        BrancheEducation b = new BrancheEducation();
+        this.brancheEducation = b.getById(c, brancheEducation);
     }
     
 }

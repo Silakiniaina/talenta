@@ -25,14 +25,17 @@ public class TypeDiplome {
     }
 
     // CRUD
-    public static List<TypeDiplome> getAll() throws SQLException{
+    public List<TypeDiplome> getAll(Connection c) throws SQLException{
         List<TypeDiplome> result = new ArrayList<>();
-        Connection c = null;
+        boolean isNewConnection = false;
         PreparedStatement prstm = null; 
         ResultSet rs = null;
         String query = "SELECT * FROM type_diplome";
         try {
-            c = Database.getConnection();
+            if(c == null){
+                c = Database.getConnection();
+                isNewConnection = true;
+            }
             prstm = c.prepareStatement(query);
             rs = prstm.executeQuery();
 
@@ -44,27 +47,39 @@ public class TypeDiplome {
             }
         } catch (SQLException e) {
             throw e;
+        } finally{
+            if(rs != null){
+                rs.close();
+            }
+            if(prstm != null){
+                prstm.close();
+            }
+            if(c != null && isNewConnection){
+                c.close();
+            }
         }
         return result;
     }
 
-    public static TypeDiplome getById(int id) throws SQLException{
-         TypeDiplome result = null;
-         Connection c = null;
+    public TypeDiplome getById(Connection c, int id) throws SQLException{
+         boolean isNewConnection = false;
          PreparedStatement prstm = null; 
          ResultSet rs = null;
          String query = "SELECT * FROM type_diplome WHERE id_type_diplome = ?";
          try {
-             c = Database.getConnection();
+            if(c == null){
+                isNewConnection = true;
+                c = Database.getConnection();
+            }
              prstm = c.prepareStatement(query);
              prstm.setInt(1, id);
              rs = prstm.executeQuery();
  
              if(rs.next()) {
-                 result = new TypeDiplome();
-                 result.setIdTypeDiplome(rs.getInt(1));
-                 result.setLabel(rs.getString(2));
+                 this.setIdTypeDiplome(rs.getInt(1));
+                 this.setLabel(rs.getString(2));
              }
+             return this;
          } catch (SQLException e) {
              throw e;
          }finally{
@@ -74,11 +89,10 @@ public class TypeDiplome {
             if(prstm != null){
                 prstm.close();
             }
-            if(c != null){
+            if(c != null && isNewConnection){
                 c.close();
             }
         }
-         return result;
      }
 
     // GETTERS AND SETTERS
