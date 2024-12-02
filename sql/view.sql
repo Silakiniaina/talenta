@@ -11,6 +11,19 @@ WHERE
         FROM
             employe
     );
+CREATE
+OR REPLACE view v_candidat_employe AS
+SELECT
+    *
+FROM
+    candidat
+WHERE
+    id_candidat IN (
+        SELECT
+            id_candidat
+        FROM
+            employe
+    );
 
 CREATE
 OR REPLACE VIEW v_recrutement_candidat AS
@@ -231,7 +244,7 @@ SELECT
     v_scr.jours_pris,
     v_scr.jours_restants
 FROM
-    candidat c
+    v_candidat_employe c
     LEFT JOIN employe e ON c.id_candidat = e.id_candidat
     LEFT JOIN v_solde_conge_restant v_scr ON e.id_employe = v_scr.id_employe
     LEFT JOIN genre g ON c.id_genre = g.id_genre;
