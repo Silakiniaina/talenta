@@ -12,7 +12,7 @@ import model.Employe;
 import model.InformationEmploye;
 import service.EmployeService;
 
-@WebServlet("/client/employe")
+@WebServlet("/client-employe")
 public class ClientEmployeServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private EmployeService employeService;

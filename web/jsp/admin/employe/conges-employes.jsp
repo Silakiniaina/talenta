@@ -24,8 +24,9 @@
                                                 <th>Prénom</th>
                                                 <th>Email</th>
                                                 <th>Genre</th>
+                                                <th>Congés total</th>
+                                                <th>Congés Acquis</th>
                                                 <th>Congés Restants</th>
-                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -39,8 +40,9 @@
                                                 <td><%= employe.getPrenom() %></td>
                                                 <td><%= employe.getEmail() %></td>
                                                 <td><%= employe.getGenre() %></td>
+                                                <td><%= employe.getJoursAcquis() %></td>
+                                                <td><%= employe.getJoursPris() %></td>
                                                 <td><%= employe.getJoursRestants() %></td>
-                                                <td><a type="button" class="btn btn-sm btn-outline-primary" href="detailsEmploye?idEmploye=<%= employe.getIdEmploye() %>">Voir Profil</a></td>
                                             </tr>
                                             <%
                                                     }

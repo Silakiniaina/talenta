@@ -167,7 +167,7 @@ CREATE TABLE
 	);
 
 CREATE TABLE
-	employe (
+	employe(
 		id_employe serial NOT NULL,
 		date_embauche date DEFAULT NOW (),
 		id_candidat integer NOT NULL,
@@ -324,17 +324,17 @@ CREATE TABLE
 		CONSTRAINT reponse_test_possibles_id_question_test_fkey FOREIGN KEY (id_question_test) REFERENCES question_test (id_question_test) ON DELETE CASCADE
 	);
 
-CREATE TABLE reponse_simulation_candidat (
+CREATE TABLE reponse_test_candidat (
     id_reponse serial NOT NULL,
     id_attribution integer,
     id_question integer,
     id_reponse_candidat integer NOT NULL,
     date_soumission timestamp DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT reponse_simulation_candidat_pkey PRIMARY KEY (id_reponse),
-    CONSTRAINT reponse_simulation_candidat_id_reponse_candidat_fkey FOREIGN KEY (id_reponse_candidat) REFERENCES reponse_simulation_possibles(id_reponse_simulation_possibles),
-    CONSTRAINT reponse_simulation_candidat_id_attribution_fkey1 FOREIGN KEY (id_attribution) REFERENCES simulation_candidat(id_attribution),
-    CONSTRAINT reponse_simulation_candidat_id_question_fkey FOREIGN KEY (id_question) REFERENCES question_simulation(id_question_simulation),
-    CONSTRAINT reponse_simulation_candidat_id_attribution_fkey FOREIGN KEY (id_attribution) REFERENCES simulation_candidat(id_attribution) ON DELETE CASCADE
+    CONSTRAINT reponse_test_candidat_pkey PRIMARY KEY (id_reponse),
+    CONSTRAINT reponse_test_candidat_id_reponse_candidat_fkey FOREIGN KEY (id_reponse_candidat) REFERENCES reponse_test_possibles(id_reponse_test_possibles),
+    CONSTRAINT reponse_test_candidat_id_attribution_fkey1 FOREIGN KEY (id_attribution) REFERENCES test_candidat(id_attribution),
+    CONSTRAINT reponse_test_candidat_id_question_fkey FOREIGN KEY (id_question) REFERENCES question_test(id_question_test),
+    CONSTRAINT reponse_test_candidat_id_attribution_fkey FOREIGN KEY (id_attribution) REFERENCES test_candidat(id_attribution) ON DELETE CASCADE
 );
 
 -- CREATE TABLE type_conge(
@@ -387,52 +387,11 @@ CREATE TABLE type_conge(
 );
 
 CREATE TABLE conge(
-   id_conge INT,
-   id_employe INT REFERENCES employe(id_employe),
-   id_type_conge INT REFERENCES type_conge(id_type_conge),
-   date_debut DATE NOT NULL,
-   date_fin DATE,
-   id_contrat INT REFERENCES contrat(id_contrat),
-   PRIMARY KEY(id_conge)
+id_conge INT,
+id_employe INT REFERENCES employe(id_employe),
+id_type_conge INT REFERENCES type_conge(id_type_conge),
+date_debut DATE NOT NULL,
+date_fin DATE,
+id_contrat INT REFERENCES contrat(id_contrat),
+PRIMARY KEY(id_conge)
 );
-
-
-
-CREATE TABLE branche_education (
-    id_branche_education SERIAL NOT NULL, 
-    nom_branche VARCHAR(200) NOT NULL, 
-    description_branche TEXT,
-    CONSTRAINT branche_education_pkey PRIMARY KEY (id_branche_education)
-);
-
-CREATE table specialite (
-    id_specialite SERIAL NOT NULL, 
-    nom_specialite VARCHAR(200) NOT NULL, 
-    description_specialite TEXT, 
-    id_branche_education INTEGER NOT NULL, 
-    CONSTRAINT specialite_pkey PRIMARY KEY(id_specialite),
-    CONSTRAINT specialite_id_branche_education_fkey FOREIGN KEY(id_branche_education) REFERENCES branche_education(id_branche_education)
-);
-
-CREATE TABLE experience_requise_poste(
-    id_poste INTEGER NOT NULL, 
-    id_specialite INTEGER NOT NULL, 
-    duree INTEGER NOT NULL, 
-    obligatoire BOOLEAN DEFAULT TRUE,
-    CONSTRAINT experience_requise_poste_id_poste_fkey FOREIGN KEY(id_poste) REFERENCES poste(id_poste),
-    CONSTRAINT experience_requise_poste_id_specialite_fkey FOREIGN KEY(id_specialite) REFERENCES specialite(id_specialite),
-    CONSTRAINT experience_requise_poste_duree_chk CHECK(duree >= 0)
-);
-CREATE TABLE
-	reponse_test_candidat (
-		id_reponse serial NOT NULL,
-		id_attribution integer NOT NULL,
-		id_question integer NOT NULL,
-		id_reponse_candidat integer NOT NULL,
-		date_soumission timestamp DEFAULT CURRENT_TIMESTAMP,
-		CONSTRAINT reponse_test_candidat_pkey PRIMARY KEY (id_reponse),
-		CONSTRAINT reponse_test_candidat_id_reponse_candidat_fkey FOREIGN KEY (id_reponse_candidat) REFERENCES reponse_test_possibles (id_reponse_test_possibles),
-		CONSTRAINT reponse_test_candidat_id_attribution_fkey1 FOREIGN KEY (id_attribution) REFERENCES test_candidat (id_attribution),
-		CONSTRAINT reponse_test_candidat_id_question_fkey FOREIGN KEY (id_question) REFERENCES question_test (id_question_test),
-		CONSTRAINT reponse_test_candidat_id_attribution_fkey FOREIGN KEY (id_attribution) REFERENCES test_candidat (id_attribution) ON DELETE CASCADE
-	);

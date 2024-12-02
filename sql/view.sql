@@ -361,8 +361,7 @@ SELECT
     nombre_reponse_correcte,
     nombre_total_question,
     ROUND(
-        (nombre_reponse_correcte::float / nombre_total_question) * 100, 
-        2
+        (nombre_reponse_correcte::float / nombre_total_question) * 100
     ) AS pourcentage_reussite,
     CASE 
         WHEN (nombre_reponse_correcte::float / nombre_total_question) * 100 >= 70 THEN 'Embauche recommandée'

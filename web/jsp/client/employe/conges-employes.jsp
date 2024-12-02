@@ -36,6 +36,8 @@
                                                 <td><%= employe.getPrenom() %></td>
                                                 <td><%= employe.getEmail() %></td>
                                                 <td><%= employe.getGenre() %></td>
+                                                <td><%= employe.getJoursAcquis() %></td>
+                                                <td><%= employe.getJoursPris() %></td>
                                                 <td><%= employe.getJoursRestants() %></td>
                                             </tr>
                                             <%

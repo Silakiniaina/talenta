@@ -11,7 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import model.InformationEmploye;
 import service.EmployeService;
 
-@WebServlet("/admin/employes")
+@WebServlet("/admin-employes")
 public class AdminEmployeServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private EmployeService employeService;
