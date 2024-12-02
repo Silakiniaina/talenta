@@ -1,0 +1,3 @@
+- Ajout date_demande dans la table Conge
+- Ajout statut dans la table Conge
+- Ajout d'un nombre minimum de total d'employés pour accepter un congé
