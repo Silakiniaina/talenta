@@ -22,6 +22,7 @@ public class LoginServlet extends HttpServlet{
        String email = req.getParameter("email");
        String mdp = req.getParameter("mdp");
        RequestDispatcher disp = null;
+       Gson gson= new Gson();
 
        try {
             req.setAttribute("role", mode);
@@ -42,7 +43,19 @@ public class LoginServlet extends HttpServlet{
                 }else{
                     throw new Exception("Login incorecte");
                 }
+            }else {
+                Candidat d = Candidat.loginEmploye(email, mdp);
+                out.println(gson.toJson(d));
+                if(d != null){
+                    req.getSession(false).setAttribute("candidat", d);
+                    disp = req.getRequestDispatcher("/WEB-INF/views/employe/accueilEmploye.jsp");
+                    disp.forward(req, resp);
+                }else{
+                    out.print("Login incorecte");
+                }
+                // out.println("mdp");
             }
+            
         }catch (Exception e) {
             req.setAttribute("error", e.getMessage());
             e.printStackTrace(out);

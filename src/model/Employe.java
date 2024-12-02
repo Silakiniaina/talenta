@@ -17,6 +17,7 @@ public class Employe {
     private Candidat candidat;
     private Poste poste;
     private Date dateEmbauche;
+    int age;
 
     // CONSTRUCTORS
     public Employe(){
@@ -67,7 +68,7 @@ public class Employe {
                 employe.setCandidat(conn,candidat.getIdCandidat());
                 Poste poste = new Poste();
                 poste.setIdPoste(rs.getInt("id_poste"));
-                employe.setPoste(poste.getIdPoste());
+                employe.setPoste(conn, poste.getIdPoste());
             }
         }
         return employe;
@@ -138,7 +139,7 @@ public class Employe {
                 Employe e = new Employe();
                 e.setIdEmploye(rs.getInt(1));
                 e.setCandidat(c,rs.getInt(2));
-                e.setPoste(rs.getInt(3));
+                e.setPoste(c, rs.getInt(3));
                 e.setDateEmbauche(rs.getDate(4));
                 result.add(e);
             }
@@ -171,4 +172,130 @@ public class Employe {
     }
     
         
+
+    public void setAge(int age){
+        this.age= age;
+    }
+    public int getAge(){
+        return this.age;
+    }
+
+    public static Employe getById(Connection con, int idEmploye) throws SQLException {
+        Employe employe = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        String query = "SELECT * FROM employe WHERE id_employe = ?";
+        try {
+            ps = con.prepareStatement(query);
+            ps.setInt(1, idEmploye);
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                employe = new Employe();
+                employe.setIdEmploye(rs.getInt("id_employe"));
+                employe.setCandidat(con, rs.getInt("id_candidat"));
+                employe.setPoste(con, rs.getInt("id_poste"));
+                employe.setDateEmbauche(rs.getDate("date_embauche"));
+            }
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
+        }
+        return employe;
+    }
+
+    public static List<Employe> getAllReadyForRetraite(Connection con) throws SQLException {
+        List<Employe> result = new ArrayList<>();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        String query = "SELECT * FROM v_employes_age_retraite";
+        
+        try {
+            ps = con.prepareStatement(query);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Employe employe = new Employe();
+                employe.setIdEmploye(rs.getInt("id_employe"));
+                employe.setCandidat(con, rs.getInt("id_candidat"));
+                employe.setPoste(con, rs.getInt("id_poste"));
+                employe.setDateEmbauche(rs.getDate("date_embauche"));
+                employe.setAge(rs.getInt("age"));
+
+                result.add(employe);
+            }
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
+        }
+
+        return result;
+    }
+
+    public static List<Employe> getAll(Connection con) throws SQLException {
+        List<Employe> result = new ArrayList<>();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        String query = "SELECT * FROM employe";
+        
+        try {
+            ps = con.prepareStatement(query);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Employe employe = new Employe();
+                employe.setIdEmploye(rs.getInt("id_employe"));
+                employe.setCandidat(con, rs.getInt("id_candidat"));
+                employe.setPoste(con, rs.getInt("id_poste"));
+                employe.setDateEmbauche(rs.getDate("date_embauche"));
+
+                result.add(employe);
+            }
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
+        }
+
+        return result;
+    }
+
+    public static Employe getEmployeByIdCandidat(Connection con, int idCandidat) throws SQLException {
+        Employe employe = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+    
+        String query = "SELECT * FROM employe WHERE id_candidat = ?";
+    
+        try {
+            ps = con.prepareStatement(query);
+            ps.setInt(1, idCandidat); 
+            rs = ps.executeQuery();
+    
+            if (rs.next()) {
+                employe = new Employe();
+                employe.setIdEmploye(rs.getInt("id_employe"));
+                employe.setCandidat(con, rs.getInt("id_candidat"));
+                employe.setPoste(con, rs.getInt("id_poste"));
+                employe.setDateEmbauche(rs.getDate("date_embauche"));
+            }
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
+        }
+    
+        return employe;
+    }
+    
+
 }

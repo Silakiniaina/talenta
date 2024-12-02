@@ -16,112 +16,33 @@ public class NotificationAdmin {
     private String contenuNotification;
     private Timestamp dateNotification;
     private Timestamp dateVueNotification;
-    private Admin admin;
     private String targetLink;
-    
+
+    // CONSTRUCTORS
     public NotificationAdmin(){
 
     }
 
-    public int getIdNotification() {
-        return idNotification;
-    }
-    public String getContenuNotification() {
-        return contenuNotification;
-    }
-    public Timestamp getDateNotification() {
-        return dateNotification;
-    }
-    public Timestamp getDateVueNotification() {
-        return dateVueNotification;
-    }
-    public Admin getAdmin() {
-        return admin;
-    }
-    public String getTargetLink(){
-        return this.targetLink;
-    }
+    // ACTIONS
 
-    public void setIdNotification(int idNotification) {
-        this.idNotification = idNotification;
-    }
-    public void setContenuNotification(String contenuNotification) {
-        this.contenuNotification = contenuNotification;
-    }
-    public void setDateNotification(Timestamp dateNotification) {
-        this.dateNotification = dateNotification;
-    }
-    public void setDateVueNotification(Timestamp dateVueNotification) {
-        this.dateVueNotification = dateVueNotification;
-    }
-    public void setAdmin(Connection con, int admini) throws SQLException{
-        Admin c = new Admin();
-        c.setIdAdmin(admini);
-        this.admin = Admin.getById(admini);
-    }
-    public void setTargetLink(String str){
-        this.targetLink = str;
-    }
-
-     public static List<NotificationAdmin> getAllByAdmin(int idResponsable) throws SQLException{
+    public static List<NotificationAdmin> getAllNotVueByAdmin() throws SQLException{
         List<NotificationAdmin> result = new ArrayList<>();
         Connection c = null;
         PreparedStatement prstm = null; 
         ResultSet rs = null;
-        String query = "SELECT * FROM notification_admin WHERE id_responsable = ? ORDER BY date_notification DESC";
+        String query = "SELECT * FROM notification_admin WHERE date_vue_notification IS NULL ORDER BY date_notification DESC";
         try {
             c = Database.getConnection();
             prstm = c.prepareStatement(query);
-            prstm.setInt(1, idResponsable);
             rs = prstm.executeQuery();
 
             while (rs.next()) {
                 NotificationAdmin d = new NotificationAdmin();
                 d.setIdNotification(rs.getInt(1));
-                d.setAdmin(c,rs.getInt(2));;
-                d.setContenuNotification(rs.getString(3));
-                d.setDateNotification(rs.getTimestamp(4));
-                d.setDateVueNotification(rs.getTimestamp(5));
-                d.setTargetLink(rs.getString(6));
-                result.add(d);
-            }
-        } catch (SQLException e) {
-            throw e;
-        } finally{
-            if(rs != null){
-                rs.close();
-            }
-            if(prstm != null){
-                prstm.close();
-            }
-            if(c != null){
-                c.close();
-            }
-        }
-        return result;
-    }
-
-
-        public static List<NotificationAdmin> getAllNotVueByAdmin(int idAdmin) throws SQLException{
-        List<NotificationAdmin> result = new ArrayList<>();
-        Connection c = null;
-        PreparedStatement prstm = null; 
-        ResultSet rs = null;
-        String query = "SELECT * FROM notification_admin WHERE id_responsable = ? AND date_vue_notification IS NULL ORDER BY date_notification DESC";
-        try {
-            c = Database.getConnection();
-            prstm = c.prepareStatement(query);
-            prstm.setInt(1, idAdmin);
-            rs = prstm.executeQuery();
-
-            while (rs.next()) {
-                NotificationAdmin d = new NotificationAdmin();
-                d.setIdNotification(rs.getInt(1));
-                d.setAdmin(c,rs.getInt(2));;
-                d.setContenuNotification(rs.getString(3));
-                d.setDateNotification(rs.getTimestamp(4));
-                d.setDateVueNotification(rs.getTimestamp(5));
-                d.setTargetLink(rs.getString(6));
+                d.setContenuNotification(rs.getString(2));
+                d.setDateNotification(rs.getTimestamp(3));
+                d.setDateVueNotification(rs.getTimestamp(4));
+                d.setTargetLink(rs.getString(5));
                 result.add(d);
             }
         } catch (SQLException e) {
@@ -155,11 +76,10 @@ public class NotificationAdmin {
             if (rs.next()) {
                 result = new NotificationAdmin();
                 result.setIdNotification(rs.getInt(1));
-                result.setAdmin(c, rs.getInt(2));
-                result.setContenuNotification(rs.getString(3));
-                result.setDateNotification(rs.getTimestamp(4));
-                result.setDateVueNotification(rs.getTimestamp(5));
-                result.setTargetLink(rs.getString(6));
+                result.setContenuNotification(rs.getString(2));
+                result.setDateNotification(rs.getTimestamp(3));
+                result.setDateVueNotification(rs.getTimestamp(4));
+                result.setTargetLink(rs.getString(5));
             }
         } catch (SQLException e) {
             throw e;
@@ -180,15 +100,14 @@ public class NotificationAdmin {
     public void insert() throws SQLException{
         Connection c = null;
         PreparedStatement prstm = null; 
-        String sql = "INSERT INTO notification_admin(id_responsable,contenu_notification,date_notification,target_link) VALUES(?, ?, ?, ?)";
+        String sql = "INSERT INTO notification_admin(contenu_notification,date_notification,target_link) VALUES(?, ?, ?)";
         try {
             c = Database.getConnection();
             c.setAutoCommit(false);
             prstm = c.prepareStatement(sql);
-            prstm.setInt(1, this.getAdmin().getIdAdmin());
-            prstm.setString(2, this.getContenuNotification());
-            prstm.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
-            prstm.setString(4, this.getTargetLink());
+            prstm.setString(1, this.getContenuNotification());
+            prstm.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
+            prstm.setString(3, this.getTargetLink());
             prstm.executeUpdate();
 
             c.commit();
@@ -230,5 +149,38 @@ public class NotificationAdmin {
             }
         }
     }
+    
+    // GETTERS AND SETTERS
+    public int getIdNotification() {
+        return idNotification;
+    }
+    public String getContenuNotification() {
+        return contenuNotification;
+    }
+    public Timestamp getDateNotification() {
+        return dateNotification;
+    }
+    public Timestamp getDateVueNotification() {
+        return dateVueNotification;
+    }
 
+    public String getTargetLink(){
+        return this.targetLink;
+    }
+
+    public void setIdNotification(int idNotification) {
+        this.idNotification = idNotification;
+    }
+    public void setContenuNotification(String contenuNotification) {
+        this.contenuNotification = contenuNotification;
+    }
+    public void setDateNotification(Timestamp dateNotification) {
+        this.dateNotification = dateNotification;
+    }
+    public void setDateVueNotification(Timestamp dateVueNotification) {
+        this.dateVueNotification = dateVueNotification;
+    }
+    public void setTargetLink(String str){
+        this.targetLink = str;
+    }
 }
