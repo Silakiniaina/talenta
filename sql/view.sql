@@ -229,7 +229,7 @@ SELECT
     c.email,
     g.label AS genre,
     -- Get the genre label from the 'genre' table
-    e.jours_acquis,
+    v_scr.jours_acquis,
     v_scr.jours_pris,
     v_scr.jours_restants
 FROM

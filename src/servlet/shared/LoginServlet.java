@@ -3,6 +3,8 @@ package servlet.shared;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import com.google.gson.Gson;
+
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;

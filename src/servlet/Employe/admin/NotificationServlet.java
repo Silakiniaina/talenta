@@ -26,7 +26,7 @@ public class NotificationServlet extends HttpServlet{
             try {
                 HttpSession session = req.getSession();
                 Admin admin = (Admin)session.getAttribute("admin");
-                List<NotificationAdmin> notifications = NotificationAdmin.getAllByAdmin(admin.getIdAdmin());
+                List<NotificationAdmin> notifications = NotificationAdmin.getAllNotVueByAdmin(admin.getIdAdmin());
     
                 req.setAttribute("notifications", notifications);
                 RequestDispatcher disp = req.getRequestDispatcher("/WEB-INF/views/admin/notifications.jsp");

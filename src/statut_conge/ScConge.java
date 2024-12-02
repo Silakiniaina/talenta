@@ -4,7 +4,7 @@ import java.sql.Date;
 
 import jakarta.servlet.http.HttpServletRequest;
 
-public class Conge {
+public class ScConge {
 
     private int idConge;
     private int idEmploye;
@@ -14,14 +14,14 @@ public class Conge {
     private Date dateFin;
 
     /* ------------------------------ Constructors ------------------------------ */
-    public Conge() {
+    public ScConge() {
     }
 
-    public Conge(int idConge) {
+    public ScConge(int idConge) {
         this.setIdConge(idConge);
     }
 
-    public Conge(int idConge, int idEmploye, int idContrat, int idTypeConge, Date dateDebut, Date dateFin) {
+    public ScConge(int idConge, int idEmploye, int idContrat, int idTypeConge, Date dateDebut, Date dateFin) {
         this(idConge);
         this.setIdEmploye(idEmploye);
         this.setIdContrat(idContrat);
@@ -30,7 +30,7 @@ public class Conge {
         this.setDateFin(dateFin);
     }
 
-    public Conge(HttpServletRequest req) throws NumberFormatException, IllegalArgumentException {
+    public ScConge(HttpServletRequest req) throws NumberFormatException, IllegalArgumentException {
         this.createFromRequest(req);
     }
 

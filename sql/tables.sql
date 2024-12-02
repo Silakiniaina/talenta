@@ -299,10 +299,10 @@ CREATE TABLE reponse_simulation_candidat (
 --     date_fin DATE
 -- );
 
--- CREATE TABLE type_fin_contrat(
---     id_type_fin_contrat SERIAL PRIMARY KEY,
---     label VARCHAR(20)
--- );
+CREATE TABLE type_fin_contrat(
+    id_type_fin_contrat SERIAL PRIMARY KEY,
+    label VARCHAR(20)
+);
 
 CREATE TABLE fin_contrat(
     id_fin_contrat SERIAL PRIMARY KEY,
