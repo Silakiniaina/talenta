@@ -39,7 +39,7 @@ public class RecrutementServlet extends HttpServlet{
             if(role != null){
                 HttpSession session = req.getSession();
                 Candidat candidat = (Candidat)session.getAttribute("candidat");
-                List<NotificationCandidat> notifications = NotificationCandidat.getAllByCandidat(candidat.getIdCandidat());
+                List<NotificationCandidat> notifications = NotificationCandidat.getAllNotVueByCandidat(candidat.getIdCandidat());
 
                 req.setAttribute("notifications", notifications);
                 disp = req.getRequestDispatcher("/WEB-INF/views/candidat/recrutementCandidat.jsp");

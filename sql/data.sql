@@ -74,6 +74,11 @@ INSERT INTO
 VALUES
     ('Sanda', 'sanda@admin.com', 'admin', 1);
 
+INSERT INTO 
+    candidat(nom,prenom,date_naissance,adresse,email,mdp,id_genre)
+VALUES 
+    ('Sanda','Silakiniaina','2005-07-12','Ambovokely','sanda@gmail.com','admin',1);
+
 INSERT INTO
     type_diplome(label)
 VALUES

@@ -1,82 +1,93 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="models.*" %>
-<%@ page import="java.util.List" %>
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Passer une Simulation</title>
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/style.css">
-</head>
+```jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="model.Test" %>
+<%@ page import="model.QuestionTest" %>
+<%@ page import="model.ReponseTestPossible" %>
+<%@ include file="../shared/head.jsp" %>
 <body>
-    <%
-    Simulation simulation = (Simulation) request.getAttribute("simulation");
-    List<QuestionSimulation> questions = (List<QuestionSimulation>) request.getAttribute("questions");
-    %>
-    
-    <h1><%=simulation.getTitre()%></h1>
-    <p class="description"><%=simulation.getDescription()%></p>
-    
-    <form action="<%=request.getContextPath()%>/passer-simulation" method="post">
-        <input type="hidden" name="id" value="<%=simulation.getIdSimulation()%>">
+    <div class="container-scroller">
+        <!-- Inclusion de la navbar -->
+        <%@ include file="../shared/navbar.jsp" %>
         
-        <%
-        if(questions != null) {
-            for(QuestionSimulation question : questions) {
-                List<ReponseSimulationPossible> reponses = question.getReponsesPossibles();
-        %>
-            <div class="question-block">
-                <h3><%=question.getTexteQuestion()%></h3>
-                <div class="reponses">
-                    <%
-                    if(reponses != null) {
-                        for(ReponseSimulationPossible reponse : reponses) {
-                    %>
-                        <div class="reponse-option">
-                            <input type="radio" 
-                                   name="question_<%=question.getIdQuestionSimulation()%>" 
-                                   value="<%=reponse.getIdReponseSimulationPossibles()%>" 
-                                   id="reponse_<%=reponse.getIdReponseSimulationPossibles()%>">
-                            <label for="reponse_<%=reponse.getIdReponseSimulationPossibles()%>">
-                                <%=reponse.getTexteReponse()%>
-                            </label>
+        <div class="container-fluid page-body-wrapper">
+            <!-- Inclusion de la sidebar -->
+            <%@ include file="../shared/sidebarAdmin.jsp" %>
+            
+            <div class="main-panel">
+                <div class="content-wrapper">
+                    <div class="row">
+                        <div class="col-md-12 grid-margin">
+                            <div class="card">
+                                <div class="card-body">
+                                    <% 
+                                    Test test = (Test) request.getAttribute("test");
+                                    if (test != null) { 
+                                    %>
+                                        <h2 class="card-title mb-4"><%= test.getTitre() %></h2>
+                                        
+                                        <form action="passerTest" method="post">
+                                            <input type="hidden" name="idTest" value="<%= test.getIdTest() %>">
+                                            <% 
+                                            int questionNumero = 1;
+                                            for (QuestionTest question : test.getQuestions()) { 
+                                            %>
+                                                <div class="card mb-3">
+                                                    <div class="card-body">
+                                                        <h4 class="card-title">Question <%= questionNumero %>: <%= question.getTexteQuestion() %></h4>
+                                                        <div class="form-group">
+                                                            <% 
+                                                            for (ReponseTestPossible reponse : question.getReponsePossible()) { 
+                                                            %>
+                                                                <div class="form-check">
+                                                                    <label class="form-check-label">
+                                                                        <input type="radio" 
+                                                                            class="form-check-input" 
+                                                                            name="question_<%= question.getIdQuestionTest() %>" 
+                                                                            value="<%= reponse.getIdReponseTestPossible() %>" 
+                                                                            required>
+                                                                        <%= reponse.getTexteReponse() %>
+                                                                        <i class="input-helper"></i>
+                                                                    </label>
+                                                                </div>
+                                                            <% 
+                                                            } 
+                                                            %>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <% 
+                                                questionNumero++;
+                                                } 
+                                            %>
+                                            
+                                            <div class="text-right">
+                                                <button type="submit" class="btn btn-primary">Soumettre le Test</button>
+                                            </div>
+                                        </form>
+                                    <% 
+                                    } else { 
+                                    %>
+                                        <div class="alert alert-warning">
+                                            Aucun test n'est disponible pour le moment.
+                                        </div>
+                                    <% 
+                                    } 
+                                    %>
+                                </div>
+                            </div>
                         </div>
-                    <%
-                        }
-                    }
-                    %>
+                    </div>
                 </div>
+                
+                <!-- Inclusion du footer -->
+                <%@ include file="../shared/footer.jsp" %>
             </div>
-        <%
-            }
-        }
-        %>
-        
-        <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Soumettre mes réponses</button>
         </div>
-    </form>
+    </div>
+
+    <%@ include file="../shared/script.jsp" %>
+    <!-- Scripts JavaScript de Skydash -->
     
-    <script>
-        // Validation côté client
-        document.querySelector('form').onsubmit = function(e) {
-            const questions = document.querySelectorAll('.question-block');
-            for(let question of questions) {
-                const reponses = question.querySelectorAll('input[type="radio"]');
-                let checked = false;
-                for(let reponse of reponses) {
-                    if(reponse.checked) {
-                        checked = true;
-                        break;
-                    }
-                }
-                if(!checked) {
-                    alert('Veuillez répondre à toutes les questions.');
-                    e.preventDefault();
-                    return false;
-                }
-            }
-            return true;
-        };
-    </script>
 </body>
 </html>
+```

@@ -32,7 +32,7 @@ public class Test {
         this.setResponsable(idResponsable);
     }
 
-    public static Test getById(Connection conn, int id) throws SQLException {
+    public Test getById(Connection conn, int id) throws SQLException {
         boolean isNewConnection = false;
         if (conn == null) {
             isNewConnection = true;
@@ -62,9 +62,18 @@ public class Test {
 
     public static List<Test> getAll(Connection conn) throws SQLException {
         List<Test> tests = new ArrayList<>();
+        PreparedStatement prstm = null;
         String query = "SELECT * FROM test";
-        try (Statement stmt = conn.createStatement()) {
-            ResultSet rs = stmt.executeQuery(query);
+        ResultSet rs = null; 
+        boolean isNewConnection = false;
+        
+        try{
+            if(conn == null){
+                conn = Database.getConnection();
+                isNewConnection = true;
+            }
+            prstm = conn.prepareStatement(query);
+            rs = prstm.executeQuery();
             while (rs.next()) {
                 Test s = new Test(
                         rs.getInt("id_test"),
@@ -75,8 +84,20 @@ public class Test {
                 s.getQuestionSimulation(conn);
                 tests.add(s);
             }
+            return tests;
+        }catch(SQLException e){
+            throw e;
+        }finally{
+            if(rs != null){
+                rs.close();
+            }
+            if(prstm != null){
+                prstm.close();
+            }
+            if(conn != null && isNewConnection){
+                conn.close();
+            }
         }
-        return tests;
     }
 
     public void insert(Connection conn) throws SQLException {

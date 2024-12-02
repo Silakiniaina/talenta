@@ -44,7 +44,7 @@ public class TestCandidat {
         if (this.idAttribution == 0) {
             String query = "INSERT INTO test_candidat (id_test, id_candidat, id_status) VALUES (?, ?, ?)";
             try (PreparedStatement pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-                pstmt.setInt(1, this.getSimulation().getIdTest());
+                pstmt.setInt(1, this.getTest().getIdTest());
                 pstmt.setInt(2, this.getCandidat().getIdCandidat());
                 pstmt.setInt(3, this.getStatus().getIdStatus());
                 pstmt.executeUpdate();
@@ -68,7 +68,7 @@ public class TestCandidat {
         return idAttribution;
     }
 
-    public Test getSimulation() {
+    public Test getTest() {
         return test;
     }
 
@@ -84,8 +84,9 @@ public class TestCandidat {
         this.idAttribution = idAttribution;
     }
 
-    public void setSimulation(int test) throws SQLException{
-        this.test = Test.getById(null, test);
+    public void setTest(Connection c,int test) throws SQLException{
+        Test t = new Test();
+        this.test = t.getById(c, test);
     }
 
     public void setCandidat(Connection con, int candidat) throws SQLException{

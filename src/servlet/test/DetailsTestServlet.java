@@ -22,7 +22,8 @@ public class DetailsTestServlet extends HttpServlet{
         String test = req.getParameter("test");
         try {
             Connection c = Database.getConnection();
-            Test s = Test.getById(c, Integer.parseInt(test));
+            Test s = new Test();
+            s = s.getById(c, Integer.parseInt(test));
 
             req.setAttribute("test", s);
             RequestDispatcher disp = req.getRequestDispatcher("/WEB-INF/views/test/detailsTest.jsp");
