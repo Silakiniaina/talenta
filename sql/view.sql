@@ -235,3 +235,70 @@ FROM
     LEFT JOIN employe e ON c.id_candidat = e.id_candidat
     LEFT JOIN v_solde_conge_restant v_scr ON e.id_employe = v_scr.id_employe
     LEFT JOIN genre g ON c.id_genre = g.id_genre;
+
+CREATE OR REPLACE VIEW v_statistiques_reponses AS
+SELECT 
+    tc.id_attribution,
+    tc.id_candidat,
+    COUNT(CASE WHEN rtp.est_reponse_attendue = false THEN 1 END) AS nombre_reponse_fausse,
+    COUNT(CASE WHEN rtp.est_reponse_attendue = true THEN 1 END) AS nombre_reponse_correcte,
+    (
+        SELECT COUNT(*) 
+        FROM question_test qt 
+        WHERE qt.id_test = t.id_test
+    ) AS nombre_total_question
+FROM 
+    test_candidat tc
+JOIN 
+    test t ON tc.id_test = t.id_test
+LEFT JOIN 
+    reponse_test_candidat rtc ON tc.id_attribution = rtc.id_attribution
+LEFT JOIN 
+    reponse_test_possibles rtp ON rtc.id_reponse_candidat = rtp.id_reponse_test_possibles
+GROUP BY 
+    tc.id_attribution, 
+    tc.id_candidat,
+    t.id_test;
+
+CREATE OR REPLACE VIEW resultat_test_candidat AS
+WITH stats_test AS (
+    SELECT 
+        tc.id_attribution,
+        tc.id_candidat,
+        COUNT(CASE WHEN rtp.est_reponse_attendue = false THEN 1 END) AS nombre_reponse_fausse,
+        COUNT(CASE WHEN rtp.est_reponse_attendue = true THEN 1 END) AS nombre_reponse_correcte,
+        (
+            SELECT COUNT(*) 
+            FROM question_test qt 
+            WHERE qt.id_test = t.id_test
+        ) AS nombre_total_question
+    FROM 
+        test_candidat tc
+    JOIN 
+        test t ON tc.id_test = t.id_test
+    LEFT JOIN 
+        reponse_test_candidat rtc ON tc.id_attribution = rtc.id_attribution
+    LEFT JOIN 
+        reponse_test_possibles rtp ON rtc.id_reponse_candidat = rtp.id_reponse_test_possibles
+    GROUP BY 
+        tc.id_attribution, 
+        tc.id_candidat,
+        t.id_test
+)
+SELECT 
+    id_attribution,
+    id_candidat,
+    nombre_reponse_fausse,
+    nombre_reponse_correcte,
+    nombre_total_question,
+    ROUND(
+        (nombre_reponse_correcte::float / nombre_total_question) * 100, 
+        2
+    ) AS pourcentage_reussite,
+    CASE 
+        WHEN (nombre_reponse_correcte::float / nombre_total_question) * 100 >= 70 THEN 'Embauche recommandée'
+        WHEN (nombre_reponse_correcte::float / nombre_total_question) * 100 >= 50 THEN 'Potentiel à considérer'
+        ELSE 'Non recommandé'
+    END AS statut_embauche
+FROM 
+    stats_test;

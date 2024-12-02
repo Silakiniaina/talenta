@@ -13,6 +13,7 @@ public class AttributionTest {
 
     private int idAttribution;
     private Test test;
+    private Recrutement recrutement;
     private Candidat candidat;
     private Status status;
 
@@ -39,8 +40,9 @@ public class AttributionTest {
             if (rs.next()) {
                 this.setIdAttribution(rs.getInt(1));
                 this.setTest(c, rs.getInt(2));
-                this.setCandidat(c, rs.getInt(3));
-                this.setStatus(c, rs.getInt(4));
+                this.setRecrutement(c, rs.getInt(3));
+                this.setCandidat(c, rs.getInt(4));
+                this.setStatus(c, rs.getInt(5));
             }
 
             return this;
@@ -78,8 +80,9 @@ public class AttributionTest {
             if (rs.next()) {
                 this.setIdAttribution(rs.getInt(1));
                 this.setTest(c, rs.getInt(2));
-                this.setCandidat(c, rs.getInt(3));
-                this.setStatus(c, rs.getInt(4));
+                this.setRecrutement(c, rs.getInt(3));
+                this.setCandidat(c, rs.getInt(4));
+                this.setStatus(c, rs.getInt(5));
             }
 
             return this;
@@ -101,7 +104,7 @@ public class AttributionTest {
     public void insert(Connection c) throws SQLException {
         PreparedStatement prstm = null;
         boolean isNewConnection = false;
-        String query = "INSERT INTO test_candidat(id_test,id_candidat, id_status) VALUES (?, ?, ?)";
+        String query = "INSERT INTO test_candidat(id_test,id_candidat,id_recrutement, id_status) VALUES (?, ?, ?, ?)";
         try {
             if (c == null) {
                 c = Database.getConnection();
@@ -113,7 +116,8 @@ public class AttributionTest {
             prstm = c.prepareStatement(query);
             prstm.setInt(1, this.getTest().getIdTest());
             prstm.setInt(2, this.getCandidat().getIdCandidat());
-            prstm.setInt(3, this.getStatus().getIdStatus());
+            prstm.setInt(3,this.getRecrutement().getIdRecrutement());
+            prstm.setInt(4, this.getStatus().getIdStatus());
             prstm.executeUpdate();
 
             c.commit();
@@ -147,6 +151,10 @@ public class AttributionTest {
         return status;
     }
 
+    public Recrutement getRecrutement(){
+        return this.recrutement;
+    }
+
     public void setIdAttribution(int idAttribution) {
         this.idAttribution = idAttribution;
     }
@@ -164,6 +172,16 @@ public class AttributionTest {
     public void setStatus(Connection c, int status) throws SQLException {
         Status s = new Status();
         this.status = s.getById(c, status);
+    }
+
+    public void setRecrutement(Connection c, int recrutement) throws SQLException{
+        Recrutement r = new Recrutement();
+        r.setIdRecrutement(recrutement);
+        this.recrutement = r.getById(c);
+    }
+
+    public void setRecrutement(Recrutement r){
+        this.recrutement = r;
     }
 
     public static void main(String[] args) {

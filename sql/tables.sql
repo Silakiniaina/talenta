@@ -287,20 +287,22 @@ CREATE TABLE
 		description text NOT NULL,
 		date_creation timestamp DEFAULT CURRENT_TIMESTAMP,
 		id_responsable integer NOT NULL,
-		CONSTRAINT simulation_pkey PRIMARY KEY (id_test),
-		CONSTRAINT simulation_id_responsable_fkey FOREIGN KEY (id_responsable) REFERENCES responsable (id_responsable)
+		CONSTRAINT test_pkey PRIMARY KEY (id_test),
+		CONSTRAINT test_id_responsable_fkey FOREIGN KEY (id_responsable) REFERENCES responsable (id_responsable)
 	);
 
 CREATE TABLE
 	test_candidat (
 		id_attribution serial NOT NULL,
-		id_test integer,
+		id_test integer NOT NULL,
+		id_recrutement integer NOT NULL,
 		id_candidat integer NOT NULL,
 		id_status integer NOT NULL,
-		CONSTRAINT simulation_candidat_pkey PRIMARY KEY (id_attribution),
-		CONSTRAINT simulation_candidat_id_status_fkey FOREIGN KEY (id_status) REFERENCES status (id_status),
-		CONSTRAINT simulation_candidat_id_candidat_fkey FOREIGN KEY (id_candidat) REFERENCES candidat (id_candidat),
-		CONSTRAINT simulation_candidat_id_simulation_fkey FOREIGN KEY (id_test) REFERENCES test (id_test) ON DELETE CASCADE
+		CONSTRAINT test_candidat_pkey PRIMARY KEY (id_attribution),
+		CONSTRAINT test_candidat_id_status_fkey FOREIGN KEY (id_status) REFERENCES status (id_status),
+		CONSTRAINT test_candidat_id_recrutement_fkey FOREIGN KEY (id_recrutement) REFERENCES recrutement (id_recrutement),
+		CONSTRAINT test_candidat_id_candidat_fkey FOREIGN KEY (id_candidat) REFERENCES candidat (id_candidat),
+		CONSTRAINT test_candidat_id_test_fkey FOREIGN KEY (id_test) REFERENCES test (id_test) ON DELETE CASCADE
 	);
 
 CREATE TABLE
@@ -308,8 +310,8 @@ CREATE TABLE
 		id_question_test serial NOT NULL,
 		id_test integer,
 		texte_question text NOT NULL,
-		CONSTRAINT question_simulation_pkey PRIMARY KEY (id_question_test),
-		CONSTRAINT question_simulation_id_simulation_fkey FOREIGN KEY (id_test) REFERENCES test (id_test) ON DELETE CASCADE
+		CONSTRAINT question_test_pkey PRIMARY KEY (id_question_test),
+		CONSTRAINT question_test_id_test_fkey FOREIGN KEY (id_test) REFERENCES test (id_test) ON DELETE CASCADE
 	);
 
 CREATE TABLE
@@ -317,9 +319,9 @@ CREATE TABLE
 		id_reponse_test_possibles serial NOT NULL,
 		id_question_test integer NOT NULL,
 		texte_reponse text NOT NULL,
-		boolean est_reponse_attendue DEFAULT false;
-		CONSTRAINT reponse_simulation_possibles_pkey PRIMARY KEY (id_reponse_test_possibles),
-		CONSTRAINT reponse_simulation_possibles_id_question_simulation_fkey FOREIGN KEY (id_question_test) REFERENCES question_test (id_question_test) ON DELETE CASCADE
+		est_reponse_attendue boolean DEFAULT false,
+		CONSTRAINT reponse_test_possibles_pkey PRIMARY KEY (id_reponse_test_possibles),
+		CONSTRAINT reponse_test_possibles_id_question_test_fkey FOREIGN KEY (id_question_test) REFERENCES question_test (id_question_test) ON DELETE CASCADE
 	);
 
 CREATE TABLE
@@ -329,9 +331,9 @@ CREATE TABLE
 		id_question integer NOT NULL,
 		id_reponse_candidat integer NOT NULL,
 		date_soumission timestamp DEFAULT CURRENT_TIMESTAMP,
-		CONSTRAINT reponse_simulation_candidat_pkey PRIMARY KEY (id_reponse),
-		CONSTRAINT reponse_simulation_candidat_id_reponse_candidat_fkey FOREIGN KEY (id_reponse_candidat) REFERENCES reponse_test_possibles (id_reponse_test_possibles),
-		CONSTRAINT reponse_simulation_candidat_id_attribution_fkey1 FOREIGN KEY (id_attribution) REFERENCES test_candidat (id_attribution),
-		CONSTRAINT reponse_simulation_candidat_id_question_fkey FOREIGN KEY (id_question) REFERENCES question_test (id_question_test),
-		CONSTRAINT reponse_simulation_candidat_id_attribution_fkey FOREIGN KEY (id_attribution) REFERENCES test_candidat (id_attribution) ON DELETE CASCADE
+		CONSTRAINT reponse_test_candidat_pkey PRIMARY KEY (id_reponse),
+		CONSTRAINT reponse_test_candidat_id_reponse_candidat_fkey FOREIGN KEY (id_reponse_candidat) REFERENCES reponse_test_possibles (id_reponse_test_possibles),
+		CONSTRAINT reponse_test_candidat_id_attribution_fkey1 FOREIGN KEY (id_attribution) REFERENCES test_candidat (id_attribution),
+		CONSTRAINT reponse_test_candidat_id_question_fkey FOREIGN KEY (id_question) REFERENCES question_test (id_question_test),
+		CONSTRAINT reponse_test_candidat_id_attribution_fkey FOREIGN KEY (id_attribution) REFERENCES test_candidat (id_attribution) ON DELETE CASCADE
 	);

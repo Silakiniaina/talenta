@@ -107,11 +107,3 @@ INSERT INTO
 VALUES
     (1, 1, true,2),
     (1, 2, false,1);
-
-INSERT INTO 
-    question_test(id_test,texte_question) 
-VALUES 
-    (1,'What is java?'),
-    (1,'What is Array in java?'),
-    (1,'What is the best way to add something in a list?'),
-    (1,'What is the OOP?'),

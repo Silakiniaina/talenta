@@ -4,6 +4,7 @@
 <%
     List<Test> tests = (List<Test>)request.getAttribute("tests");
     String idCandidat = (String)request.getAttribute("idCandidat");
+    String recrutement = (String)request.getAttribute("recrutement");
 %>
     <%@include file="../shared/head.jsp" %>
     <body>
@@ -20,6 +21,7 @@
                                         <h3 class="card-title">Attribution Test</h3>
                                         <form class="forms-sample" action="attribuerTest" method="post">
                                             <input type="hidden" name="idCandidat" value="<%= idCandidat %>">
+                                            <input type="hidden" name="recrutement" value="<%= recrutement %>">
                                             <div class="form-group">
                                                 <label for="test">Test</label>
                                                 <select class="form-control" id="test" name="idTest">
