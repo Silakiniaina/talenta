@@ -1,5 +1,12 @@
 package classification_personnelle;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
 public class ClassificationPersonnelle {
 
     private String firstName;
@@ -39,6 +46,28 @@ public class ClassificationPersonnelle {
 
     public void setCategorie(String categorie) {
         this.categorie = categorie;
+    }
+
+    /* --------------------------------- Methods -------------------------------- */
+    public List<ClassificationPersonnelle> getByCategorie(int categorieId, Connection conn) throws SQLException {
+        List<ClassificationPersonnelle> data = new ArrayList<>();
+        String query = "SELECT * FROM v_classification_personnelle WHERE id_categorie = ?";
+
+        try (PreparedStatement statement = conn.prepareStatement(query)) {
+            statement.setInt(1, categorieId);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                ClassificationPersonnelle cp = new ClassificationPersonnelle();
+                cp.setFirstName(resultSet.getString("prenom"));
+                cp.setLastName(resultSet.getString("nom"));
+                cp.setCategorie("categorie");
+
+                data.add(cp);
+            }
+        }
+
+        return data;
     }
 
 }
