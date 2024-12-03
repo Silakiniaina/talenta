@@ -242,7 +242,8 @@ SELECT
     -- Get the genre label from the 'genre' table
     v_scr.jours_acquis,
     v_scr.jours_pris,
-    v_scr.jours_restants
+    v_scr.jours_restants,
+    e.id_employe
 FROM
     v_candidat_employe c
     LEFT JOIN employe e ON c.id_candidat = e.id_candidat
@@ -669,3 +670,58 @@ JOIN
 ON 
     vsb.id_employe = e.id_employe
 ;
+
+CREATE OR REPLACE VIEW v_information_employe_paie AS 
+SELECT 
+    e.id_employe,
+    e.nom,
+    e.prenom,
+    e.date_naissance,
+    e.email,
+    emp.numero_cnaps,
+    e.adresse,
+    emp.date_embauche,
+        
+    -- Calcul de l'âge
+    CAST(
+        (EXTRACT(YEAR FROM CURRENT_DATE) - EXTRACT(YEAR FROM e.date_naissance)) -
+        (CASE 
+            WHEN EXTRACT(MONTH FROM CURRENT_DATE) < EXTRACT(MONTH FROM e.date_naissance) 
+            OR (EXTRACT(MONTH FROM CURRENT_DATE) = EXTRACT(MONTH FROM e.date_naissance) 
+                AND EXTRACT(DAY FROM CURRENT_DATE) < EXTRACT(DAY FROM e.date_naissance)) 
+            THEN 1 
+            ELSE 0 
+        END)
+    AS INTEGER) AS age,
+
+        -- Calcul de l'ancienneté formaté en chaîne
+    CONCAT(
+        FLOOR(EXTRACT(YEAR FROM AGE(CURRENT_DATE, emp.date_embauche))), ' ans ',
+        FLOOR(
+            (EXTRACT(MONTH FROM AGE(CURRENT_DATE, emp.date_embauche)) * 1.0) 
+        ), ' mois et ',
+        FLOOR(
+            (EXTRACT(DAY FROM AGE(CURRENT_DATE, emp.date_embauche)) * 1.0)
+        ), ' jours'
+    ) AS anciennete_formatee,
+        
+    p.nom as poste,
+    d.nom as departement
+        
+    FROM 
+        v_informations_employe e
+    JOIN 
+        employe emp ON e.id_employe = emp.id_employe
+    JOIN 
+        poste p ON p.id_poste = emp.id_poste
+    JOIN 
+        departement d ON p.id_departement = d.id_departement
+    ;
+
+-- Exemple de requête pour utiliser la vue
+-- SELECT * FROM v_information_employe_paie;
+
+-- Notes importantes :
+-- 1. Adaptez les noms de tables et de colonnes à votre schéma de base de données
+-- 2. Les calculs d'ancienneté utilisent des moyennes (30.44 jours par mois, 365.25 jours par an)
+-- 3. Assurez-vous que les jointures correspondent à votre modèle de données
