@@ -445,43 +445,46 @@ GROUP BY
 
 
 -- absence :
-CREATE VIEW v_absence_avec_solde AS
+CREATE OR REPLACE VIEW v_absence_avec_solde AS
 SELECT 
-    a.id_employe,
+    e.id_employe,
     -- Nombre de jours pour chaque type d'absence avec solde
-    SUM(CASE WHEN ta.nom_type = 'Repos médical' THEN (a.date_fin - a.date_debut + 1) ELSE 0 END) AS repos_medical,
-    SUM(CASE WHEN ta.nom_type = 'Assistance maternité' THEN (a.date_fin - a.date_debut + 1) ELSE 0 END) AS assistance_mat,
-    SUM(CASE WHEN ta.nom_type = 'Hospitalisation et convalescence' THEN (a.date_fin - a.date_debut + 1) ELSE 0 END) AS hospitalisation_conv,
-    SUM(CASE WHEN ta.nom_type = 'Événement familial' THEN (a.date_fin - a.date_debut + 1) ELSE 0 END) AS evenement_familial,
+    COALESCE(SUM(CASE WHEN ta.nom_type = 'Repos médical' THEN (a.date_fin - a.date_debut + 1) ELSE 0 END), 0) AS repos_medical,
+    COALESCE(SUM(CASE WHEN ta.nom_type = 'Assistance maternité' THEN (a.date_fin - a.date_debut + 1) ELSE 0 END), 0) AS assistance_mat,
+    COALESCE(SUM(CASE WHEN ta.nom_type = 'Hospitalisation et convalescence' THEN (a.date_fin - a.date_debut + 1) ELSE 0 END), 0) AS hospitalisation_conv,
+    COALESCE(SUM(CASE WHEN ta.nom_type = 'Événement familial' THEN (a.date_fin - a.date_debut + 1) ELSE 0 END), 0) AS evenement_familial,
     -- Total des jours d'absence avec solde
-    SUM(a.date_fin - a.date_debut + 1) AS total
+    COALESCE(SUM(a.date_fin - a.date_debut + 1), 0) AS total
 FROM 
-    absence a
-JOIN 
+    employe e
+LEFT JOIN 
+    absence a ON e.id_employe = a.id_employe
+LEFT JOIN 
     type_absence ta ON a.id_type_absence = ta.id_type_absence
-WHERE 
-    ta.nom_type IN ('Repos médical', 'Assistance maternité', 'Hospitalisation et convalescence', 'Événement familial')
+    AND ta.nom_type IN ('Repos médical', 'Assistance maternité', 'Hospitalisation et convalescence', 'Événement familial')
 GROUP BY 
-    a.id_employe;
+    e.id_employe;
 
-CREATE VIEW v_absence_sans_solde AS
+
+CREATE OR REPLACE VIEW v_absence_sans_solde AS
 SELECT 
-    a.id_employe,
+    e.id_employe,
     -- Nombre de jours pour chaque type d'absence sans solde
-    SUM(CASE WHEN ta.nom_type = 'Retard' THEN (a.date_fin - a.date_debut + 1) ELSE 0 END) AS retard,
-    SUM(CASE WHEN ta.nom_type = 'Absence sans solde' THEN (a.date_fin - a.date_debut + 1) ELSE 0 END) AS absence_sans_solde,
-    SUM(CASE WHEN ta.nom_type = 'Absence non autorisée' THEN (a.date_fin - a.date_debut + 1) ELSE 0 END) AS absence_non_autorise,
-    SUM(CASE WHEN ta.nom_type = 'Mise à pied' THEN (a.date_fin - a.date_debut + 1) ELSE 0 END) AS mise_a_pied,
+    COALESCE(SUM(CASE WHEN ta.nom_type = 'Retard' THEN (a.date_fin - a.date_debut + 1) ELSE 0 END), 0) AS retard,
+    COALESCE(SUM(CASE WHEN ta.nom_type = 'Absence sans solde' THEN (a.date_fin - a.date_debut + 1) ELSE 0 END), 0) AS absence_sans_solde,
+    COALESCE(SUM(CASE WHEN ta.nom_type = 'Absence non autorisée' THEN (a.date_fin - a.date_debut + 1) ELSE 0 END), 0) AS absence_non_autorise,
+    COALESCE(SUM(CASE WHEN ta.nom_type = 'Mise à pied' THEN (a.date_fin - a.date_debut + 1) ELSE 0 END), 0) AS mise_a_pied,
     -- Total des jours d'absence sans solde
-    SUM(a.date_fin - a.date_debut + 1) AS total
+    COALESCE(SUM(a.date_fin - a.date_debut + 1), 0) AS total
 FROM 
-    absence a
-JOIN 
+    employe e
+LEFT JOIN 
+    absence a ON e.id_employe = a.id_employe
+LEFT JOIN 
     type_absence ta ON a.id_type_absence = ta.id_type_absence
-WHERE 
-    ta.nom_type IN ('Retard', 'Absence sans solde', 'Absence non autorisée', 'Mise à pied')
+    AND ta.nom_type IN ('Retard', 'Absence sans solde', 'Absence non autorisée', 'Mise à pied')
 GROUP BY 
-    a.id_employe;
+    e.id_employe;
 
 
 -- heure supp

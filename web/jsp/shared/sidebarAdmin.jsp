@@ -65,9 +65,9 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="etatPaie">
+            <a class="nav-link" href="listPaie">
                 <i class="icon-grid menu-icon"></i>
-                <span class="menu-title">Etat de paie</span>
+                <span class="menu-title">Liste de paie</span>
             </a>
         </li>
     </ul>
