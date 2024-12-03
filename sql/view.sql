@@ -383,3 +383,53 @@ SELECT
     END AS statut_embauche
 FROM 
     stats_test;
+
+-- heure supp
+CREATE VIEW v_heure_sup_details AS
+WITH calcul_durees AS (
+    SELECT 
+        pe.id_employe,
+        pe.date_entree::DATE AS date_travail,
+        EXTRACT(EPOCH FROM (pe.date_sortie - pe.date_entree)) / 3600 AS heures_travaillees -- Convertit en heures
+    FROM 
+        presence_employe pe
+),
+heures_supp_tranche AS (
+    SELECT 
+        c.id_employe,
+        c.date_travail,
+        -- Heures supplémentaires 30% (de 8h à 10h)
+        CASE 
+            WHEN c.heures_travaillees > 8 THEN LEAST(c.heures_travaillees - 8, 2) 
+            ELSE 0 
+        END AS sup_30,
+        -- Heures supplémentaires 40% (de 10h à 12h)
+        CASE 
+            WHEN c.heures_travaillees > 10 THEN LEAST(c.heures_travaillees - 10, 2) 
+            ELSE 0 
+        END AS sup_40,
+        -- Heures supplémentaires 50% (de 12h à 14h)
+        CASE 
+            WHEN c.heures_travaillees > 12 THEN LEAST(c.heures_travaillees - 12, 2) 
+            ELSE 0 
+        END AS sup_50,
+        -- Heures supplémentaires 100% (au-delà de 14h)
+        CASE 
+            WHEN c.heures_travaillees > 14 THEN c.heures_travaillees - 14
+            ELSE 0 
+        END AS sup_100
+    FROM 
+        calcul_durees c
+)
+SELECT 
+    t.id_employe,
+    SUM(t.sup_30) AS sup_30,       -- Total heures supplémentaires à 30%
+    SUM(t.sup_40) AS sup_40,       -- Total heures supplémentaires à 40%
+    SUM(t.sup_50) AS sup_50,       -- Total heures supplémentaires à 50%
+    SUM(t.sup_100) AS sup_100,     -- Total heures supplémentaires à 100%
+    -- Total global des heures supplémentaires
+    SUM(t.sup_30 + t.sup_40 + t.sup_50 + t.sup_100) AS total
+FROM 
+    heures_supp_tranche t
+GROUP BY 
+    t.id_employe;

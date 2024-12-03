@@ -402,3 +402,37 @@ CREATE TABLE presence_employe(
 	date_entree TIMESTAMP NOT NULL, 
 	date_sortie TIMESTAMP NOT NULL
 );
+-- heure supp
+CREATE TABLE regle_majoration(
+    id_regle SERIAL PRIMARY KEY,
+    pourcentage_majoration INTEGER NOT NULL, -- (30%, 40%, etc.)
+    debut_heure_supp INTEGER NOT NULL, -- Nombre d'heures après lesquelles la majoration commence
+    description TEXT
+);
+
+ 
+--paie
+CREATE TABLE avantage_nature (
+    id_avantage SERIAL PRIMARY KEY,
+    id_employe INT REFERENCES employe(id_employe),
+    type_avantage VARCHAR(50) NOT NULL,
+    valeur_avantage DECIMAL(10,2) NOT NULL,
+    date_application DATE NOT NULL
+);
+
+CREATE TABLE entite (
+    id_entite SERIAL PRIMARY KEY,
+    nom_entite VARCHAR(100) NOT NULL,
+    adresse VARCHAR(200) NOT NULL,
+    code_postal VARCHAR(10) NOT NULL,
+    ville VARCHAR(100) NOT NULL,
+    pays VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE taux_cotisation (
+    id_taux_cotisation SERIAL PRIMARY KEY,
+    type_cotisation VARCHAR(50) NOT NULL,
+    taux_employeur DECIMAL(5,2) NOT NULL,
+    taux_employe DECIMAL(5,2) NOT NULL,
+    date_application DATE NOT NULL
+);
