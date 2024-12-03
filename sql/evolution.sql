@@ -13,6 +13,9 @@ ALTER TABLE recrutement ADD COLUMN description_recrutement TEXT;
 
 ALTER TABLE reponse_test_possibles ADD COLUMN est_reponse_attendue boolean DEFAULT false;
 
+ALTER TABLE employe ADD COLUMN salaire_base DECIMAL(18,2) DEFAULT 0,
+
+
 
 CREATE OR REPLACE FUNCTION calcul_salaire_mensuel(id_employe_param INT, mois DATE)
 RETURNS NUMERIC AS $$

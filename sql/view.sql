@@ -384,13 +384,82 @@ SELECT
 FROM 
     stats_test;
 
+-- fisc
+CREATE VIEW vue_deductions AS
+SELECT 
+    e.id_employe,
+    COALESCE(SUM(CASE WHEN df.nom_deduction = 'OSTIE' THEN de.montant ELSE 0 END), 0) AS OSTIE,
+    COALESCE(SUM(CASE WHEN df.nom_deduction = 'CNAPS' THEN de.montant ELSE 0 END), 0) AS CNAPS,
+    COALESCE(SUM(CASE WHEN df.nom_deduction = 'IRSA' THEN de.montant ELSE 0 END), 0) AS IRSA
+FROM
+    employe e
+LEFT JOIN deduction_employe de ON e.id_employe = de.id_employe
+LEFT JOIN deduction_fiscale df ON de.id_deduction = df.id_deduction
+GROUP BY 
+    e.id_employe;
+
+
+-- absence :
+CREATE VIEW v_absence_avec_solde AS
+SELECT 
+    a.id_employe,
+    -- Nombre de jours pour chaque type d'absence avec solde
+    SUM(CASE WHEN ta.nom_type = 'Repos médical' THEN (a.date_fin - a.date_debut + 1) ELSE 0 END) AS repos_medical,
+    SUM(CASE WHEN ta.nom_type = 'Assistance maternité' THEN (a.date_fin - a.date_debut + 1) ELSE 0 END) AS assistance_mat,
+    SUM(CASE WHEN ta.nom_type = 'Hospitalisation et convalescence' THEN (a.date_fin - a.date_debut + 1) ELSE 0 END) AS hospitalisation_conv,
+    SUM(CASE WHEN ta.nom_type = 'Événement familial' THEN (a.date_fin - a.date_debut + 1) ELSE 0 END) AS evenement_familial,
+    -- Total des jours d'absence avec solde
+    SUM(a.date_fin - a.date_debut + 1) AS total
+FROM 
+    absence a
+JOIN 
+    type_absence ta ON a.id_type_absence = ta.id_type_absence
+WHERE 
+    ta.nom_type IN ('Repos médical', 'Assistance maternité', 'Hospitalisation et convalescence', 'Événement familial')
+GROUP BY 
+    a.id_employe;
+
+CREATE VIEW v_absence_sans_solde AS
+SELECT 
+    a.id_employe,
+    -- Nombre de jours pour chaque type d'absence sans solde
+    SUM(CASE WHEN ta.nom_type = 'Retard' THEN (a.date_fin - a.date_debut + 1) ELSE 0 END) AS retard,
+    SUM(CASE WHEN ta.nom_type = 'Absence sans solde' THEN (a.date_fin - a.date_debut + 1) ELSE 0 END) AS absence_sans_solde,
+    SUM(CASE WHEN ta.nom_type = 'Absence non autorisée' THEN (a.date_fin - a.date_debut + 1) ELSE 0 END) AS absence_non_autorise,
+    SUM(CASE WHEN ta.nom_type = 'Mise à pied' THEN (a.date_fin - a.date_debut + 1) ELSE 0 END) AS mise_a_pied,
+    -- Total des jours d'absence sans solde
+    SUM(a.date_fin - a.date_debut + 1) AS total
+FROM 
+    absence a
+JOIN 
+    type_absence ta ON a.id_type_absence = ta.id_type_absence
+WHERE 
+    ta.nom_type IN ('Retard', 'Absence sans solde', 'Absence non autorisée', 'Mise à pied')
+GROUP BY 
+    a.id_employe;
+
+
 -- heure supp
 CREATE VIEW v_heure_sup_details AS
 WITH calcul_durees AS (
     SELECT 
         pe.id_employe,
         pe.date_entree::DATE AS date_travail,
-        EXTRACT(EPOCH FROM (pe.date_sortie - pe.date_entree)) / 3600 AS heures_travaillees -- Convertit en heures
+        EXTRACT(EPOCH FROM (pe.date_sortie - pe.date_entree)) / 3600 AS heures_travaillees, -- Convertit en heures
+        -- Vérifie si c'est un dimanche
+        CASE 
+            WHEN EXTRACT(DOW FROM pe.date_entree) = 0 THEN TRUE 
+            ELSE FALSE 
+        END AS is_dimanche,
+        -- Vérifie si c'est un jour férié
+        CASE 
+            WHEN EXISTS (
+                SELECT 1 
+                FROM jours_feries jf 
+                WHERE jf.date = pe.date_entree::DATE
+            ) THEN TRUE
+            ELSE FALSE
+        END AS is_jour_ferie
     FROM 
         presence_employe pe
 ),
@@ -398,6 +467,8 @@ heures_supp_tranche AS (
     SELECT 
         c.id_employe,
         c.date_travail,
+        c.is_dimanche,
+        c.is_jour_ferie,
         -- Heures supplémentaires 30% (de 8h à 10h)
         CASE 
             WHEN c.heures_travaillees > 8 THEN LEAST(c.heures_travaillees - 8, 2) 
@@ -413,9 +484,10 @@ heures_supp_tranche AS (
             WHEN c.heures_travaillees > 12 THEN LEAST(c.heures_travaillees - 12, 2) 
             ELSE 0 
         END AS sup_50,
-        -- Heures supplémentaires 100% (au-delà de 14h)
+        -- Heures supplémentaires 100% (au-delà de 14h ou pour dimanches/jours fériés)
         CASE 
             WHEN c.heures_travaillees > 14 THEN c.heures_travaillees - 14
+            WHEN c.is_dimanche OR c.is_jour_ferie THEN c.heures_travaillees -- Tout est majoré à 100%
             ELSE 0 
         END AS sup_100
     FROM 
@@ -433,3 +505,35 @@ FROM
     heures_supp_tranche t
 GROUP BY 
     t.id_employe;
+
+
+CREATE VIEW v_taux_employe AS
+SELECT
+    e.id_employe,
+    e.salaire_base,
+    e.salaire_base / (30 * 8) AS taux_horaire, -- On suppose 30 jours travaillés et 8h par jour
+    e.salaire_base / 30 AS taux_journalier
+FROM
+    employe e;
+
+
+CREATE VIEW v_salaire_brut_employe AS
+SELECT
+    e.id_employe,
+    e.salaire_base,
+    (
+        e.salaire_base +
+        (
+            SELECT SUM(
+                (hs.sup_30 * t.taux_horaire * 1.3) + 
+                (hs.sup_40 * t.taux_horaire * 1.4) + 
+                (hs.sup_50 * t.taux_horaire * 1.5) + 
+                (hs.sup_100 * t.taux_horaire * 2)
+            )
+            FROM v_heure_sup_details hs
+            JOIN v_taux_employe t ON hs.id_employe = t.id_employe
+            WHERE hs.id_employe = e.id_employe
+        )
+    ) AS salaire_brut
+FROM
+    employe e

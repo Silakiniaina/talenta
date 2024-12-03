@@ -130,6 +130,17 @@ INSERT INTO type_conge (id_type_conge, nom_type, est_conge_paye) VALUES
 (2, 'Congé sans solde', false), -- Congé non rémunéré
 (3, 'Congé maladie', true);    -- Congé maladie rémunéré
 
+INSERT INTO type_absence (nom_type, est_avec_solde)
+VALUES
+    ('Repos médical', true),
+    ('Assistance maternité', true),
+    ('Hospitalisation et convalescence', true),
+    ('Événement familial', true), -- Ajustez selon votre politique d'entreprise
+    ('Retard', false),
+    ('Absence sans solde', false),
+    ('Absence non autorisée', false),
+    ('Mise à pied', false);
+
 
 -- Création des contrats pour les employés
 INSERT INTO contrat (date_debut_contrat, salaire_base, date_fin_contrat, id_candidat, id_type_contrat) VALUES
@@ -165,3 +176,5 @@ INSERT INTO presence_employe (id_employe, date_entree, date_sortie) VALUES
 -- Ajout d'un congé pour l'employé 1
 INSERT INTO conge (id_conge, id_employe, id_type_conge, date_debut, date_fin, id_contrat) VALUES
 (1, 1, 1, '2024-10-10', '2024-10-20', 1); -- Congé payé du 10 au 20 octobre 2024
+
+

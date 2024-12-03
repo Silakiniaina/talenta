@@ -170,6 +170,7 @@ CREATE TABLE
 	employe(
 		id_employe serial NOT NULL,
 		date_embauche date DEFAULT NOW (),
+		salaire_base DECIMAL(18,2) NOT NULL,
 		id_candidat integer NOT NULL,
 		id_poste integer NOT NULL,
 		CONSTRAINT employe_pkey PRIMARY KEY (id_employe),
@@ -337,19 +338,6 @@ CREATE TABLE reponse_test_candidat (
     CONSTRAINT reponse_test_candidat_id_attribution_fkey FOREIGN KEY (id_attribution) REFERENCES test_candidat(id_attribution) ON DELETE CASCADE
 );
 
--- CREATE TABLE type_conge(
---     id_type_conge serial PRIMARY KEY,
---     nom_type VARCHAR(20)
--- );
-
--- CREATE TABLE conge(
---     id_conge SERIAL PRIMARY KEY,
---     id_employe integer REFERENCES employe(id_employe),
---     id_type_conge integer REFERENCES type_conge(id_type_conge),
---     date_debut DATE,
---     date_fin DATE
--- );
-
 CREATE TABLE type_fin_contrat(
     id_type_fin_contrat SERIAL PRIMARY KEY,
     label VARCHAR(20)
@@ -402,6 +390,39 @@ CREATE TABLE presence_employe(
 	date_entree TIMESTAMP NOT NULL, 
 	date_sortie TIMESTAMP NOT NULL
 );
+
+-- salaire
+
+-- fisc
+CREATE TABLE deduction_fiscale (
+    id_deduction SERIAL PRIMARY KEY,
+    nom_deduction VARCHAR(50) NOT NULL, -- OSTIE, CNAPS, IRSA
+    taux NUMERIC(5, 2) NOT NULL         -- Pourcentage de la déduction
+);
+
+CREATE TABLE deduction_employe (
+    id_deduction_employe SERIAL PRIMARY KEY,
+    id_employe INT REFERENCES employe(id_employe),
+    id_deduction INT REFERENCES deduction_fiscale(id_deduction),
+    base_salaire NUMERIC(10, 2) NOT NULL, -- Salaire brut utilisé comme base
+    montant NUMERIC(10, 2) NOT NULL      -- Montant de la déduction
+);
+
+--absence :
+CREATE TABLE type_absence (
+    id_type_absence SERIAL PRIMARY KEY,
+    nom_type VARCHAR(50) NOT NULL,
+    est_avec_solde BOOLEAN DEFAULT false -- Indique si l'absence est avec solde ou sans solde
+);
+
+CREATE TABLE absence (
+    id_absence SERIAL PRIMARY KEY,
+    id_employe INT REFERENCES employe(id_employe),
+    id_type_absence INT REFERENCES type_absence(id_type_absence),
+    date_debut DATE NOT NULL,
+    date_fin DATE NOT NULL -- Si l'absence dure un seul jour, `date_debut` = `date_fin`
+);
+
 -- heure supp
 CREATE TABLE regle_majoration(
     id_regle SERIAL PRIMARY KEY,
@@ -409,6 +430,12 @@ CREATE TABLE regle_majoration(
     debut_heure_supp INTEGER NOT NULL, -- Nombre d'heures après lesquelles la majoration commence
     description TEXT
 );
+
+CREATE TABLE jours_feries (
+    date DATE PRIMARY KEY,       -- Date du jour férié
+    description VARCHAR(255)     -- Description du jour férié
+);
+
 
  
 --paie
