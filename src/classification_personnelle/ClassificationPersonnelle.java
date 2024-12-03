@@ -1,16 +1,16 @@
-package classification_personnel;
+package classification_personnelle;
 
-public class ClassificationPersonnel {
+public class ClassificationPersonnelle {
 
     private String firstName;
     private String lastName;
     private String categorie;
 
     /* ------------------------------ Constructors ------------------------------ */
-    public ClassificationPersonnel() {
+    public ClassificationPersonnelle() {
     }
 
-    public ClassificationPersonnel(String firstName, String lastName, String categorie) {
+    public ClassificationPersonnelle(String firstName, String lastName, String categorie) {
         this.setFirstName(firstName);
         this.setLastName(lastName);
         this.setCategorie(categorie);

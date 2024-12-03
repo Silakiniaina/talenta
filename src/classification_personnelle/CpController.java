@@ -1,4 +1,4 @@
-package classification_personnel;
+package classification_personnelle;
 
 import java.io.IOException;
 
