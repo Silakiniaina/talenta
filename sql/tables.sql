@@ -395,3 +395,10 @@ date_fin DATE,
 id_contrat INT REFERENCES contrat(id_contrat),
 PRIMARY KEY(id_conge)
 );
+
+CREATE TABLE presence_employe(
+	id_presence SERIAL PRIMARY KEY, 
+	id_employe INTEGER REFERENCES employe(id_employe),
+	date_entree TIMESTAMP NOT NULL, 
+	date_sortie TIMESTAMP NOT NULL
+);

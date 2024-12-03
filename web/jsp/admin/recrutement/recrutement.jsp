@@ -41,7 +41,6 @@
                                             <div class="d-flex d-sm-block d-md-flex align-items-center justify-content-center col-md-12 p-0"style="gap:10px;">
                                                 <a href="listeCandidat?idRecrutement=<%=r.getIdRecrutement() %>" type="button" class="btn btn-sm btn-outline-primary ">Candidats</a>
                                                 <a href="preselection?idRecrutement=<%=r.getIdRecrutement() %>" type="button" class="btn btn-sm btn-outline-secondary ">Selection</a>
-                                                <a href="resultatTest?idRecrutement=<%=r.getIdRecrutement() %>" type="button" class="btn btn-sm btn-outline-secondary ">Resultat</a>
                                                 <a href="detailsRecrutement?idRecrutement=<%=r.getIdRecrutement() %>" type="button" class="btn btn-sm btn-outline-success ">Details</a>
                                             </div>
                                         </div>

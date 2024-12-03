@@ -64,5 +64,11 @@
                 <span class="menu-title">Demissions</span>
             </a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" href="etatPaie">
+                <i class="icon-grid menu-icon"></i>
+                <span class="menu-title">Etat de paie</span>
+            </a>
+        </li>
     </ul>
 </nav>
