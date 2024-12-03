@@ -25,7 +25,7 @@ public class AbsenceAvecSoldeEmploye {
         PreparedStatement prstm = null; 
         ResultSet rs = null; 
         boolean isNewConnection  = false;
-        String sql = "SELECT * FROM v_heure_sup_details WHERE id_employe = ?";
+        String sql = "SELECT * FROM v_absence_avec_solde WHERE id_employe = ?";
         try {
             if(c == null){
                 c = Database.getConnection();
