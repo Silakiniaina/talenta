@@ -537,3 +537,22 @@ SELECT
     ) AS salaire_brut
 FROM
     employe e
+;
+
+CREATE VIEW v_bulletin_paie AS
+SELECT
+    e.id_employe,
+    vsb.salaire_brut,
+    -- Calcul de la CNAPS (exemple : 1% à la charge de l'employé, plafonné à 2 000 000 Ar)
+    LEAST(vsb.salaire_brut * 0.01, 20000) AS cotisation_cnaps,
+    -- Calcul de l'OSTIE (exemple : 1% du salaire brut)
+    vsb.salaire_brut * 0.01 AS cotisation_ostie,
+    calculer_irsa(vsb.salaire_brut::NUMERIC) AS irsa,
+    vsb.salaire_brut - (LEAST(vsb.salaire_brut * 0.01, 20000))  - (vsb.salaire_brut * 0.01) - (calculer_irsa(vsb.salaire_brut::NUMERIC)) AS salaire_net
+FROM
+    employe e
+JOIN 
+    v_salaire_brut_employe vsb
+ON 
+    vsb.id_employe = e.id_employe
+;
