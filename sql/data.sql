@@ -141,6 +141,13 @@ VALUES
     ('Absence non autorisée', false),
     ('Mise à pied', false);
 
+-- prime et indemnite
+INSERT INTO type_prime (nom_type_prime) VALUES ('prime_rendement');
+INSERT INTO type_prime (nom_type_prime) VALUES ('prime_ancienete');
+
+INSERT INTO type_indemnite (nom_type_indemnite) VALUES ('indemnite_licenciement');
+
+
 
 -- Création des contrats pour les employés
 INSERT INTO contrat (date_debut_contrat, salaire_base, date_fin_contrat, id_candidat, id_type_contrat) VALUES

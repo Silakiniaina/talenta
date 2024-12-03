@@ -391,7 +391,31 @@ CREATE TABLE presence_employe(
 	date_sortie TIMESTAMP NOT NULL
 );
 
--- salaire
+-- prime et indemnite : 
+CREATE TABLE type_prime (
+    id_type_prime SERIAL PRIMARY KEY,
+    nom_type_prime VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE prime_employe (
+    id_prime SERIAL PRIMARY KEY,
+    id_employe INT REFERENCES employe(id_employe),
+    id_type_prime INT REFERENCES type_prime(id_type_prime),
+    montant_prime NUMERIC(10, 2) NOT NULL
+);
+
+CREATE TABLE type_indemnite (
+    id_type_indemnite SERIAL PRIMARY KEY,
+    nom_type_indemnite VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE indemnite_employe (
+    id_indemnite SERIAL PRIMARY KEY,
+    id_employe INT REFERENCES employe(id_employe),
+    id_type_indemnite INT REFERENCES type_indemnite(id_type_indemnite),
+    montant_indemnite NUMERIC(10, 2) NOT NULL
+);
+
 
 -- fisc
 CREATE TABLE deduction_fiscale (

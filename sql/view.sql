@@ -384,6 +384,50 @@ SELECT
 FROM 
     stats_test;
 
+
+
+
+
+
+
+-- prime et indemnite:
+CREATE VIEW v_prime AS
+SELECT 
+    e.id_employe,
+    e.salaire_base,
+    COALESCE(SUM(CASE WHEN tp.nom_type_prime = 'prime_rendement' THEN pe.montant_prime ELSE 0 END), 0) AS prime_rendement,
+    COALESCE(SUM(CASE WHEN tp.nom_type_prime = 'prime_ancienete' THEN pe.montant_prime ELSE 0 END), 0) AS prime_ancienete
+FROM 
+    employe e
+LEFT JOIN 
+    prime_employe pe ON e.id_employe = pe.id_employe
+LEFT JOIN 
+    type_prime tp ON pe.id_type_prime = tp.id_type_prime
+GROUP BY 
+    e.id_employe, e.salaire_base;
+
+
+CREATE VIEW v_indemnite AS
+SELECT 
+    e.id_employe,
+    e.salaire_base,
+    COALESCE(SUM(CASE WHEN ti.nom_type_indemnite = 'indemnite_licenciement' THEN ie.montant_indemnite ELSE 0 END), 0) AS indemnite_licenciement
+FROM 
+    employe e
+LEFT JOIN 
+    indemnite_employe ie ON e.id_employe = ie.id_employe
+LEFT JOIN 
+    type_indemnite ti ON ie.id_type_indemnite = ti.id_type_indemnite
+GROUP BY 
+    e.id_employe, e.salaire_base;
+
+
+
+
+
+
+
+
 -- fisc
 CREATE VIEW vue_deductions AS
 SELECT 
@@ -539,20 +583,89 @@ FROM
     employe e
 ;
 
-CREATE VIEW v_bulletin_paie AS
+-- conge
+CREATE VIEW v_conge_paye AS
+SELECT 
+    e.id_employe,
+    e.salaire_base,
+    SUM(CASE WHEN tc.nom_type = 'Conge payé' THEN (ce.date_fin - ce.date_debut + 1) ELSE 0 END) AS conge_paye
+FROM 
+    employe e
+LEFT JOIN 
+    conge ce ON e.id_employe = ce.id_employe
+LEFT JOIN 
+    type_conge tc ON ce.id_type_conge = tc.id_type_conge
+GROUP BY 
+    e.id_employe, e.salaire_base;
+
+CREATE VIEW v_conge_non_paye AS
+SELECT 
+    e.id_employe,
+    e.salaire_base,
+    SUM(CASE WHEN tc.nom_type = 'Conge non payé' THEN (ce.date_fin - ce.date_debut + 1) ELSE 0 END) AS conge_non_paye
+FROM 
+    employe e
+LEFT JOIN 
+    conge ce ON e.id_employe = ce.id_employe
+LEFT JOIN 
+    type_conge tc ON ce.id_type_conge = tc.id_type_conge
+GROUP BY 
+    e.id_employe, e.salaire_base;
+
+
+
+CREATE OR REPLACE VIEW v_salaire_complet AS
 SELECT
     e.id_employe,
+    vsb.salaire_base,
+    -- Salaire brut de l'employé
     vsb.salaire_brut,
-    -- Calcul de la CNAPS (exemple : 1% à la charge de l'employé, plafonné à 2 000 000 Ar)
-    LEAST(vsb.salaire_brut * 0.01, 20000) AS cotisation_cnaps,
-    -- Calcul de l'OSTIE (exemple : 1% du salaire brut)
-    vsb.salaire_brut * 0.01 AS cotisation_ostie,
-    calculer_irsa(vsb.salaire_brut::NUMERIC) AS irsa,
-    vsb.salaire_brut - (LEAST(vsb.salaire_brut * 0.01, 20000))  - (vsb.salaire_brut * 0.01) - (calculer_irsa(vsb.salaire_brut::NUMERIC)) AS salaire_net
+    
+    -- Prime de rendement
+    COALESCE(vp.prime_rendement, 0) AS prime_rendement,
+    
+    -- Prime d'ancienneté
+    COALESCE(vp.prime_ancienete, 0) AS prime_ancienete,
+    
+    -- Congé payé : Nombre total de jours de congé payé
+    COALESCE(vc.conge_paye, 0) AS conge_paye,
+    
+    -- Montant correspondant au congé payé (nombre de jours * salaire journalier)
+    COALESCE(vc.conge_paye, 0) * (vsb.salaire_brut / 30) AS montant_conge,
+
+    -- Salaire brut avec primes, indemnités et congés payés
+    vsb.salaire_brut +
+    COALESCE(vp.prime_rendement, 0) +
+    COALESCE(vp.prime_ancienete, 0) +
+    COALESCE(vi.indemnite_licenciement, 0) +
+    (COALESCE(vc.conge_paye, 0) * (vsb.salaire_brut / 30)) AS salaire_brut_avec_prime_indemnite
 FROM
     employe e
 JOIN 
-    v_salaire_brut_employe vsb
+    v_salaire_brut_employe vsb ON vsb.id_employe = e.id_employe
+LEFT JOIN
+    v_prime vp ON vp.id_employe = e.id_employe
+LEFT JOIN
+    v_indemnite vi ON vi.id_employe = e.id_employe
+LEFT JOIN
+    v_conge_paye vc ON vc.id_employe = e.id_employe;
+
+
+
+CREATE VIEW v_bulletin_paie AS
+SELECT
+    e.id_employe,
+    vsb.salaire_brut_avec_prime_indemnite as salaire_brut,
+    -- Calcul de la CNAPS (exemple : 1% à la charge de l'employé, plafonné à 2 000 000 Ar)
+    LEAST(vsb.salaire_brut_avec_prime_indemnite * 0.01, 20000) AS cotisation_cnaps,
+    -- Calcul de l'OSTIE (exemple : 1% du salaire brut)
+    vsb.salaire_brut_avec_prime_indemnite * 0.01 AS cotisation_ostie,
+    calculer_irsa(vsb.salaire_brut_avec_prime_indemnite::NUMERIC) AS irsa,
+    vsb.salaire_brut_avec_prime_indemnite - (LEAST(vsb.salaire_brut_avec_prime_indemnite * 0.01, 20000))  - (vsb.salaire_brut_avec_prime_indemnite * 0.01) - (calculer_irsa(vsb.salaire_brut_avec_prime_indemnite::NUMERIC)) AS salaire_net
+FROM
+    employe e
+JOIN 
+    v_salaire_complet vsb
 ON 
     vsb.id_employe = e.id_employe
 ;
