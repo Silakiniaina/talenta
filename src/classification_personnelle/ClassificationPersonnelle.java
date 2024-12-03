@@ -49,6 +49,26 @@ public class ClassificationPersonnelle {
     }
 
     /* --------------------------------- Methods -------------------------------- */
+    public List<ClassificationPersonnelle> getAll(Connection conn) throws SQLException {
+        List<ClassificationPersonnelle> data = new ArrayList<>();
+        String query = "SELECT * FROM v_classification_personelle";
+
+        try (PreparedStatement statement = conn.prepareStatement(query)) {
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                ClassificationPersonnelle cp = new ClassificationPersonnelle();
+                cp.setFirstName(resultSet.getString("prenom"));
+                cp.setLastName(resultSet.getString("nom"));
+                cp.setCategorie("categorie");
+
+                data.add(cp);
+            }
+        }
+
+        return data;
+    }
+
     public List<ClassificationPersonnelle> getByCategorie(int categorieId, Connection conn) throws SQLException {
         List<ClassificationPersonnelle> data = new ArrayList<>();
         String query = "SELECT * FROM v_classification_personnelle WHERE id_categorie = ?";
