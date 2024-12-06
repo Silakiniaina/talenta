@@ -1,20 +1,3 @@
-CREATE OR REPLACE FUNCTION calculer_irsa(montant_brut NUMERIC)
-RETURNS NUMERIC AS $$
-BEGIN
-    IF montant_brut <= 350000 THEN
-        RETURN 0;
-    ELSIF montant_brut BETWEEN 350001 AND 400000 THEN
-        RETURN (montant_brut - 350000) * 0.05;
-    ELSIF montant_brut BETWEEN 400001 AND 500000 THEN
-        RETURN (montant_brut - 400000) * 0.10 + 2500; -- 2500 = (400000-350001)*0.05
-    ELSIF montant_brut BETWEEN 500001 AND 600000 THEN
-        RETURN (montant_brut - 500000) * 0.15 + 7500; -- 7500 = (400000-350001)*0.05 + (500000-400001)*0.10
-    ELSE
-        RETURN (montant_brut - 600000) * 0.20 + 12500; -- 12500 = (400000-350001)*0.05 + (500000-400001)*0.10 + (600000-500001)*0.15
-    END IF;
-END;
-$$ LANGUAGE plpgsql;
-
 CREATE OR REPLACE FUNCTION calculer_irsa(montant_brut NUMERIC) 
 RETURNS NUMERIC AS $$
 DECLARE

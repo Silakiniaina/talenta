@@ -720,11 +720,3 @@ SELECT
     JOIN 
         departement d ON p.id_departement = d.id_departement
     ;
-
--- Exemple de requête pour utiliser la vue
--- SELECT * FROM v_information_employe_paie;
-
--- Notes importantes :
--- 1. Adaptez les noms de tables et de colonnes à votre schéma de base de données
--- 2. Les calculs d'ancienneté utilisent des moyennes (30.44 jours par mois, 365.25 jours par an)
--- 3. Assurez-vous que les jointures correspondent à votre modèle de données
