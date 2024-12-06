@@ -3,6 +3,8 @@ package servlet.shared;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import com.google.gson.Gson;
+
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -38,6 +40,8 @@ public class LoginServlet extends HttpServlet{
             }else if(mode != null && mode.equals("admin")){
                 Admin d = Admin.login(email, mdp);
                 if(d != null){
+                    req.getSession(false).setAttribute("admin", d);
+
                     disp = req.getRequestDispatcher("/WEB-INF/views/admin/accueilAdmin.jsp");
                     disp.forward(req, resp);
                 }else{

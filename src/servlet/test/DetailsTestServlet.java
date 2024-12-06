@@ -1,4 +1,4 @@
-package servlet.simulation;
+package servlet.test;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -6,24 +6,27 @@ import java.sql.Connection;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import model.Simulation;
+import model.Test;
 import model.utils.Database;
 
-public class DetailsSimulationServlet extends HttpServlet{
+@WebServlet("/detailsTest")
+public class DetailsTestServlet extends HttpServlet{
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         PrintWriter out = resp.getWriter();
-        String idSimulation = req.getParameter("idSimulation");
+        String test = req.getParameter("test");
         try {
             Connection c = Database.getConnection();
-            Simulation s = Simulation.getById(c, Integer.parseInt(idSimulation));
+            Test s = new Test();
+            s = s.getById(c, Integer.parseInt(test));
 
-            req.setAttribute("simulation", s);
-            RequestDispatcher disp = req.getRequestDispatcher("/WEB-INF/views/simulations/detailsSimulation.jsp");
+            req.setAttribute("test", s);
+            RequestDispatcher disp = req.getRequestDispatcher("/WEB-INF/views/test/detailsTest.jsp");
             disp.forward(req, resp);
         } catch (Exception e) {
             e.printStackTrace(out);

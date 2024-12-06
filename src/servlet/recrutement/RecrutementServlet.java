@@ -8,6 +8,7 @@ import java.util.List;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,6 +18,7 @@ import model.Competence;
 import model.NotificationCandidat;
 import model.Recrutement;
 
+@WebServlet("/recrutement")
 public class RecrutementServlet extends HttpServlet{
 
     @Override
@@ -37,7 +39,7 @@ public class RecrutementServlet extends HttpServlet{
             if(role != null){
                 HttpSession session = req.getSession();
                 Candidat candidat = (Candidat)session.getAttribute("candidat");
-                List<NotificationCandidat> notifications = NotificationCandidat.getAllByCandidat(candidat.getIdCandidat());
+                List<NotificationCandidat> notifications = NotificationCandidat.getAllNotVueByCandidat(candidat.getIdCandidat());
 
                 req.setAttribute("notifications", notifications);
                 disp = req.getRequestDispatcher("/WEB-INF/views/candidat/recrutementCandidat.jsp");

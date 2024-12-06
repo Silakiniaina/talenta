@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,6 +16,7 @@ import model.Competence;
 import model.Departement;
 import model.Poste;
 
+@WebServlet("/poste")
 public class PosteServlet extends HttpServlet{
 
     @Override

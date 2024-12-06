@@ -3,14 +3,20 @@ package servlet.candidat;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.util.List;
 
+import java.util.List;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.Candidat;
 import model.Recrutement;
+import model.Candidat;
 
+@WebServlet("/listeCandidat")
 public class ListeCandidatServlet extends HttpServlet{
     
     @Override

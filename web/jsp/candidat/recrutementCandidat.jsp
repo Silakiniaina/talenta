@@ -3,7 +3,6 @@
 <%@ page import="model.Poste" %>
 <%@ page import="model.Recrutement" %> 
 <%@ page import="model.Competence" %> 
-<%@ page import="model.CompetenceRequise" %> 
 <%
     List<Recrutement> recrutements = (List<Recrutement>)request.getAttribute("recrutements");
     List<Competence> competences = (List<Competence>)request.getAttribute("competences");

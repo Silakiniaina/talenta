@@ -11,6 +11,19 @@ WHERE
         FROM
             employe
     );
+CREATE
+OR REPLACE view v_candidat_employe AS
+SELECT
+    *
+FROM
+    candidat
+WHERE
+    id_candidat IN (
+        SELECT
+            id_candidat
+        FROM
+            employe
+    );
 
 CREATE
 OR REPLACE VIEW v_recrutement_candidat AS
@@ -153,9 +166,7 @@ FROM
     LEFT JOIN diplomes_match dm ON c.id_candidat = dm.id_candidat
     AND r.id_recrutement = dm.id_recrutement
     LEFT JOIN experience_totale et ON c.id_candidat = et.id_candidat
-WHERE
-    current_date BETWEEN r.date_debut_recrutement
-    AND r.date_fin_recrutement;
+;
 
 -- Reste conge
 CREATE
@@ -229,11 +240,12 @@ SELECT
     c.email,
     g.label AS genre,
     -- Get the genre label from the 'genre' table
-    e.jours_acquis,
+    v_scr.jours_acquis,
     v_scr.jours_pris,
-    v_scr.jours_restants
+    v_scr.jours_restants,
+    e.id_employe
 FROM
-    candidat c
+    v_candidat_employe c
     LEFT JOIN employe e ON c.id_candidat = e.id_candidat
     LEFT JOIN v_solde_conge_restant v_scr ON e.id_employe = v_scr.id_employe
     LEFT JOIN genre g ON c.id_genre = g.id_genre;
@@ -305,3 +317,406 @@ AND dd.etat IS NULL;
 
 
 
+
+
+CREATE OR REPLACE VIEW v_statistiques_reponses AS
+SELECT 
+    tc.id_attribution,
+    tc.id_candidat,
+    COUNT(CASE WHEN rtp.est_reponse_attendue = false THEN 1 END) AS nombre_reponse_fausse,
+    COUNT(CASE WHEN rtp.est_reponse_attendue = true THEN 1 END) AS nombre_reponse_correcte,
+    (
+        SELECT COUNT(*) 
+        FROM question_test qt 
+        WHERE qt.id_test = t.id_test
+    ) AS nombre_total_question
+FROM 
+    test_candidat tc
+JOIN 
+    test t ON tc.id_test = t.id_test
+LEFT JOIN 
+    reponse_test_candidat rtc ON tc.id_attribution = rtc.id_attribution
+LEFT JOIN 
+    reponse_test_possibles rtp ON rtc.id_reponse_candidat = rtp.id_reponse_test_possibles
+GROUP BY 
+    tc.id_attribution, 
+    tc.id_candidat,
+    t.id_test;
+
+CREATE OR REPLACE VIEW resultat_test_candidat AS
+WITH stats_test AS (
+    SELECT 
+        tc.id_attribution,
+        tc.id_candidat,
+        COUNT(CASE WHEN rtp.est_reponse_attendue = false THEN 1 END) AS nombre_reponse_fausse,
+        COUNT(CASE WHEN rtp.est_reponse_attendue = true THEN 1 END) AS nombre_reponse_correcte,
+        (
+            SELECT COUNT(*) 
+            FROM question_test qt 
+            WHERE qt.id_test = t.id_test
+        ) AS nombre_total_question
+    FROM 
+        test_candidat tc
+    JOIN 
+        test t ON tc.id_test = t.id_test
+    LEFT JOIN 
+        reponse_test_candidat rtc ON tc.id_attribution = rtc.id_attribution
+    LEFT JOIN 
+        reponse_test_possibles rtp ON rtc.id_reponse_candidat = rtp.id_reponse_test_possibles
+    GROUP BY 
+        tc.id_attribution, 
+        tc.id_candidat,
+        t.id_test
+)
+SELECT 
+    id_attribution,
+    id_candidat,
+    nombre_reponse_fausse,
+    nombre_reponse_correcte,
+    nombre_total_question,
+    ROUND(
+        (nombre_reponse_correcte::float / nombre_total_question) * 100
+    ) AS pourcentage_reussite,
+    CASE 
+        WHEN (nombre_reponse_correcte::float / nombre_total_question) * 100 >= 70 THEN 'Embauche recommandée'
+        WHEN (nombre_reponse_correcte::float / nombre_total_question) * 100 >= 50 THEN 'Potentiel à considérer'
+        ELSE 'Non recommandé'
+    END AS statut_embauche
+FROM 
+    stats_test;
+
+
+
+
+
+
+
+-- prime et indemnite:
+CREATE VIEW v_prime AS
+SELECT 
+    e.id_employe,
+    e.salaire_base,
+    COALESCE(SUM(CASE WHEN tp.nom_type_prime = 'prime_rendement' THEN pe.montant_prime ELSE 0 END), 0) AS prime_rendement,
+    COALESCE(SUM(CASE WHEN tp.nom_type_prime = 'prime_ancienete' THEN pe.montant_prime ELSE 0 END), 0) AS prime_ancienete
+FROM 
+    employe e
+LEFT JOIN 
+    prime_employe pe ON e.id_employe = pe.id_employe
+LEFT JOIN 
+    type_prime tp ON pe.id_type_prime = tp.id_type_prime
+GROUP BY 
+    e.id_employe, e.salaire_base;
+
+
+CREATE VIEW v_indemnite AS
+SELECT 
+    e.id_employe,
+    e.salaire_base,
+    COALESCE(SUM(CASE WHEN ti.nom_type_indemnite = 'indemnite_licenciement' THEN ie.montant_indemnite ELSE 0 END), 0) AS indemnite_licenciement
+FROM 
+    employe e
+LEFT JOIN 
+    indemnite_employe ie ON e.id_employe = ie.id_employe
+LEFT JOIN 
+    type_indemnite ti ON ie.id_type_indemnite = ti.id_type_indemnite
+GROUP BY 
+    e.id_employe, e.salaire_base;
+
+
+
+
+
+
+
+
+-- fisc
+CREATE VIEW vue_deductions AS
+SELECT 
+    e.id_employe,
+    COALESCE(SUM(CASE WHEN df.nom_deduction = 'OSTIE' THEN de.montant ELSE 0 END), 0) AS OSTIE,
+    COALESCE(SUM(CASE WHEN df.nom_deduction = 'CNAPS' THEN de.montant ELSE 0 END), 0) AS CNAPS,
+    COALESCE(SUM(CASE WHEN df.nom_deduction = 'IRSA' THEN de.montant ELSE 0 END), 0) AS IRSA
+FROM
+    employe e
+LEFT JOIN deduction_employe de ON e.id_employe = de.id_employe
+LEFT JOIN deduction_fiscale df ON de.id_deduction = df.id_deduction
+GROUP BY 
+    e.id_employe;
+
+
+-- absence :
+CREATE OR REPLACE VIEW v_absence_avec_solde AS
+SELECT 
+    e.id_employe,
+    -- Nombre de jours pour chaque type d'absence avec solde
+    COALESCE(SUM(CASE WHEN ta.nom_type = 'Repos médical' THEN (a.date_fin - a.date_debut + 1) ELSE 0 END), 0) AS repos_medical,
+    COALESCE(SUM(CASE WHEN ta.nom_type = 'Assistance maternité' THEN (a.date_fin - a.date_debut + 1) ELSE 0 END), 0) AS assistance_mat,
+    COALESCE(SUM(CASE WHEN ta.nom_type = 'Hospitalisation et convalescence' THEN (a.date_fin - a.date_debut + 1) ELSE 0 END), 0) AS hospitalisation_conv,
+    COALESCE(SUM(CASE WHEN ta.nom_type = 'Événement familial' THEN (a.date_fin - a.date_debut + 1) ELSE 0 END), 0) AS evenement_familial,
+    -- Total des jours d'absence avec solde
+    COALESCE(SUM(a.date_fin - a.date_debut + 1), 0) AS total
+FROM 
+    employe e
+LEFT JOIN 
+    absence a ON e.id_employe = a.id_employe
+LEFT JOIN 
+    type_absence ta ON a.id_type_absence = ta.id_type_absence
+    AND ta.nom_type IN ('Repos médical', 'Assistance maternité', 'Hospitalisation et convalescence', 'Événement familial')
+GROUP BY 
+    e.id_employe;
+
+
+CREATE OR REPLACE VIEW v_absence_sans_solde AS
+SELECT 
+    e.id_employe,
+    -- Nombre de jours pour chaque type d'absence sans solde
+    COALESCE(SUM(CASE WHEN ta.nom_type = 'Retard' THEN (a.date_fin - a.date_debut + 1) ELSE 0 END), 0) AS retard,
+    COALESCE(SUM(CASE WHEN ta.nom_type = 'Absence sans solde' THEN (a.date_fin - a.date_debut + 1) ELSE 0 END), 0) AS absence_sans_solde,
+    COALESCE(SUM(CASE WHEN ta.nom_type = 'Absence non autorisée' THEN (a.date_fin - a.date_debut + 1) ELSE 0 END), 0) AS absence_non_autorise,
+    COALESCE(SUM(CASE WHEN ta.nom_type = 'Mise à pied' THEN (a.date_fin - a.date_debut + 1) ELSE 0 END), 0) AS mise_a_pied,
+    -- Total des jours d'absence sans solde
+    COALESCE(SUM(a.date_fin - a.date_debut + 1), 0) AS total
+FROM 
+    employe e
+LEFT JOIN 
+    absence a ON e.id_employe = a.id_employe
+LEFT JOIN 
+    type_absence ta ON a.id_type_absence = ta.id_type_absence
+    AND ta.nom_type IN ('Retard', 'Absence sans solde', 'Absence non autorisée', 'Mise à pied')
+GROUP BY 
+    e.id_employe;
+
+
+-- heure supp
+CREATE VIEW v_heure_sup_details AS
+WITH calcul_durees AS (
+    SELECT 
+        pe.id_employe,
+        pe.date_entree::DATE AS date_travail,
+        EXTRACT(EPOCH FROM (pe.date_sortie - pe.date_entree)) / 3600 AS heures_travaillees, -- Convertit en heures
+        -- Vérifie si c'est un dimanche
+        CASE 
+            WHEN EXTRACT(DOW FROM pe.date_entree) = 0 THEN TRUE 
+            ELSE FALSE 
+        END AS is_dimanche,
+        -- Vérifie si c'est un jour férié
+        CASE 
+            WHEN EXISTS (
+                SELECT 1 
+                FROM jours_feries jf 
+                WHERE jf.date = pe.date_entree::DATE
+            ) THEN TRUE
+            ELSE FALSE
+        END AS is_jour_ferie
+    FROM 
+        presence_employe pe
+),
+heures_supp_tranche AS (
+    SELECT 
+        c.id_employe,
+        c.date_travail,
+        c.is_dimanche,
+        c.is_jour_ferie,
+        -- Heures supplémentaires 30% (de 8h à 10h)
+        CASE 
+            WHEN c.heures_travaillees > 8 THEN LEAST(c.heures_travaillees - 8, 2) 
+            ELSE 0 
+        END AS sup_30,
+        -- Heures supplémentaires 40% (de 10h à 12h)
+        CASE 
+            WHEN c.heures_travaillees > 10 THEN LEAST(c.heures_travaillees - 10, 2) 
+            ELSE 0 
+        END AS sup_40,
+        -- Heures supplémentaires 50% (de 12h à 14h)
+        CASE 
+            WHEN c.heures_travaillees > 12 THEN LEAST(c.heures_travaillees - 12, 2) 
+            ELSE 0 
+        END AS sup_50,
+        -- Heures supplémentaires 100% (au-delà de 14h ou pour dimanches/jours fériés)
+        CASE 
+            WHEN c.heures_travaillees > 14 THEN c.heures_travaillees - 14
+            WHEN c.is_dimanche OR c.is_jour_ferie THEN c.heures_travaillees -- Tout est majoré à 100%
+            ELSE 0 
+        END AS sup_100
+    FROM 
+        calcul_durees c
+)
+SELECT 
+    t.id_employe,
+    SUM(t.sup_30) AS sup_30,       -- Total heures supplémentaires à 30%
+    SUM(t.sup_40) AS sup_40,       -- Total heures supplémentaires à 40%
+    SUM(t.sup_50) AS sup_50,       -- Total heures supplémentaires à 50%
+    SUM(t.sup_100) AS sup_100,     -- Total heures supplémentaires à 100%
+    -- Total global des heures supplémentaires
+    SUM(t.sup_30 + t.sup_40 + t.sup_50 + t.sup_100) AS total
+FROM 
+    heures_supp_tranche t
+GROUP BY 
+    t.id_employe;
+
+
+CREATE VIEW v_taux_employe AS
+SELECT
+    e.id_employe,
+    e.salaire_base,
+    e.salaire_base / (30 * 8) AS taux_horaire, -- On suppose 30 jours travaillés et 8h par jour
+    e.salaire_base / 30 AS taux_journalier
+FROM
+    employe e;
+
+
+CREATE VIEW v_salaire_brut_employe AS
+SELECT
+    e.id_employe,
+    e.salaire_base,
+    (
+        e.salaire_base +
+        (
+            SELECT SUM(
+                (hs.sup_30 * t.taux_horaire * 1.3) + 
+                (hs.sup_40 * t.taux_horaire * 1.4) + 
+                (hs.sup_50 * t.taux_horaire * 1.5) + 
+                (hs.sup_100 * t.taux_horaire * 2)
+            )
+            FROM v_heure_sup_details hs
+            JOIN v_taux_employe t ON hs.id_employe = t.id_employe
+            WHERE hs.id_employe = e.id_employe
+        )
+    ) AS salaire_brut
+FROM
+    employe e
+;
+
+-- conge
+CREATE VIEW v_conge_paye AS
+SELECT 
+    e.id_employe,
+    e.salaire_base,
+    SUM(CASE WHEN tc.nom_type = 'Conge payé' THEN (ce.date_fin - ce.date_debut + 1) ELSE 0 END) AS conge_paye
+FROM 
+    employe e
+LEFT JOIN 
+    conge ce ON e.id_employe = ce.id_employe
+LEFT JOIN 
+    type_conge tc ON ce.id_type_conge = tc.id_type_conge
+GROUP BY 
+    e.id_employe, e.salaire_base;
+
+CREATE VIEW v_conge_non_paye AS
+SELECT 
+    e.id_employe,
+    e.salaire_base,
+    SUM(CASE WHEN tc.nom_type = 'Conge non payé' THEN (ce.date_fin - ce.date_debut + 1) ELSE 0 END) AS conge_non_paye
+FROM 
+    employe e
+LEFT JOIN 
+    conge ce ON e.id_employe = ce.id_employe
+LEFT JOIN 
+    type_conge tc ON ce.id_type_conge = tc.id_type_conge
+GROUP BY 
+    e.id_employe, e.salaire_base;
+
+
+
+CREATE OR REPLACE VIEW v_salaire_complet AS
+SELECT
+    e.id_employe,
+    vsb.salaire_base,
+    -- Salaire brut de l'employé
+    vsb.salaire_brut,
+    
+    -- Prime de rendement
+    COALESCE(vp.prime_rendement, 0) AS prime_rendement,
+    
+    -- Prime d'ancienneté
+    COALESCE(vp.prime_ancienete, 0) AS prime_ancienete,
+    
+    -- Congé payé : Nombre total de jours de congé payé
+    COALESCE(vc.conge_paye, 0) AS conge_paye,
+    
+    -- Montant correspondant au congé payé (nombre de jours * salaire journalier)
+    COALESCE(vc.conge_paye, 0) * (vsb.salaire_brut / 30) AS montant_conge,
+
+    -- Salaire brut avec primes, indemnités et congés payés
+    vsb.salaire_brut +
+    COALESCE(vp.prime_rendement, 0) +
+    COALESCE(vp.prime_ancienete, 0) +
+    COALESCE(vi.indemnite_licenciement, 0) +
+    (COALESCE(vc.conge_paye, 0) * (vsb.salaire_brut / 30)) AS salaire_brut_avec_prime_indemnite
+FROM
+    employe e
+JOIN 
+    v_salaire_brut_employe vsb ON vsb.id_employe = e.id_employe
+LEFT JOIN
+    v_prime vp ON vp.id_employe = e.id_employe
+LEFT JOIN
+    v_indemnite vi ON vi.id_employe = e.id_employe
+LEFT JOIN
+    v_conge_paye vc ON vc.id_employe = e.id_employe;
+
+
+
+CREATE VIEW v_bulletin_paie AS
+SELECT
+    e.id_employe,
+    vsb.salaire_brut_avec_prime_indemnite as salaire_brut,
+    -- Calcul de la CNAPS (exemple : 1% à la charge de l'employé, plafonné à 2 000 000 Ar)
+    LEAST(vsb.salaire_brut_avec_prime_indemnite * 0.01, 20000) AS cotisation_cnaps,
+    -- Calcul de l'OSTIE (exemple : 1% du salaire brut)
+    vsb.salaire_brut_avec_prime_indemnite * 0.01 AS cotisation_ostie,
+    calculer_irsa(vsb.salaire_brut_avec_prime_indemnite::NUMERIC) AS irsa,
+    vsb.salaire_brut_avec_prime_indemnite - (LEAST(vsb.salaire_brut_avec_prime_indemnite * 0.01, 20000))  - (vsb.salaire_brut_avec_prime_indemnite * 0.01) - (calculer_irsa(vsb.salaire_brut_avec_prime_indemnite::NUMERIC)) AS salaire_net
+FROM
+    employe e
+JOIN 
+    v_salaire_complet vsb
+ON 
+    vsb.id_employe = e.id_employe
+;
+
+CREATE OR REPLACE VIEW v_information_employe_paie AS 
+SELECT 
+    e.id_employe,
+    e.nom,
+    e.prenom,
+    e.date_naissance,
+    e.email,
+    emp.numero_cnaps,
+    e.adresse,
+    emp.date_embauche,
+        
+    -- Calcul de l'âge
+    CAST(
+        (EXTRACT(YEAR FROM CURRENT_DATE) - EXTRACT(YEAR FROM e.date_naissance)) -
+        (CASE 
+            WHEN EXTRACT(MONTH FROM CURRENT_DATE) < EXTRACT(MONTH FROM e.date_naissance) 
+            OR (EXTRACT(MONTH FROM CURRENT_DATE) = EXTRACT(MONTH FROM e.date_naissance) 
+                AND EXTRACT(DAY FROM CURRENT_DATE) < EXTRACT(DAY FROM e.date_naissance)) 
+            THEN 1 
+            ELSE 0 
+        END)
+    AS INTEGER) AS age,
+
+        -- Calcul de l'ancienneté formaté en chaîne
+    CONCAT(
+        FLOOR(EXTRACT(YEAR FROM AGE(CURRENT_DATE, emp.date_embauche))), ' ans ',
+        FLOOR(
+            (EXTRACT(MONTH FROM AGE(CURRENT_DATE, emp.date_embauche)) * 1.0) 
+        ), ' mois et ',
+        FLOOR(
+            (EXTRACT(DAY FROM AGE(CURRENT_DATE, emp.date_embauche)) * 1.0)
+        ), ' jours'
+    ) AS anciennete_formatee,
+        
+    p.nom as poste,
+    d.nom as departement
+        
+    FROM 
+        v_informations_employe e
+    JOIN 
+        employe emp ON e.id_employe = emp.id_employe
+    JOIN 
+        poste p ON p.id_poste = emp.id_poste
+    JOIN 
+        departement d ON p.id_departement = d.id_departement
+    ;

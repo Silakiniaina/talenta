@@ -25,15 +25,16 @@ public class NotificationAdmin {
 
     // ACTIONS
 
-    public static List<NotificationAdmin> getAllNotVueByAdmin() throws SQLException{
+    public static List<NotificationAdmin> getAllNotVueByAdmin(int id) throws SQLException{
         List<NotificationAdmin> result = new ArrayList<>();
         Connection c = null;
         PreparedStatement prstm = null; 
         ResultSet rs = null;
-        String query = "SELECT * FROM notification_admin WHERE date_vue_notification IS NULL ORDER BY date_notification DESC";
+        String query = "SELECT * FROM notification_admin WHERE id_admin = ? AND date_vue_notification IS NULL ORDER BY date_notification DESC";
         try {
             c = Database.getConnection();
             prstm = c.prepareStatement(query);
+            prstm.setInt(1,id);
             rs = prstm.executeQuery();
 
             while (rs.next()) {

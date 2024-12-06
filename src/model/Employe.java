@@ -18,8 +18,10 @@ public class Employe {
     private Poste poste;
     private Date dateEmbauche;
     int age;
+    private double salaireBase;
 
     // CONSTRUCTORS
+
     public Employe(){
 
     }
@@ -30,8 +32,7 @@ public class Employe {
         this.idEmploye = idEmploye;
     }
     public void setCandidat(Connection con, int candidat) throws SQLException{
-        Candidat c = new Candidat();
-        this.candidat = c.getById(con,candidat);
+        this.candidat = Candidat.getById(candidat, con);
     }
     public void setPoste(Connection c, int poste)throws SQLException {
         Poste p = new Poste();
@@ -184,9 +185,14 @@ public class Employe {
         Employe employe = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
+        boolean isNewConnection = false;
 
         String query = "SELECT * FROM employe WHERE id_employe = ?";
         try {
+            if(con == null){
+                con = Database.getConnection();
+                isNewConnection = true;
+            }
             ps = con.prepareStatement(query);
             ps.setInt(1, idEmploye);
             rs = ps.executeQuery();
@@ -197,12 +203,14 @@ public class Employe {
                 employe.setCandidat(con, rs.getInt("id_candidat"));
                 employe.setPoste(con, rs.getInt("id_poste"));
                 employe.setDateEmbauche(rs.getDate("date_embauche"));
+                employe.setSalaireBase(rs.getDouble("salaire_base"));
             }
         } catch (SQLException e) {
             throw e;
         } finally {
             if (rs != null) rs.close();
             if (ps != null) ps.close();
+            if  (con != null && isNewConnection) con.close();
         }
         return employe;
     }
@@ -242,10 +250,14 @@ public class Employe {
         List<Employe> result = new ArrayList<>();
         PreparedStatement ps = null;
         ResultSet rs = null;
-        
+        boolean isNewConnection = false;
         String query = "SELECT * FROM employe";
         
         try {
+            if(con == null){
+                con = Database.getConnection();
+                isNewConnection = true;
+            }
             ps = con.prepareStatement(query);
             rs = ps.executeQuery();
 
@@ -255,6 +267,7 @@ public class Employe {
                 employe.setCandidat(con, rs.getInt("id_candidat"));
                 employe.setPoste(con, rs.getInt("id_poste"));
                 employe.setDateEmbauche(rs.getDate("date_embauche"));
+                employe.setSalaireBase(rs.getDouble("salaire_base"));
 
                 result.add(employe);
             }
@@ -263,6 +276,7 @@ public class Employe {
         } finally {
             if (rs != null) rs.close();
             if (ps != null) ps.close();
+            if (con != null && isNewConnection) con.close() ;
         }
 
         return result;
@@ -297,5 +311,13 @@ public class Employe {
         return employe;
     }
     
+    public double getSalaireBase() {
+        return salaireBase;
+    }
+    
+    
+    public void setSalaireBase(double salaireBase) {
+        this.salaireBase = salaireBase;
+    }
 
 }

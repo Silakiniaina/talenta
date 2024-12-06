@@ -253,7 +253,7 @@ public class ScUtils {
                 emp = new Employe();
                 emp.setIdEmploye(id);
                 emp.setCandidat(conn, id);
-                emp.setPoste(id);
+                emp.setPoste(conn,id);
                 emp.setDateEmbauche(dateEmbauche);
             }
         }

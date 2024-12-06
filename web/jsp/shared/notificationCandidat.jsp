@@ -1,8 +1,10 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.google.gson.Gson" %>
+<%@ page import="model.Candidat" %>
 <%@ page import="model.NotificationCandidat" %>
 <%
-    List<NotificationCandidat> notifications = (List<NotificationCandidat>)request.getAttribute(("notifications"));
+    Candidat candidat = (Candidat)request.getSession().getAttribute("candidat");
+    List<NotificationCandidat> notifications = NotificationCandidat.getAllNotVueByCandidat(candidat.getIdCandidat());
 %>
    
 <li class="nav-item dropdown">

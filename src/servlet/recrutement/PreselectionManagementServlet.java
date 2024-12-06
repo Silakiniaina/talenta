@@ -34,7 +34,7 @@ public class PreselectionManagementServlet extends HttpServlet{
 
             NotificationCandidat notif = new NotificationCandidat();
             notif.setCandidat(c, idCandidat);
-            notif.setTargetLink("#");
+            notif.setTargetLink("recrutement?");
             notif.setDateNotification(Timestamp.valueOf(LocalDateTime.now()));
 
             if(mode != null){
