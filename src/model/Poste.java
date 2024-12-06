@@ -15,7 +15,9 @@ public class Poste {
     private int idPoste;
     private String nomPoste;
     private Departement departement;
-    private List<CompetenceRequise> listCompetence;
+    private List<Competence> listCompetence;
+    private List<Education> listEducation;
+    private List<Experience> listExperience;
 
     // CONSTRUCTOR
     public Poste() {
@@ -29,23 +31,31 @@ public class Poste {
     }
 
     // CRUD
-    public static List<Poste> getAll() throws SQLException {
+    public List<Poste> getAll(Connection c) throws SQLException {
         List<Poste> result = new ArrayList<>();
-        Connection c = null;
+        boolean isNewConnection = false;
         PreparedStatement prstm = null;
         ResultSet rs = null;
         String query = "SELECT * FROM poste";
         try {
-            c = Database.getConnection();
+            if(c == null){
+                isNewConnection = true;
+                c = Database.getConnection();
+            }
             prstm = c.prepareStatement(query);
             rs = prstm.executeQuery();
 
+            Competence comp = new Competence();
+            Education edu = new Education();
+            Experience exp = new Experience();
             while (rs.next()) {
                 Poste d = new Poste();
                 d.setIdPoste(rs.getInt(1));
                 d.setNomPoste(rs.getString(2));
                 d.setDepartement(rs.getInt(3));
-                d.setListCompetence(CompetenceRequise.getAllByPoste(d.getIdPoste()));
+                d.setListCompetence(comp.getAllByPoste(c,d.getIdPoste()));
+                d.setListEducation(edu.getAllByPoste(c, d.getIdPoste()));
+                d.setListExperience(exp.getAllByPoste(c, d.getIdPoste()));
                 result.add(d);
             }
         }catch (SQLException e) {
@@ -57,45 +67,66 @@ public class Poste {
             if(prstm != null){
                 prstm.close();
             }
-            if(c != null){
+            if(c != null && isNewConnection){
                 c.close();
             }
         }
         return result;
     }
 
-    public static Poste getById(int id) throws SQLException {
-        Poste result = null;
-        Connection c = null;
+    public Poste getById(Connection c, int id) throws SQLException {
+        boolean isNewConnection = false;
         PreparedStatement prstm = null;
         ResultSet rs = null;
         String query = "SELECT * FROM poste WHERE id_poste = ?";
         try {
-            c = Database.getConnection();
+            if(c == null){
+                isNewConnection = true;
+                c = Database.getConnection();
+            }
             prstm = c.prepareStatement(query);
             prstm.setInt(1, id);
             rs = prstm.executeQuery();
 
+            
             if (rs.next()) {
-                result = new Poste();
-                result.setIdPoste(rs.getInt(1));
-                result.setNomPoste(rs.getString(2));
-                result.setDepartement(rs.getInt(3));
-                result.setListCompetence(CompetenceRequise.getAllByPoste(result.getIdPoste()));
+                Competence comp = new Competence();
+                Education edu = new Education();
+                Experience exp = new Experience();
+
+                this.setIdPoste(rs.getInt(1));
+                this.setNomPoste(rs.getString(2));
+                this.setDepartement(rs.getInt(3));
+                this.setListCompetence(comp.getAllByPoste(c,this.getIdPoste()));
+                this.setListEducation(edu.getAllByPoste(c, this.getIdPoste()));
+                this.setListExperience(exp.getAllByPoste(c,this.getIdPoste()));
 
             }
+            return this;
         } catch (SQLException e) {
             throw e;
+        }finally{
+            if(rs != null){
+                rs.close();
+            }
+            if(prstm != null){
+                prstm.close();
+            }
+            if(c != null && isNewConnection){
+                c.close();
+            }
         }
-        return result;
     }
 
-    public Poste insert() throws SQLException{
-        Connection c = null; 
+    public Poste insert(Connection c) throws SQLException{
+        boolean isNewConnection = false;
         PreparedStatement prstm = null;
         String query = "INSERT INTO poste(nom,id_departement) VALUES (?, ?)";
         try {
-            c = Database.getConnection();
+            if(c == null){
+                isNewConnection = true;
+                c = Database.getConnection();
+            }
             c.setAutoCommit(false);
 
             prstm = c.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -136,13 +167,12 @@ public class Poste {
         try {
             c = Database.getConnection();
             c.setAutoCommit(false);
-            for (CompetenceRequise competence : this.getListCompetence()) {
-                String sql = "INSERT INTO competence_requise (id_poste, id_competence, experience) VALUES (?, ?, ?)";
+            for (Competence competence : this.getListCompetence()) {
+                String sql = "INSERT INTO competence_requise_poste (id_poste, id_competence) VALUES (?, ?)";
                 st = c.prepareStatement(sql);
 
                 st.setInt(1, this.getIdPoste());
-                st.setInt(2, competence.getCompetence().getIdCompetence());
-                st.setInt(3, competence.getExperience());
+                st.setInt(2, competence.getIdCompetence());
                 st.executeUpdate();
             }
 
@@ -170,8 +200,11 @@ public class Poste {
     public Departement getDepartement() {
         return departement;
     }
-    public List<CompetenceRequise> getListCompetence(){
+    public List<Competence> getListCompetence(){
         return this.listCompetence;
+    }
+    public List<Education> getListEducation(){
+        return this.listEducation;
     }
 
     public void setIdPoste(int idPoste) {
@@ -186,7 +219,19 @@ public class Poste {
         this.departement = Departement.getById(iddepartement);
     }
 
-    public void setListCompetence(List<CompetenceRequise> ls){
+    public void setListCompetence(List<Competence> ls){
         this.listCompetence = ls;
+    }
+
+    public void setListEducation(List<Education> ls){
+        this.listEducation = ls;
+    }
+
+    public List<Experience> getListExperience() {
+        return listExperience;
+    }
+
+    public void setListExperience(List<Experience> listExperience) {
+        this.listExperience = listExperience;
     }
 }

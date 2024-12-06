@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.time.LocalDate;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -14,6 +15,7 @@ import jakarta.servlet.http.HttpSession;
 import model.Candidat;
 import model.RecrutementCandidat;
 
+@WebServlet("/candidat")
 public class CandidatServlet extends HttpServlet{
 
     @Override

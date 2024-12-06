@@ -23,9 +23,10 @@ public class Candidat {
     private String adresse;
     private Genre genre;
     private List<Competence> listCompetence;
-    private List<Experience> listExperience;
-    private List<Education> listEducation;
+    private List<ExperienceCandidat> listExperience;
+    private List<EducationCandidat> listEducation;
 
+    
     // CONSTRUCTORS
     public Candidat(){
         this.setListCompetence(new ArrayList<>());
@@ -43,14 +44,17 @@ public class Candidat {
     }
 
     // ACTIONS
-    public static List<Candidat> getAll() throws SQLException{
+    public List<Candidat> getAll(Connection c) throws SQLException{
         List<Candidat> result = new ArrayList<>();
-        Connection c = null;
         PreparedStatement prstm = null; 
         ResultSet rs = null;
+        boolean isNewConnection = false;
         String query = "SELECT * FROM v_candidat";
         try {
-            c = Database.getConnection();
+            if(c == null){
+                isNewConnection = true;
+                c = Database.getConnection(); 
+            }
             prstm = c.prepareStatement(query);
             rs = prstm.executeQuery();
 
@@ -70,10 +74,21 @@ public class Candidat {
         } catch (SQLException e) {
             throw e;
         }
+        finally{
+            if(rs != null){
+                rs.close();
+            }
+            if(prstm != null){
+                prstm.close();
+            }
+            if(c != null && isNewConnection){
+                c.close();
+            }
+        }
         return result;
     }
 
-    public Candidat getById(Connection c) throws SQLException{
+    public Candidat getById(Connection c, int id) throws SQLException{
         boolean isNewConnection = false;
         PreparedStatement prstm = null; 
         ResultSet rs = null;
@@ -84,7 +99,7 @@ public class Candidat {
                 isNewConnection = true;
             }
             prstm = c.prepareStatement(query);
-            prstm.setInt(1, this.getIdCandidat());
+            prstm.setInt(1, id);
             rs = prstm.executeQuery();
 
             if (rs.next()) {
@@ -99,6 +114,48 @@ public class Candidat {
                 this.getEducations(c);
             }
             return this;
+        } catch (SQLException e) {
+            throw e;
+        }finally{
+            if(rs != null){
+                rs.close();
+            }
+            if(prstm != null){
+                prstm.close();
+            }
+            if(c != null && isNewConnection){
+                c.close();
+            }
+        }
+    }
+
+    public static Candidat getById(int idCandidat, Connection c) throws SQLException{
+        Candidat candidat= new Candidat();
+        boolean isNewConnection = false;
+        PreparedStatement prstm = null; 
+        ResultSet rs = null;
+        String query = "SELECT * FROM candidat WHERE id_candidat = ?";
+        try {
+            if( c == null){
+                c = Database.getConnection();
+                isNewConnection = true;
+            }
+            prstm = c.prepareStatement(query);
+            prstm.setInt(1, idCandidat);
+            rs = prstm.executeQuery();
+
+            if (rs.next()) {
+                candidat.setIdCandidat(rs.getInt(1));
+                candidat.setNomCandidat(rs.getString(2));
+                candidat.setPrenomCandidat(rs.getString(3));
+                candidat.setDateNaissance(rs.getDate(4));
+                candidat.setAdresse(rs.getString(5));
+                candidat.setGenre(rs.getInt(6));
+                candidat.getCompetences(c);
+                candidat.getExperiences(c);
+                candidat.getEducations(c);
+            }
+            return candidat;
         } catch (SQLException e) {
             throw e;
         }finally{
@@ -252,6 +309,48 @@ public class Candidat {
         }
     }
 
+    public static Candidat loginEmploye(String email, String password) throws SQLException{
+        Candidat result = null; 
+        Connection c = null; 
+        PreparedStatement prstm = null;
+        ResultSet rs = null; 
+        String query = "SELECT * FROM v_employe WHERE email = ? AND mdp = ? ";
+        try {
+            c = Database.getConnection();
+            prstm = c.prepareStatement(query);
+            prstm.setString(1, email);
+            prstm.setString(2, password);
+
+            rs = prstm.executeQuery();
+
+            if(rs.next()){
+                result = new Candidat();
+                result.setIdCandidat(rs.getInt(1));
+                result.setNomCandidat(rs.getString(2));
+                result.setPrenomCandidat(rs.getString(3));
+                result.setDateNaissance(rs.getDate(4));
+                result.setAdresse(rs.getString(5));
+                result.setGenre(rs.getInt(6));
+                result.getCompetences(c);
+                result.getExperiences(c);
+                result.getEducations(c);
+            }
+            return result;
+        } catch (SQLException e) {
+            throw e;
+        }finally{
+            if(rs != null){
+                rs.close();
+            }
+            if(prstm != null){
+                prstm.close();
+            }
+            if(c != null){
+                c.close();
+            }
+        }
+    }
+
     public void getCompetences(Connection conn)throws SQLException{
         Connection c = null;
         PreparedStatement prstm = null; 
@@ -273,8 +372,9 @@ public class Candidat {
             Competence d = null;
             this.setListCompetence(new ArrayList<>());
 
+            Competence comp = new Competence();
             while (rs.next()) {
-                d = Competence.getById(c, rs.getInt(1));
+                d = comp.getById(c, rs.getInt(1));
                 this.getListCompetence().add(d);
             }
         } catch (SQLException e) {
@@ -293,11 +393,47 @@ public class Candidat {
     }
 
     public void getExperiences(Connection c)throws SQLException{
-        this.setListExperience(Experience.getAllByCandidat(c,this.getIdCandidat()));
+        ExperienceCandidat e = new ExperienceCandidat();
+        this.setListExperience(e.getAllByCandidat(c,this.getIdCandidat()));
     }
 
+    public boolean hasPostuler(Recrutement r) throws SQLException{
+        Connection c = null; 
+        PreparedStatement prstm = null; 
+        ResultSet rs = null; 
+        String sql = "SELECT * FROM recrutement_candidat WHERE id_candidat = ? AND id_recrutement = ?";
+        boolean result = false;
+        try {
+            c = Database.getConnection();
+            prstm = c.prepareStatement(sql);
+            prstm.setInt(1, this.getIdCandidat());
+            prstm.setInt(2, r.getIdRecrutement());
+
+            rs = prstm.executeQuery();
+
+            if(rs.next()){
+                result = true;
+            }
+            return result;
+        } catch (SQLException e) {
+            throw e;
+        }finally{
+            if(rs != null){
+                rs.close();
+            }
+            if(prstm != null){
+                prstm.close();
+            }
+            if(c != null){
+                c.close();
+            }
+        }
+    }
+
+
     public void getEducations(Connection c)throws SQLException{
-        this.setListEducation(Education.getAllByCandidat(c,this.getIdCandidat()));
+        EducationCandidat e = new EducationCandidat();
+        this.setListEducation(e.getAllByCandidat(c,this.getIdCandidat()));
     }
 
 
@@ -325,11 +461,11 @@ public class Candidat {
         return adresse;
     
     }
-    public List<Experience> getListExperience(){
+    public List<ExperienceCandidat> getListExperience(){
         return this.listExperience;
     }
 
-    public List<Education> getListEducation(){
+    public List<EducationCandidat> getListEducation(){
         return this.listEducation;
     }
 
@@ -360,11 +496,11 @@ public class Candidat {
         return listCompetence;
     }   
 
-    public void setListExperience(List<Experience> ls){
+    public void setListExperience(List<ExperienceCandidat> ls){
         this.listExperience = ls;
     }
 
-    public void setListEducation(List<Education> ls){
+    public void setListEducation(List<EducationCandidat> ls){
         this.listEducation = ls;
     }
 
@@ -379,5 +515,9 @@ public class Candidat {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void setGenre(Genre genre) {
+        this.genre = genre;
     }
 }

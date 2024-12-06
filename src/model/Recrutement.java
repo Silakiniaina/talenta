@@ -20,6 +20,7 @@ public class Recrutement {
     private Poste poste;
     private Status status;
     private List<Candidat> listCandidats;
+    private String descriptionRecrutement;
 
     // CONSTRUCTORS
     public Recrutement(){
@@ -32,7 +33,7 @@ public class Recrutement {
         Connection c = null;
         PreparedStatement prstm = null; 
         ResultSet rs = null;
-        String query = "SELECT * FROM recrutement";
+        String query = "SELECT * FROM recrutement ORDER BY date_debut_recrutement DESC";
         try {
             c = Database.getConnection();
             prstm = c.prepareStatement(query);
@@ -44,8 +45,9 @@ public class Recrutement {
                 d.setDateDebut(rs.getDate(2));
                 d.setDateFin(rs.getDate(3));
                 d.setNombre(rs.getInt(4));
-                d.setPoste(rs.getInt(5));
-                d.setStatus(rs.getInt(6));
+                d.setPoste(c,rs.getInt(5));
+                d.setStatus(c,rs.getInt(6));
+                d.setDescriptionRecrutement(rs.getString(7));
                 d.fetchListCandidat(c);
 
                 result.add(d);
@@ -85,7 +87,9 @@ public class Recrutement {
                 this.setDateDebut(rs.getDate(2));
                 this.setDateFin(rs.getDate(3));
                 this.setNombre(rs.getInt(4));
-                this.setPoste(rs.getInt(5));
+                this.setPoste(c,rs.getInt(5));
+                this.setStatus(c,rs.getInt(6));
+                this.setDescriptionRecrutement(rs.getString(7));
                 this.fetchListCandidat(c);
             }
             return this;
@@ -107,7 +111,7 @@ public class Recrutement {
     public Recrutement insert() throws SQLException{
         Connection c = null; 
         PreparedStatement prstm = null;
-        String query = "INSERT INTO recrutement(date_debut_recrutement, date_fin_recrutement, nombre, id_poste) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO recrutement(date_debut_recrutement, date_fin_recrutement, nombre, id_poste,description_recrutement) VALUES (?, ?, ?, ?, ?)";
         try {
             c = Database.getConnection();
             c.setAutoCommit(false);
@@ -117,6 +121,7 @@ public class Recrutement {
             prstm.setDate(2, this.getDateFin());
             prstm.setInt(3, this.getNombre());
             prstm.setInt(4, this.getPoste().getIdPoste());
+            prstm.setString(5,this.getDescriptionRecrutement());              
 
             int affectedRows = prstm.executeUpdate();
             if (affectedRows > 0) {
@@ -159,13 +164,47 @@ public class Recrutement {
 
             while (rs.next()) {
                 Candidat cd = new Candidat();
-                cd.setIdCandidat(rs.getInt(1));
-                result.add(cd.getById(c));
+                result.add(cd.getById(c, rs.getInt(1)));
             }
             this.setListCandidats(result);
         } catch (SQLException e) {
             throw e;
         }finally{
+            if(rs != null){
+                rs.close();
+            }
+            if(prstm != null){
+                prstm.close();
+            }
+            if(c != null && isNewConnection){
+                c.close();
+            }
+        }
+    }
+
+    public int getNombreCandidature(Connection c) throws SQLException{
+        int result = 0;
+        PreparedStatement prstm = null; 
+        ResultSet rs = null; 
+        boolean isNewConnection = false;
+        String sql = "SELECT DISTINCT COUNT(id_candidat) FROM recrutement_candidat WHERE id_recrutement = ?";
+        try {
+            if(c == null){
+                isNewConnection = true;
+                c = Database.getConnection();
+            }
+            prstm = c.prepareStatement(sql);
+            prstm.setInt( 1, this.getIdRecrutement());
+
+            rs = prstm.executeQuery();
+            if(rs.next()){
+                result = rs.getInt(1);
+            }
+
+            return result;
+        } catch (SQLException e) {
+            throw e;
+        } finally{
             if(rs != null){
                 rs.close();
             }
@@ -222,10 +261,21 @@ public class Recrutement {
     public void setNombre(int nombre) {
         this.nombre = nombre;
     }
-    public void setPoste(int idposte)throws SQLException {
-        this.poste = Poste.getById(idposte);
+    public void setPoste(Connection c,int idposte)throws SQLException {
+        Poste p = new Poste();
+        this.poste = p.getById(c,idposte);
     }
-    public void setStatus(int idstatus)throws SQLException{
-        this.status = Status.getById(idstatus);
+    public void setStatus(Connection c,int idstatus)throws SQLException{
+        Status s = new Status();
+        this.status = s.getById(c,idstatus);
+    }
+
+
+    public String getDescriptionRecrutement() {
+        return descriptionRecrutement;
+    }
+
+    public void setDescriptionRecrutement(String descriptionRecrutement) {
+        this.descriptionRecrutement = descriptionRecrutement;
     }
 }

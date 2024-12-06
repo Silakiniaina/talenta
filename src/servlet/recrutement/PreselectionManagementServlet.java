@@ -3,9 +3,7 @@ package servlet.recrutement;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import jakarta.servlet.ServletException;
@@ -36,7 +34,7 @@ public class PreselectionManagementServlet extends HttpServlet{
 
             NotificationCandidat notif = new NotificationCandidat();
             notif.setCandidat(c, idCandidat);
-            notif.setTargetLink("#");
+            notif.setTargetLink("recrutement?");
             notif.setDateNotification(Timestamp.valueOf(LocalDateTime.now()));
 
             if(mode != null){

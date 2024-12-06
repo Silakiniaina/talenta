@@ -24,6 +24,7 @@ public class LoginServlet extends HttpServlet{
        String email = req.getParameter("email");
        String mdp = req.getParameter("mdp");
        RequestDispatcher disp = null;
+       Gson gson= new Gson();
 
        try {
             req.setAttribute("role", mode);
@@ -39,12 +40,26 @@ public class LoginServlet extends HttpServlet{
             }else if(mode != null && mode.equals("admin")){
                 Admin d = Admin.login(email, mdp);
                 if(d != null){
+                    req.getSession(false).setAttribute("admin", d);
+
                     disp = req.getRequestDispatcher("/WEB-INF/views/admin/accueilAdmin.jsp");
                     disp.forward(req, resp);
                 }else{
                     throw new Exception("Login incorecte");
                 }
+            }else {
+                Candidat d = Candidat.loginEmploye(email, mdp);
+                out.println(gson.toJson(d));
+                if(d != null){
+                    req.getSession(false).setAttribute("candidat", d);
+                    disp = req.getRequestDispatcher("/WEB-INF/views/employe/accueilEmploye.jsp");
+                    disp.forward(req, resp);
+                }else{
+                    out.print("Login incorecte");
+                }
+                // out.println("mdp");
             }
+            
         }catch (Exception e) {
             req.setAttribute("error", e.getMessage());
             e.printStackTrace(out);
@@ -54,7 +69,6 @@ public class LoginServlet extends HttpServlet{
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        PrintWriter out  = resp.getWriter();
         String type = req.getParameter("role");
         RequestDispatcher disp = req.getRequestDispatcher("/WEB-INF/views/shared/login.jsp");
         try {

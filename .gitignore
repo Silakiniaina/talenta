@@ -1,5 +1,7 @@
-/bin
-/lib 
+bin/
+lib/ 
+
+src/model/utils/Database.java
 
 *.class
 *.txt
@@ -7,5 +9,11 @@
 *.loo
 *.lo1
 *.jar
+*.war
 *.drawio
 *.bkp
+
+tmp/
+temp/
+
+.vscode/
