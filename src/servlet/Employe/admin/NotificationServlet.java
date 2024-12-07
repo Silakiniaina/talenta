@@ -10,9 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.Admin;
-import model.Candidat;
 import model.NotificationAdmin;
-import model.NotificationCandidat;
 
 public class NotificationServlet extends HttpServlet{
     @Override

@@ -11,10 +11,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import model.Employe;
 import model.FinContrat;
-import model.NotificationCandidat;
-import model.TypeFinContrat;
 import model.utils.Database;
 
 @WebServlet("/finContrat-add")
@@ -47,8 +44,6 @@ public class AddFinContratServlet extends HttpServlet {
                 resp.sendRedirect(req.getContextPath() + "/finContrat-notif?idEmploye="+ idEmploye+ "&idTypeContrat="+typeContrat);
                 out.println("lalala");
             } else {
-                // req.setAttribute("errorMessage", "Tous les champs sont requis.");
-                // req.getRequestDispatcher("/WEB-INF/views/error.jsp").forward(req, resp);
                 out.println("Erreur de l'enregistrement");
             }
         } catch (SQLException | IllegalArgumentException e) {
