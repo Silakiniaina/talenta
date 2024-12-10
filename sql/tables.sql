@@ -521,3 +521,11 @@ CREATE TABLE
 		id_categorie_professionnelle SERIAL PRIMARY KEY, 
 		nom_categorie_professionnelle VARCHAR(250) NOT NULL
 	);
+
+CREATE TABLE 
+	categorie_professionnelle_poste (
+		id_poste INT NOT NULL, 
+		id_categorie_professionnelle INT NOT NULL,
+		FOREIGN KEY(id_poste) REFERENCES poste(id_poste),
+		FOREIGN KEY(id_categorie_professionnelle) REFERENCES categorie_professionnelle(id_categorie_professionnelle)
+	);
