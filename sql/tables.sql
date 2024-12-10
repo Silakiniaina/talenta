@@ -515,3 +515,9 @@ CREATE TABLE
 		id_hierarchie SERIAL PRIMARY KEY, 
 		nom_hierarchie VARCHAR(100) NOT NULL UNIQUE
 	);
+
+CREATE TABLE 
+	categorie_professionnelle (
+		id_categorie_professionnelle SERIAL PRIMARY KEY, 
+		nom_categorie_professionnelle VARCHAR(250) NOT NULL
+	);
