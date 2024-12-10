@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.google.gson.Gson;
 
+import model.Education;
 import model.utils.Database;
 
 public class Hierarchie {
@@ -28,6 +29,43 @@ public class Hierarchie {
                 c = Database.getConnection();
             }
             prstm = c.prepareStatement(query);
+            rs = prstm.executeQuery();
+
+            while (rs.next()) {
+                Hierarchie d = new Hierarchie();
+                d.setIdHierarchie(rs.getInt(1));
+                d.setNomHierarchie(rs.getString(2));
+                result.add(d);
+            }
+        } catch (SQLException e) {
+            throw e;
+        }finally{
+            if(rs != null){
+                rs.close();
+            }
+            if(prstm != null){
+                prstm.close();
+            }
+            if(c != null && isNewConnection){
+                c.close();
+            }
+        }
+        return result;
+    }
+
+    public List<Hierarchie> getAllByPoste(Connection c, int idPoste) throws SQLException{
+        List<Hierarchie> result = new ArrayList<>();
+        boolean isNewConnection = false;
+        PreparedStatement prstm = null; 
+        ResultSet rs = null;
+        String query = "SELECT id_hierarchie, nom_hierarchie FROM hierarchie WHERE id_poste = ?";
+        try {
+            if(c == null){
+                isNewConnection = true;
+                c = Database.getConnection();
+            }
+            prstm = c.prepareStatement(query);
+            prstm.setInt(1, idPoste);
             rs = prstm.executeQuery();
 
             while (rs.next()) {
