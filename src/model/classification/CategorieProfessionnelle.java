@@ -19,7 +19,7 @@ public class CategorieProfessionnelle {
         boolean isNewConnection = false;
         PreparedStatement prstm = null; 
         ResultSet rs = null;
-        String query = "SELECT id_hierarchie, nom_hierarchie FROM hierarchie";
+        String query = "SELECT id_categorie_professionnelle, nom_categorie_professionnelle FROM categorie_professionnelle";
         try {
             if(c == null){
                 isNewConnection = true;
@@ -48,6 +48,40 @@ public class CategorieProfessionnelle {
             }
         }
         return result;
+    }
+
+    public CategorieProfessionnelle getById(Connection c, int id) throws SQLException{
+        boolean isNewConnection = false;
+        PreparedStatement prstm = null; 
+        ResultSet rs = null;
+        String query = "SELECT * FROM categorie_professionnelle WHERE id_categorie_professionnelle = ?";
+        try {
+            if(c == null){
+                isNewConnection = true;
+                c = Database.getConnection();
+            }
+            prstm = c.prepareStatement(query);
+            prstm.setInt(1, id);
+            rs = prstm.executeQuery();
+
+            if (rs.next()) {
+                this.setIdCategorieProfessionnelle(rs.getInt(1));
+                this.setNomCategorieProfessionnelle(rs.getString(2));
+            }
+            return this;
+        } catch (SQLException e) {
+            throw e;
+        }finally{
+            if(rs != null){
+                rs.close();
+            }
+            if(prstm != null){
+                prstm.close();
+            }
+            if(c != null && isNewConnection){
+                c.close();
+            }
+        }
     }
 
     // GETTERS AND SETTERS
