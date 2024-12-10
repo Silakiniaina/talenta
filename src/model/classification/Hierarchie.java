@@ -16,7 +16,7 @@ public class Hierarchie {
     private int idHierarchie;
     private String nomHierarchie;
     
-    public static List<Hierarchie> getAll(Connection c) throws SQLException{
+    public List<Hierarchie> getAll(Connection c) throws SQLException{
         List<Hierarchie> result = new ArrayList<>();
         boolean isNewConnection = false;
         PreparedStatement prstm = null; 
@@ -52,6 +52,40 @@ public class Hierarchie {
         return result;
     }
 
+    public Hierarchie getById(Connection c, int id) throws SQLException{
+        boolean isNewConnection = false;
+        PreparedStatement prstm = null; 
+        ResultSet rs = null;
+        String query = "SELECT * FROM hierarchie WHERE id_hierarchie = ?";
+        try {
+            if(c == null){
+                isNewConnection = true;
+                c = Database.getConnection();
+            }
+            prstm = c.prepareStatement(query);
+            prstm.setInt(1, id);
+            rs = prstm.executeQuery();
+
+            if (rs.next()) {
+                this.setIdHierarchie(rs.getInt(1));
+                this.setNomHierarchie(rs.getString(2));
+            }
+            return this;
+        } catch (SQLException e) {
+            throw e;
+        }finally{
+            if(rs != null){
+                rs.close();
+            }
+            if(prstm != null){
+                prstm.close();
+            }
+            if(c != null && isNewConnection){
+                c.close();
+            }
+        }
+    }
+
     // GETTERS
     public int getIdHierarchie() {
         return idHierarchie;
@@ -70,8 +104,10 @@ public class Hierarchie {
     public static void main(String[] args) {
         try {
             Connection c = Database.getConnection();
-            List<Hierarchie> ls = Hierarchie.getAll(null);
+            List<Hierarchie> ls = new Hierarchie().getAll(null);
+            Hierarchie h = new Hierarchie().getById(c, 1);
             System.out.println(new Gson().toJson(ls));
+            System.out.println(new Gson().toJson(h));
         } catch (Exception e) {
             // TODO: handle exception
         }
