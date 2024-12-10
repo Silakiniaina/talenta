@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.Gson;
+
 import model.utils.Database;
 
 public class CategorieProfessionnelle {
@@ -32,6 +34,42 @@ public class CategorieProfessionnelle {
                 CategorieProfessionnelle d = new CategorieProfessionnelle();
                 d.setIdCategorieProfessionnelle(rs.getInt(1));
                 d.setNomCategorieProfessionnelle(rs.getString(2));
+                result.add(d);
+            }
+        } catch (SQLException e) {
+            throw e;
+        }finally{
+            if(rs != null){
+                rs.close();
+            }
+            if(prstm != null){
+                prstm.close();
+            }
+            if(c != null && isNewConnection){
+                c.close();
+            }
+        }
+        return result;
+    }
+
+    public List<CategorieProfessionnelle> getAllByPoste(Connection c, int idPoste) throws SQLException{
+        List<CategorieProfessionnelle> result = new ArrayList<>();
+        boolean isNewConnection = false;
+        PreparedStatement prstm = null; 
+        ResultSet rs = null;
+        String query = "SELECT id_categorie_professionnelle FROM categorie_professionnelle_poste WHERE id_poste = ?";
+        try {
+            if(c == null){
+                isNewConnection = true;
+                c = Database.getConnection();
+            }
+            prstm = c.prepareStatement(query);
+            prstm.setInt(1, idPoste);
+            rs = prstm.executeQuery();
+            
+            while (rs.next()) {
+                CategorieProfessionnelle d = new CategorieProfessionnelle();
+                d = d.getById(c, rs.getInt(1));
                 result.add(d);
             }
         } catch (SQLException e) {
@@ -96,5 +134,14 @@ public class CategorieProfessionnelle {
     }
     public void setNomCategorieProfessionnelle(String nomCategorieProfessionnelle) {
         this.nomCategorieProfessionnelle = nomCategorieProfessionnelle;
+    }
+
+    public static void main(String[] args) {
+        try {
+            List<CategorieProfessionnelle> ls = new CategorieProfessionnelle().getAllByPoste(null,1);
+            System.out.println(new Gson().toJson(ls));
+        } catch (Exception e) {
+            
+        }
     }
 }
