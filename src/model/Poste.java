@@ -11,6 +11,7 @@ import java.util.List;
 import com.google.gson.Gson;
 
 import model.classification.CategorieProfessionnelle;
+import model.classification.Hierarchie;
 import model.utils.Database;
 
 public class Poste {
@@ -18,6 +19,8 @@ public class Poste {
     private int idPoste;
     private String nomPoste;
     private Departement departement;
+    private int anneeExperienceRequise;
+    private Hierarchie hierarchie;
     private List<Competence> listCompetence;
     private List<Education> listEducation;
     private List<Experience> listExperience;
@@ -58,6 +61,8 @@ public class Poste {
                 d.setIdPoste(rs.getInt(1));
                 d.setNomPoste(rs.getString(2));
                 d.setDepartement(rs.getInt(3));
+                d.setAnneeExperienceRequise(rs.getInt(4));
+                d.setHierarchie(c, rs.getInt(5));
                 d.setListCompetence(comp.getAllByPoste(c,d.getIdPoste()));
                 d.setListEducation(edu.getAllByPoste(c, d.getIdPoste()));
                 d.setListExperience(exp.getAllByPoste(c, d.getIdPoste()));
@@ -104,6 +109,8 @@ public class Poste {
                 this.setIdPoste(rs.getInt(1));
                 this.setNomPoste(rs.getString(2));
                 this.setDepartement(rs.getInt(3));
+                this.setAnneeExperienceRequise(rs.getInt(4));
+                this.setHierarchie(c, rs.getInt(5));
                 this.setListCompetence(comp.getAllByPoste(c,this.getIdPoste()));
                 this.setListEducation(edu.getAllByPoste(c, this.getIdPoste()));
                 this.setListExperience(exp.getAllByPoste(c,this.getIdPoste()));
@@ -129,7 +136,7 @@ public class Poste {
     public Poste insert(Connection c) throws SQLException{
         boolean isNewConnection = false;
         PreparedStatement prstm = null;
-        String query = "INSERT INTO poste(nom,id_departement) VALUES (?, ?)";
+        String query = "INSERT INTO poste(nom,id_departement,annees_experience_requises,id_hierarchie) VALUES (?, ?, ?, ?)";
         try {
             if(c == null){
                 isNewConnection = true;
@@ -140,7 +147,8 @@ public class Poste {
             prstm = c.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             prstm.setString(1, this.getNomPoste());
             prstm.setInt(2, this.getDepartement().getIdDepartement());
-
+            prstm.setInt(3, this.getAnneeExperienceRequise());
+            prstm.setInt(4, this.getHierarchie().getIdHierarchie());
             int affectedRows = prstm.executeUpdate();
             if (affectedRows > 0) {
                 try (ResultSet generatedKeys = prstm.getGeneratedKeys()) {
@@ -251,6 +259,23 @@ public class Poste {
     public void setListExperience(List<Experience> listExperience) {
         this.listExperience = listExperience;
     }
+
+    public Hierarchie getHierarchie() {
+        return hierarchie;
+    }
+
+    public void setHierarchie(Connection c, int hierarchie) throws SQLException{
+        this.hierarchie = new Hierarchie().getById(c, hierarchie);
+    }
+
+    public int getAnneeExperienceRequise() {
+        return anneeExperienceRequise;
+    }
+
+    public void setAnneeExperienceRequise(int anneeExperienceRequise) {
+        this.anneeExperienceRequise = anneeExperienceRequise;
+    }
+
 
     public static void main(String[] args) {
         try {

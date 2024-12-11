@@ -1,9 +1,11 @@
 <%@ page import="java.util.List" %>
 <%@ page import="model.Competence" %>
+<%@ page import="model.classification.Hierarchie" %>
 <%@ page import="model.Departement" %> 
 
 <%
     List<Departement> departements = (List<Departement>)request.getAttribute("departements");
+    List<Hierarchie> hierarchies = (List<Hierarchie>)request.getAttribute("hierarchies");
     List<Competence> competences = (List<Competence>)request.getAttribute("competences");
 %>
     <%@include file="../../shared/head.jsp" %>
@@ -34,6 +36,20 @@
                                                         }
                                                     %>
                                                 </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="departement">Hierarchie</label>
+                                                <select class="form-control" id="departement" name="hierarchie">
+                                                    <%
+                                                        for (Hierarchie hierarchie : hierarchies) {
+                                                            out.println("<option value=\"" + hierarchie.getIdHierarchie() + "\">" + hierarchie.getNomHierarchie() + "</option>");
+                                                        }
+                                                    %>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="annee-xp">Annee xp requise :</label>
+                                                <input type="number" min=0 class="form-control" id="annee-xp" name="annee-xp" placeholder="Annee xp">
                                             </div>
                                             <button type="submit" class="btn btn-primary mr-2">Ajouter</button>
                                         </form>

@@ -185,3 +185,7 @@ INSERT INTO conge (id_conge, id_employe, id_type_conge, date_debut, date_fin, id
 (1, 1, 1, '2024-10-10', '2024-10-20', 1); -- Congé payé du 10 au 20 octobre 2024
 
 
+INSERT INTO hierarchie(nom_hierarchie) VALUES 
+    ('Junior'),
+    ('Senior')
+;

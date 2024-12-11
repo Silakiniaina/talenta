@@ -529,3 +529,6 @@ CREATE TABLE
 		FOREIGN KEY(id_poste) REFERENCES poste(id_poste),
 		FOREIGN KEY(id_categorie_professionnelle) REFERENCES categorie_professionnelle(id_categorie_professionnelle)
 	);
+
+ALTER TABLE poste ADD COLUMN id_hierarchie INT ;
+ALTER TABLE poste ADD CONSTRAINT poste_id_hierarchie_pkey FOREIGN KEY(id_hierarchie) REFERENCES hierarchie(id_hierarchie);

@@ -23,6 +23,8 @@
                                                         <th>ID</th>
                                                         <th>Nom</th>
                                                         <th>Departement</th>
+                                                        <th>Hierarchie</th>
+                                                        <th>XP requise</th>
                                                         <th>Action</th>
                                                     </tr>
                                                 </thead>
@@ -34,6 +36,8 @@
                                                         <td><%= poste.getIdPoste() %></td>
                                                         <td><%= poste.getNomPoste() %></td>
                                                         <td><%= poste.getDepartement().getNomDepartement() %></td>
+                                                        <td><%= poste.getHierarchie().getNomHierarchie() %></td>
+                                                        <td><%= poste.getAnneeExperienceRequise() %></td>
                                                         <td><a href="recrutement?mode=i&idPoste=<%= poste.getIdPoste() %>">Recruter</a></td>
                                                     </tr>
                                                     <%
