@@ -346,7 +346,7 @@ GROUP BY
 CREATE OR REPLACE VIEW resultat_test_candidat AS
 WITH stats_test AS (
     SELECT 
-        tc.id_attribution,
+        tc.id_recrutement,
         tc.id_candidat,
         COUNT(CASE WHEN rtp.est_reponse_attendue = false THEN 1 END) AS nombre_reponse_fausse,
         COUNT(CASE WHEN rtp.est_reponse_attendue = true THEN 1 END) AS nombre_reponse_correcte,
@@ -364,12 +364,12 @@ WITH stats_test AS (
     LEFT JOIN 
         reponse_test_possibles rtp ON rtc.id_reponse_candidat = rtp.id_reponse_test_possibles
     GROUP BY 
-        tc.id_attribution, 
+        tc.id_recrutement, 
         tc.id_candidat,
         t.id_test
 )
 SELECT 
-    id_attribution,
+    id_recrutement,
     id_candidat,
     nombre_reponse_fausse,
     nombre_reponse_correcte,
