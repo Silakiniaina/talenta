@@ -8,6 +8,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.Gson;
+
+import model.classification.CategorieProfessionnelle;
 import model.utils.Database;
 
 public class Poste {
@@ -18,6 +21,7 @@ public class Poste {
     private List<Competence> listCompetence;
     private List<Education> listEducation;
     private List<Experience> listExperience;
+    private List<CategorieProfessionnelle> listCategorieProfessionnelles;
 
     // CONSTRUCTOR
     public Poste() {
@@ -48,6 +52,7 @@ public class Poste {
             Competence comp = new Competence();
             Education edu = new Education();
             Experience exp = new Experience();
+            CategorieProfessionnelle csp = new CategorieProfessionnelle();
             while (rs.next()) {
                 Poste d = new Poste();
                 d.setIdPoste(rs.getInt(1));
@@ -56,6 +61,7 @@ public class Poste {
                 d.setListCompetence(comp.getAllByPoste(c,d.getIdPoste()));
                 d.setListEducation(edu.getAllByPoste(c, d.getIdPoste()));
                 d.setListExperience(exp.getAllByPoste(c, d.getIdPoste()));
+                d.setListCategorieProfessionnelles(csp.getAllByPoste(c, d.getIdPoste()));
                 result.add(d);
             }
         }catch (SQLException e) {
@@ -93,6 +99,7 @@ public class Poste {
                 Competence comp = new Competence();
                 Education edu = new Education();
                 Experience exp = new Experience();
+                CategorieProfessionnelle csp = new CategorieProfessionnelle();
 
                 this.setIdPoste(rs.getInt(1));
                 this.setNomPoste(rs.getString(2));
@@ -100,6 +107,7 @@ public class Poste {
                 this.setListCompetence(comp.getAllByPoste(c,this.getIdPoste()));
                 this.setListEducation(edu.getAllByPoste(c, this.getIdPoste()));
                 this.setListExperience(exp.getAllByPoste(c,this.getIdPoste()));
+                this.setListCategorieProfessionnelles(csp.getAllByPoste(c, this.getIdPoste()));
 
             }
             return this;
@@ -188,9 +196,18 @@ public class Poste {
         }
     }
 
+    
     // GETTERS AND SETTERS
     public int getIdPoste() {
         return idPoste;
+    }
+
+    public List<CategorieProfessionnelle> getListCategorieProfessionnelles() {
+        return listCategorieProfessionnelles;
+    }
+
+    public void setListCategorieProfessionnelles(List<CategorieProfessionnelle> listCategorieProfessionnelles) {
+        this.listCategorieProfessionnelles = listCategorieProfessionnelles;
     }
 
     public String getNomPoste() {
@@ -233,5 +250,15 @@ public class Poste {
 
     public void setListExperience(List<Experience> listExperience) {
         this.listExperience = listExperience;
+    }
+
+    public static void main(String[] args) {
+        try {
+            Connection c = Database.getConnection();
+            List<Poste> ls = new Poste().getAll(c);
+            System.out.println(new Gson().toJson(ls));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
