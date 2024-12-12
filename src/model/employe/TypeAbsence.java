@@ -21,7 +21,7 @@ public class TypeAbsence {
         Connection c = null;
         PreparedStatement prstm = null; 
         ResultSet rs = null;
-        String query = "SELECT * FROM genre";
+        String query = "SELECT * FROM type_absence";
         try {
             c = Database.getConnection();
             prstm = c.prepareStatement(query);
@@ -39,6 +39,40 @@ public class TypeAbsence {
         }
         return result;
     }
+
+    public static TypeAbsence getById(int id) throws SQLException{
+         TypeAbsence result = null;
+         Connection c = null;
+         PreparedStatement prstm = null; 
+         ResultSet rs = null;
+         String query = "SELECT * FROM type_absence WHERE id_type_absence = ?";
+         try {
+             c = Database.getConnection();
+             prstm = c.prepareStatement(query);
+             prstm.setInt(1, id);
+             rs = prstm.executeQuery();
+ 
+             if(rs.next()) {
+                 result = new TypeAbsence();
+                 result.setIdTypeAbsence(rs.getInt(1));
+                 result.setNomTypeAbsence(rs.getString(2));
+                 result.setAvecSolde(rs.getBoolean(3));
+             }
+         } catch (SQLException e) {
+             throw e;
+         }finally{
+            if(rs != null){
+                rs.close();
+            }
+            if(prstm != null){
+                prstm.close();
+            }
+            if(c != null){
+                c.close();
+            }
+        }
+         return result;
+     }
 
     // GETTERS AND SETTERS
     public int getIdTypeAbsence() {
