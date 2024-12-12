@@ -42,7 +42,7 @@
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item"> <a class="nav-link" href="list-employe">Liste Employe</a></li>
                     <li class="nav-item"> <a class="nav-link" href="presence-employe">Presence</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="#">Abscence</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="absence-employe">Abscence</a></li>
                     <li class="nav-item"> <a class="nav-link" href="#">Prime</a></li>
                     <li class="nav-item"> <a class="nav-link" href="#">Indemnite</a></li>
                 </ul>
