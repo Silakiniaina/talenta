@@ -46,7 +46,43 @@ public class TypePrime {
             }
         }
         return result;
-    }   
+    } 
+    
+    public static TypePrime getById(Connection c, int id) throws SQLException{
+        TypePrime result = null;
+        boolean isNewConnection = false;
+        PreparedStatement prstm = null; 
+        ResultSet rs = null;
+        String query = "SELECT * FROM type_prime WHERE id_type_prime = ?";
+        try {
+           if( c == null ){
+               c = Database.getConnection();
+               isNewConnection = true;
+           }
+            prstm = c.prepareStatement(query);
+            prstm.setInt(1, id);
+            rs = prstm.executeQuery();
+
+            if(rs.next()) {
+                result = new TypePrime();
+                result.setIdTypePrime(rs.getInt(1));
+                result.setNomTypePrime(rs.getString(2));
+            }
+        } catch (SQLException e) {
+            throw e;
+        }finally{
+           if(rs != null){
+               rs.close();
+           }
+           if(prstm != null){
+               prstm.close();
+           }
+           if(c != null && isNewConnection){
+               c.close();
+           }
+       }
+        return result;
+    }
 
     // GETTERS AND SETTERS
     public int getIdTypePrime() {
