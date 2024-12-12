@@ -37,6 +37,17 @@ public class TypeAbsence {
         } catch (SQLException e) {
             throw e;
         }
+        finally{
+            if(rs != null){
+                rs.close();
+            }
+            if(prstm != null){
+                prstm.close();
+            }
+            if(c != null){
+                c.close();
+            }
+        }
         return result;
     }
 
