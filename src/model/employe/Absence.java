@@ -57,6 +57,45 @@ public class Absence {
         return result;
     }
 
+    public List<Absence> getByEmploye(Connection c, int idEmp) throws SQLException{
+        List<Absence> result = new ArrayList<>();
+        boolean isNewConnection = false;
+        PreparedStatement prstm = null; 
+        ResultSet rs = null;
+        String query = "SELECT * FROM absence WHERE id_employe = ?";
+        try {
+            if(c == null){
+                isNewConnection = true;
+                c = Database.getConnection();
+            }
+            prstm = c.prepareStatement(query);
+            prstm.setInt(1, idEmp);
+            rs = prstm.executeQuery();
+
+            while (rs.next()) {
+                Absence d = new Absence();
+                d.setIdAbsence(rs.getInt(1));
+                d.setEmploye(c, rs.getInt(2));
+                d.setDateDebut(rs.getDate(3));
+                d.setDateFin(rs.getDate(4));
+                result.add(d);
+            }
+        } catch (SQLException e) {
+            throw e;
+        }finally{
+            if(rs != null){
+                rs.close();
+            }
+            if(prstm != null){
+                prstm.close();
+            }
+            if(c != null && isNewConnection){
+                c.close();
+            }
+        }
+        return result;
+    }
+
     public int getIdAbsence() {
         return idAbsence;
     }
