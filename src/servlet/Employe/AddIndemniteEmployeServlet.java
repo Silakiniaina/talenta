@@ -12,11 +12,11 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.Employe;
-import model.employe.Prime;
-import model.employe.TypePrime;
+import model.employe.Indemnite;
+import model.employe.TypeIndemnite;
 
-@WebServlet("/addPrime")
-public class AddPrimeEmployeServlet extends HttpServlet{
+@WebServlet("/addIndemnite")
+public class AddIndemniteEmployeServlet extends HttpServlet{
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -25,11 +25,11 @@ public class AddPrimeEmployeServlet extends HttpServlet{
             Connection c = (Connection)req.getSession().getAttribute("connexion");
 
             List<Employe> employes = Employe.getAll(c);
-            List<TypePrime> types = TypePrime.getAll();
+            List<TypeIndemnite> types = TypeIndemnite.getAll();
 
             req.setAttribute("employes", employes);
             req.setAttribute("types", types);
-            RequestDispatcher disp = req.getRequestDispatcher("/WEB-INF/views/admin/employe/addPrime.jsp");
+            RequestDispatcher disp = req.getRequestDispatcher("/WEB-INF/views/admin/employe/addIndemnite.jsp");
             disp.forward(req, resp);
         } catch (Exception e) {
             e.printStackTrace(out);
@@ -46,14 +46,14 @@ public class AddPrimeEmployeServlet extends HttpServlet{
         try {
             Connection c = (Connection)req.getSession().getAttribute("connexion");
 
-            Prime p  = new Prime();
+            Indemnite p  = new Indemnite();
             p.setEmploye(c, emp);
-            p.setTypePrime(c, type);
-            p.setMontantPrime(montant);
+            p.setTypeIndemnite(c, type);
+            p.setMontantIndemnite(montant);
 
             p.insert(c);
 
-            resp.sendRedirect("addPrime");
+            resp.sendRedirect("addIndemnite");
         } catch (Exception e) {
             e.printStackTrace(out);
         }
