@@ -94,6 +94,36 @@ public class Prime {
         return result;
     }
 
+    public void insert(Connection c) throws SQLException{
+        boolean isNewConnection = false;
+        PreparedStatement prstm = null;
+        String query = "INSERT INTO prime_employe(id_employe,id_type_prime,montant_prime) VALUES (?, ?, ?)";
+        try {
+            if(c == null){
+                isNewConnection = true;
+                c = Database.getConnection();
+            }
+            c.setAutoCommit(false);
+
+            prstm = c.prepareStatement(query);
+            prstm.setInt(1, this.getEmploye().getIdEmploye());
+            prstm.setInt(2, this.getTypePrime().getIdTypePrime());
+            prstm.setDouble(3, this.getMontantPrime());
+            prstm.executeUpdate();
+
+            c.commit();
+        } catch (SQLException e) {
+            c.rollback();
+            throw e;
+        }finally{
+            if(prstm != null){
+                prstm.close();
+            }
+            if(c != null && isNewConnection){
+                c.close();
+            }
+        }
+    }
     // GETTERS AND SETTERS
     public int getIdPrime() {
         return idPrime;
