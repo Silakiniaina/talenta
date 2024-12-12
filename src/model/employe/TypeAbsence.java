@@ -40,14 +40,17 @@ public class TypeAbsence {
         return result;
     }
 
-    public static TypeAbsence getById(int id) throws SQLException{
+    public static TypeAbsence getById(Connection c, int id) throws SQLException{
          TypeAbsence result = null;
-         Connection c = null;
+         boolean isNewConnection = false;
          PreparedStatement prstm = null; 
          ResultSet rs = null;
          String query = "SELECT * FROM type_absence WHERE id_type_absence = ?";
          try {
-             c = Database.getConnection();
+            if( c == null ){
+                c = Database.getConnection();
+                isNewConnection = true;
+            }
              prstm = c.prepareStatement(query);
              prstm.setInt(1, id);
              rs = prstm.executeQuery();
@@ -67,7 +70,7 @@ public class TypeAbsence {
             if(prstm != null){
                 prstm.close();
             }
-            if(c != null){
+            if(c != null && isNewConnection){
                 c.close();
             }
         }
