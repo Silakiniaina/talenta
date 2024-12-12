@@ -59,6 +59,45 @@ public class Presence {
         return result;
     }
 
+    public List<Presence> getByEmploye(Connection c, int idEmp) throws SQLException{
+        List<Presence> result = new ArrayList<>();
+        boolean isNewConnection = false;
+        PreparedStatement prstm = null; 
+        ResultSet rs = null;
+        String query = "SELECT * FROM presence_employe WHERE id_employe = ?";
+        try {
+            if(c == null){
+                isNewConnection = true;
+                c = Database.getConnection();
+            }
+            prstm = c.prepareStatement(query);
+            prstm.setInt(1, idEmp);
+            rs = prstm.executeQuery();
+
+            while (rs.next()) {
+                Presence d = new Presence();
+                d.setIdPresence(rs.getInt(1));
+                d.setEmploye(c, rs.getInt(2));
+                d.setDateHeureEntree(rs.getTimestamp(3));
+                d.setDateHeureSortie(rs.getTimestamp(4));
+                result.add(d);
+            }
+        } catch (SQLException e) {
+            throw e;
+        }finally{
+            if(rs != null){
+                rs.close();
+            }
+            if(prstm != null){
+                prstm.close();
+            }
+            if(c != null && isNewConnection){
+                c.close();
+            }
+        }
+        return result;
+    }
+
     // GETTERS AND SETTERS
     public int getIdPresence() {
         return idPresence;
@@ -89,7 +128,7 @@ public class Presence {
         try {
             Connection c = Database.getConnection();
 
-            List<Presence> ls = new Presence().getAll(c);
+            List<Presence> ls = new Presence().getByEmploye(c,2);
             Gson g = new Gson();
             for(Presence p : ls){
                 System.out.println(g.toJson(p));
