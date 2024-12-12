@@ -4,9 +4,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.time.LocalDate;
-
-import com.google.gson.Gson;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -24,7 +21,6 @@ public class NotifierServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         PrintWriter out= resp.getWriter();
-        Gson gson= new Gson();
 
         String idEmployeStr = req.getParameter("idEmploye");
         String idType= req.getParameter("idTypeContrat");
@@ -33,10 +29,8 @@ public class NotifierServlet extends HttpServlet {
 
                 int idEmploye = Integer.parseInt(idEmployeStr);
                 Employe employe = Employe.getById(conn, idEmploye);
-                // out.println(gson.toJson(employe));
                 int idTypeContrat= Integer.parseInt(idType);
                 TypeFinContrat tpf= TypeFinContrat.getById(idTypeContrat);
-                // out.println(gson.toJson(tpf));
                 
                 if (employe != null) {
                     NotificationCandidat notification = new NotificationCandidat();

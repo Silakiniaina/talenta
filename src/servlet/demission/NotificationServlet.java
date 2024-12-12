@@ -4,9 +4,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.time.LocalDate;
-
-import com.google.gson.Gson;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -15,8 +12,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.Employe;
 import model.NotificationAdmin;
-import model.NotificationCandidat;
-import model.TypeFinContrat;
 import model.utils.Database;
 
 @WebServlet("/demission-notif")
@@ -25,7 +20,6 @@ public class NotificationServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         PrintWriter out= resp.getWriter();
-        Gson gson= new Gson();
 
         String idEmployeStr = req.getParameter("idCandidat");
         String date= req.getParameter("date");

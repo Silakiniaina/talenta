@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import model.Competence;
 import model.Departement;
 import model.Poste;
+import model.classification.Hierarchie;
 
 @WebServlet("/poste")
 public class PosteServlet extends HttpServlet{
@@ -28,11 +29,12 @@ public class PosteServlet extends HttpServlet{
             Connection c = (Connection)req.getSession().getAttribute("connexion");
             if(mode != null && mode.equals("i")){
                 List<Departement> listeDepartements = Departement.getAll();
-                Competence comp = new Competence();
-                List<Competence> listeCompetences = comp.getAll(c);
+                List<Competence> listeCompetences = new Competence().getAll(c);
+                List<Hierarchie> hierarchies = new Hierarchie().getAll(c);
 
                 req.setAttribute("departements", listeDepartements);
                 req.setAttribute("competences", listeCompetences);
+                req.setAttribute("hierarchies", hierarchies);
                 disp = req.getRequestDispatcher("/WEB-INF/views/admin/poste/addPoste.jsp");
             }else{
                 Poste p = new Poste();
@@ -51,11 +53,15 @@ public class PosteServlet extends HttpServlet{
         PrintWriter out = resp.getWriter();
         String nom = req.getParameter("nom");
         String dept =  req.getParameter("dept");
+        String hierarchie = req.getParameter("hierarchie");
+        String annee_xp_str = req.getParameter("annee-xp");
         try {
             Connection c = (Connection)req.getSession().getAttribute("connexion");
             Poste p = new Poste();
             p.setDepartement(Integer.parseInt(dept));
+            p.setHierarchie(c, Integer.parseInt(hierarchie));
             p.setNomPoste(nom);
+            p.setAnneeExperienceRequise(Integer.parseInt(annee_xp_str));
 
             p.insert(c);
             resp.sendRedirect("poste");

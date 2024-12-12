@@ -53,6 +53,10 @@ public class Employe {
     public Date getDateEmbauche() {
         return dateEmbauche;
     }
+
+    public String getNomComplet(){
+        return this.getCandidat().getPrenomCandidat()+" "+this.getCandidat().getNomCandidat();
+    }
     public static Employe getEmployeFromCandidat(Candidat candidat) throws SQLException {
         Employe employe = null;
         String query = "SELECT * FROM Employe WHERE id_candidat = ?";

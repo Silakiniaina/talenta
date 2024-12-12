@@ -51,7 +51,7 @@ public class DemandeDemission {
     public String getEtat(){
         return this.etat;
     }
-    public void setEtat(){
+    public void setEtat( String etat){
         this.etat= etat;
     }
 

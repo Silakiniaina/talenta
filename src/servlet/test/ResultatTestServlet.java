@@ -28,17 +28,11 @@ public class ResultatTestServlet extends HttpServlet{
         List<ResultatTestCandidat> ls = ResultatTestCandidat.getResultatByRecrutement(c, Integer.parseInt(idRecrutementStr));
 
         req.setAttribute("resultats", ls);
+        req.setAttribute("idRecrutement", idRecrutementStr);
         RequestDispatcher disp = req.getRequestDispatcher("/WEB-INF/views/test/resultatTest.jsp");
         disp.forward(req, resp);
        } catch (Exception e) {
         e.printStackTrace(out);
        }
     }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // TODO Auto-generated method stub
-        super.doPost(req, resp);
-    }
-    
 }

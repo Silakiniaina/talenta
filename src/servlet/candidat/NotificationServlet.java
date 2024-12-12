@@ -14,7 +14,6 @@ public class NotificationServlet extends HttpServlet{
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        PrintWriter out = resp.getWriter();
         String notification = req.getParameter("notification");
         if(notification != null){
             req.setAttribute("notification", notification);

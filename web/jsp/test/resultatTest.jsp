@@ -5,6 +5,7 @@
 <%@ page import=" model.Recrutement" %>
 <%
     List<ResultatTestCandidat> resultats = (List<ResultatTestCandidat>)request.getAttribute("resultats");
+    String idRecrutement = (String)request.getAttribute("idRecrutement");
 %>
 
     <%@include file="../shared/head.jsp" %>
@@ -49,7 +50,7 @@
                                                         <td><%= resultat.getPourcentageReussite() %></td>
                                                         <td><%= resultat.getStatus() %></td>
                                                         <td>
-                                                            <a type="button" class="btn btn-sm btn-outline-danger" href="#">Embaucher</a></td>
+                                                            <a type="button" class="btn btn-sm btn-outline-danger" href="contrat?idRecrutement=<%= idRecrutement %>&idCandidat=<%= candidat.getIdCandidat() %>">Embaucher</a></td>
                                                         </td>
                                                     </tr>
                                                 <%

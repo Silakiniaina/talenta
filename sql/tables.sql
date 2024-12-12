@@ -167,10 +167,10 @@ CREATE TABLE
 	);
 
 CREATE TABLE
-	employe(
+	employe (
 		id_employe serial NOT NULL,
 		date_embauche date DEFAULT NOW (),
-		salaire_base DECIMAL(18,2) NOT NULL,
+		salaire_base DECIMAL(18, 2) NOT NULL,
 		id_candidat integer NOT NULL,
 		id_poste integer NOT NULL,
 		CONSTRAINT employe_pkey PRIMARY KEY (id_employe),
@@ -325,165 +325,210 @@ CREATE TABLE
 		CONSTRAINT reponse_test_possibles_id_question_test_fkey FOREIGN KEY (id_question_test) REFERENCES question_test (id_question_test) ON DELETE CASCADE
 	);
 
-CREATE TABLE reponse_test_candidat (
-    id_reponse serial NOT NULL,
-    id_attribution integer,
-    id_question integer,
-    id_reponse_candidat integer NOT NULL,
-    date_soumission timestamp DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT reponse_test_candidat_pkey PRIMARY KEY (id_reponse),
-    CONSTRAINT reponse_test_candidat_id_reponse_candidat_fkey FOREIGN KEY (id_reponse_candidat) REFERENCES reponse_test_possibles(id_reponse_test_possibles),
-    CONSTRAINT reponse_test_candidat_id_attribution_fkey1 FOREIGN KEY (id_attribution) REFERENCES test_candidat(id_attribution),
-    CONSTRAINT reponse_test_candidat_id_question_fkey FOREIGN KEY (id_question) REFERENCES question_test(id_question_test),
-    CONSTRAINT reponse_test_candidat_id_attribution_fkey FOREIGN KEY (id_attribution) REFERENCES test_candidat(id_attribution) ON DELETE CASCADE
-);
+CREATE TABLE
+	reponse_test_candidat (
+		id_reponse serial NOT NULL,
+		id_attribution integer,
+		id_question integer,
+		id_reponse_candidat integer NOT NULL,
+		date_soumission timestamp DEFAULT CURRENT_TIMESTAMP,
+		CONSTRAINT reponse_test_candidat_pkey PRIMARY KEY (id_reponse),
+		CONSTRAINT reponse_test_candidat_id_reponse_candidat_fkey FOREIGN KEY (id_reponse_candidat) REFERENCES reponse_test_possibles (id_reponse_test_possibles),
+		CONSTRAINT reponse_test_candidat_id_attribution_fkey1 FOREIGN KEY (id_attribution) REFERENCES test_candidat (id_attribution),
+		CONSTRAINT reponse_test_candidat_id_question_fkey FOREIGN KEY (id_question) REFERENCES question_test (id_question_test),
+		CONSTRAINT reponse_test_candidat_id_attribution_fkey FOREIGN KEY (id_attribution) REFERENCES test_candidat (id_attribution) ON DELETE CASCADE
+	);
 
-CREATE TABLE type_fin_contrat(
-    id_type_fin_contrat SERIAL PRIMARY KEY,
-    label VARCHAR(20)
-);
+CREATE TABLE
+	type_fin_contrat (
+		id_type_fin_contrat SERIAL PRIMARY KEY,
+		label VARCHAR(20)
+	);
 
-CREATE TABLE fin_contrat(
-    id_fin_contrat SERIAL PRIMARY KEY,
-    id_employe INT REFERENCES employe(id_employe),
-    id_type_fin_contrat INT REFERENCES type_fin_contrat(id_type_fin_contrat),
-    motif VARCHAR(100),
-    date_depot DATE
-);
+CREATE TABLE
+	fin_contrat (
+		id_fin_contrat SERIAL PRIMARY KEY,
+		id_employe INT REFERENCES employe (id_employe),
+		id_type_fin_contrat INT REFERENCES type_fin_contrat (id_type_fin_contrat),
+		motif VARCHAR(100),
+		date_depot DATE
+	);
 
-CREATE TABLE notification_admin (
-    id_notification serial NOT NULL,
-    contenu_notification varchar(256) NOT NULL,
-    date_notification timestamp DEFAULT CURRENT_TIMESTAMP,
-    date_vue_notification timestamp,
-    target_link varchar(256),
-    CONSTRAINT notification_admin_pkey PRIMARY KEY (id_notification)
-);
+CREATE TABLE
+	notification_admin (
+		id_notification serial NOT NULL,
+		contenu_notification varchar(256) NOT NULL,
+		date_notification timestamp DEFAULT CURRENT_TIMESTAMP,
+		date_vue_notification timestamp,
+		target_link varchar(256),
+		CONSTRAINT notification_admin_pkey PRIMARY KEY (id_notification)
+	);
 
-CREATE TABLE demande_demission(
-    id_demande SERIAL PRIMARY KEY,
-    id_candidat INT REFERENCES candidat(id_candidat),
-    date_depot DATE,
-    motif VARCHAR(100),
-    etat VARCHAR(10));
-    
-CREATE TABLE type_conge(
-   id_type_conge INT,
-   nom_type VARCHAR(50) NOT NULL,
-   est_conge_paye BOOLEAN DEFAULT true,
-   PRIMARY KEY(id_type_conge)
-);
+CREATE TABLE
+	demande_demission (
+		id_demande SERIAL PRIMARY KEY,
+		id_candidat INT REFERENCES candidat (id_candidat),
+		date_depot DATE,
+		motif VARCHAR(100),
+		etat VARCHAR(10)
+	);
 
-CREATE TABLE conge(
-id_conge INT,
-id_employe INT REFERENCES employe(id_employe),
-id_type_conge INT REFERENCES type_conge(id_type_conge),
-date_debut DATE NOT NULL,
-date_fin DATE,
-id_contrat INT REFERENCES contrat(id_contrat),
-PRIMARY KEY(id_conge)
-);
+CREATE TABLE
+	type_conge (
+		id_type_conge INT,
+		nom_type VARCHAR(50) NOT NULL,
+		est_conge_paye BOOLEAN DEFAULT true,
+		PRIMARY KEY (id_type_conge)
+	);
 
-CREATE TABLE presence_employe(
-	id_presence SERIAL PRIMARY KEY, 
-	id_employe INTEGER REFERENCES employe(id_employe),
-	date_entree TIMESTAMP NOT NULL, 
-	date_sortie TIMESTAMP NOT NULL
-);
+CREATE TABLE
+	conge (
+		id_conge INT,
+		id_employe INT REFERENCES employe (id_employe),
+		id_type_conge INT REFERENCES type_conge (id_type_conge),
+		date_debut DATE NOT NULL,
+		date_fin DATE,
+		id_contrat INT REFERENCES contrat (id_contrat),
+		PRIMARY KEY (id_conge)
+	);
+
+CREATE TABLE
+	presence_employe (
+		id_presence SERIAL PRIMARY KEY,
+		id_employe INTEGER REFERENCES employe (id_employe),
+		date_entree TIMESTAMP NOT NULL,
+		date_sortie TIMESTAMP NOT NULL
+	);
 
 -- prime et indemnite : 
-CREATE TABLE type_prime (
-    id_type_prime SERIAL PRIMARY KEY,
-    nom_type_prime VARCHAR(50) NOT NULL
-);
+CREATE TABLE
+	type_prime (
+		id_type_prime SERIAL PRIMARY KEY,
+		nom_type_prime VARCHAR(50) NOT NULL
+	);
 
-CREATE TABLE prime_employe (
-    id_prime SERIAL PRIMARY KEY,
-    id_employe INT REFERENCES employe(id_employe),
-    id_type_prime INT REFERENCES type_prime(id_type_prime),
-    montant_prime NUMERIC(10, 2) NOT NULL
-);
+CREATE TABLE
+	prime_employe (
+		id_prime SERIAL PRIMARY KEY,
+		id_employe INT REFERENCES employe (id_employe),
+		id_type_prime INT REFERENCES type_prime (id_type_prime),
+		montant_prime NUMERIC(10, 2) NOT NULL
+	);
 
-CREATE TABLE type_indemnite (
-    id_type_indemnite SERIAL PRIMARY KEY,
-    nom_type_indemnite VARCHAR(50) NOT NULL
-);
+CREATE TABLE
+	type_indemnite (
+		id_type_indemnite SERIAL PRIMARY KEY,
+		nom_type_indemnite VARCHAR(50) NOT NULL
+	);
 
-CREATE TABLE indemnite_employe (
-    id_indemnite SERIAL PRIMARY KEY,
-    id_employe INT REFERENCES employe(id_employe),
-    id_type_indemnite INT REFERENCES type_indemnite(id_type_indemnite),
-    montant_indemnite NUMERIC(10, 2) NOT NULL
-);
-
+CREATE TABLE
+	indemnite_employe (
+		id_indemnite SERIAL PRIMARY KEY,
+		id_employe INT REFERENCES employe (id_employe),
+		id_type_indemnite INT REFERENCES type_indemnite (id_type_indemnite),
+		montant_indemnite NUMERIC(10, 2) NOT NULL
+	);
 
 -- fisc
-CREATE TABLE deduction_fiscale (
-    id_deduction SERIAL PRIMARY KEY,
-    nom_deduction VARCHAR(50) NOT NULL, -- OSTIE, CNAPS, IRSA
-    taux NUMERIC(5, 2) NOT NULL         -- Pourcentage de la déduction
-);
+CREATE TABLE
+	deduction_fiscale (
+		id_deduction SERIAL PRIMARY KEY,
+		nom_deduction VARCHAR(50) NOT NULL, -- OSTIE, CNAPS, IRSA
+		taux NUMERIC(5, 2) NOT NULL -- Pourcentage de la déduction
+	);
 
-CREATE TABLE deduction_employe (
-    id_deduction_employe SERIAL PRIMARY KEY,
-    id_employe INT REFERENCES employe(id_employe),
-    id_deduction INT REFERENCES deduction_fiscale(id_deduction),
-    base_salaire NUMERIC(10, 2) NOT NULL, -- Salaire brut utilisé comme base
-    montant NUMERIC(10, 2) NOT NULL      -- Montant de la déduction
-);
+CREATE TABLE
+	deduction_employe (
+		id_deduction_employe SERIAL PRIMARY KEY,
+		id_employe INT REFERENCES employe (id_employe),
+		id_deduction INT REFERENCES deduction_fiscale (id_deduction),
+		base_salaire NUMERIC(10, 2) NOT NULL, -- Salaire brut utilisé comme base
+		montant NUMERIC(10, 2) NOT NULL -- Montant de la déduction
+	);
 
 --absence :
-CREATE TABLE type_absence (
-    id_type_absence SERIAL PRIMARY KEY,
-    nom_type VARCHAR(50) NOT NULL,
-    est_avec_solde BOOLEAN DEFAULT false -- Indique si l'absence est avec solde ou sans solde
-);
+CREATE TABLE
+	type_absence (
+		id_type_absence SERIAL PRIMARY KEY,
+		nom_type VARCHAR(50) NOT NULL,
+		est_avec_solde BOOLEAN DEFAULT false -- Indique si l'absence est avec solde ou sans solde
+	);
 
-CREATE TABLE absence (
-    id_absence SERIAL PRIMARY KEY,
-    id_employe INT REFERENCES employe(id_employe),
-    id_type_absence INT REFERENCES type_absence(id_type_absence),
-    date_debut DATE NOT NULL,
-    date_fin DATE NOT NULL -- Si l'absence dure un seul jour, `date_debut` = `date_fin`
-);
+CREATE TABLE
+	absence (
+		id_absence SERIAL PRIMARY KEY,
+		id_employe INT REFERENCES employe (id_employe),
+		id_type_absence INT REFERENCES type_absence (id_type_absence),
+		date_debut DATE NOT NULL,
+		date_fin DATE NOT NULL -- Si l'absence dure un seul jour, `date_debut` = `date_fin`
+	);
 
 -- heure supp
-CREATE TABLE regle_majoration(
-    id_regle SERIAL PRIMARY KEY,
-    pourcentage_majoration INTEGER NOT NULL, -- (30%, 40%, etc.)
-    debut_heure_supp INTEGER NOT NULL, -- Nombre d'heures après lesquelles la majoration commence
-    description TEXT
-);
+CREATE TABLE
+	regle_majoration (
+		id_regle SERIAL PRIMARY KEY,
+		pourcentage_majoration INTEGER NOT NULL, -- (30%, 40%, etc.)
+		debut_heure_supp INTEGER NOT NULL, -- Nombre d'heures après lesquelles la majoration commence
+		description TEXT
+	);
 
-CREATE TABLE jours_feries (
-    date DATE PRIMARY KEY,       -- Date du jour férié
-    description VARCHAR(255)     -- Description du jour férié
-);
+CREATE TABLE
+	jours_feries (
+		date DATE PRIMARY KEY, -- Date du jour férié
+		description VARCHAR(255) -- Description du jour férié
+	);
 
-
- 
 --paie
-CREATE TABLE avantage_nature (
-    id_avantage SERIAL PRIMARY KEY,
-    id_employe INT REFERENCES employe(id_employe),
-    type_avantage VARCHAR(50) NOT NULL,
-    valeur_avantage DECIMAL(10,2) NOT NULL,
-    date_application DATE NOT NULL
-);
+CREATE TABLE
+	avantage_nature (
+		id_avantage SERIAL PRIMARY KEY,
+		id_employe INT REFERENCES employe (id_employe),
+		type_avantage VARCHAR(50) NOT NULL,
+		valeur_avantage DECIMAL(10, 2) NOT NULL,
+		date_application DATE NOT NULL
+	);
 
-CREATE TABLE entite (
-    id_entite SERIAL PRIMARY KEY,
-    nom_entite VARCHAR(100) NOT NULL,
-    adresse VARCHAR(200) NOT NULL,
-    code_postal VARCHAR(10) NOT NULL,
-    ville VARCHAR(100) NOT NULL,
-    pays VARCHAR(100) NOT NULL
-);
+CREATE TABLE
+	entite (
+		id_entite SERIAL PRIMARY KEY,
+		nom_entite VARCHAR(100) NOT NULL,
+		adresse VARCHAR(200) NOT NULL,
+		code_postal VARCHAR(10) NOT NULL,
+		ville VARCHAR(100) NOT NULL,
+		pays VARCHAR(100) NOT NULL
+	);
 
-CREATE TABLE taux_cotisation (
-    id_taux_cotisation SERIAL PRIMARY KEY,
-    type_cotisation VARCHAR(50) NOT NULL,
-    taux_employeur DECIMAL(5,2) NOT NULL,
-    taux_employe DECIMAL(5,2) NOT NULL,
-    date_application DATE NOT NULL
-);
+CREATE TABLE
+	taux_cotisation (
+		id_taux_cotisation SERIAL PRIMARY KEY,
+		type_cotisation VARCHAR(50) NOT NULL,
+		taux_employeur DECIMAL(5, 2) NOT NULL,
+		taux_employe DECIMAL(5, 2) NOT NULL,
+		date_application DATE NOT NULL
+	);
+
+
+-- classification professionnelle CSP
+
+CREATE TABLE 
+	hierarchie (
+		id_hierarchie SERIAL PRIMARY KEY, 
+		nom_hierarchie VARCHAR(100) NOT NULL UNIQUE
+	);
+
+CREATE TABLE 
+	categorie_professionnelle (
+		id_categorie_professionnelle SERIAL PRIMARY KEY, 
+		nom_categorie_professionnelle VARCHAR(250) NOT NULL
+	);
+
+CREATE TABLE 
+	categorie_professionnelle_poste (
+		id_poste INT NOT NULL, 
+		id_categorie_professionnelle INT NOT NULL,
+		FOREIGN KEY(id_poste) REFERENCES poste(id_poste),
+		FOREIGN KEY(id_categorie_professionnelle) REFERENCES categorie_professionnelle(id_categorie_professionnelle)
+	);
+
+ALTER TABLE poste ADD COLUMN id_hierarchie INT ;
+ALTER TABLE poste ADD CONSTRAINT poste_id_hierarchie_pkey FOREIGN KEY(id_hierarchie) REFERENCES hierarchie(id_hierarchie);

@@ -25,6 +25,7 @@ public class ExperienceCandidat {
 
 
     public List<ExperienceCandidat> getAllByCandidat(Connection conn, int idCandidat)throws SQLException{
+        @SuppressWarnings({ "unchecked", "rawtypes" })
         List<ExperienceCandidat> result = new ArrayList();
         Connection c = null;
         PreparedStatement prstm = null; 
@@ -68,47 +69,6 @@ public class ExperienceCandidat {
             }
         }
     }
-
-    // public static Experience getById(Connection conn ,int id) throws SQLException{
-    //     Experience result = null;
-    //      Connection c = null;
-    //      PreparedStatement prstm = null; 
-    //      ResultSet rs = null;
-    //      boolean isNewConnection = false;
-    //      String query = "SELECT * FROM competence WHERE id_competence = ?";
-    //      try {
-    //          if(conn == null){
-    //              c = Database.getConnection();
-    //              isNewConnection = true;
-    //          }else{
-    //              c = conn;
-    //          }
-    //          prstm = c.prepareStatement(query);
-    //          prstm.setInt(1, id);
-    //          rs = prstm.executeQuery();
- 
-    //          if(rs.next()) {
-    //             result = new Experience();
-    //             result.setIdExperience(rs.getInt(1));
-    //             result.setDateDebut(rs.getDate(3));
-    //             result.setDateFin(rs.getDate(4));
-    //             result.setDescription(rs.getString(5));
-    //         }
-    //      } catch (SQLException e) {
-    //          throw e;
-    //      }finally{
-    //          if(rs != null){
-    //              rs.close();
-    //          }
-    //          if(prstm != null){
-    //              prstm.close();
-    //          }
-    //          if( c != null && isNewConnection){
-    //              c.close();
-    //          }
-    //      }
-    //      return result;
-    //  }
     
     // GETTERS AND SETTERS
     public int getIdExperience() {

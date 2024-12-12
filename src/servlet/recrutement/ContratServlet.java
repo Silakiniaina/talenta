@@ -30,7 +30,7 @@ public class ContratServlet extends HttpServlet{
             request.setAttribute("idCandidat", idCandidat);
             request.setAttribute("typeContrats", ls);
             request.setAttribute("idRecrutement", idRecrutement);
-            RequestDispatcher disp = request.getRequestDispatcher("/WEB-INF/views/admin/evalution/contrat.jsp");
+            RequestDispatcher disp = request.getRequestDispatcher("/WEB-INF/views/test/embauche.jsp");
             disp.forward(request,response);
         } catch (Exception e) {
             e.printStackTrace(out);

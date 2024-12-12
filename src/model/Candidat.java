@@ -210,10 +210,10 @@ public class Candidat {
         }
     }
 
-    public void insertIntoEmploye(Recrutement r) throws SQLException{
+    public void insertIntoEmploye(Recrutement r , double salaire_base) throws SQLException{
         Connection c = null; 
         PreparedStatement prstm = null;
-        String query = "INSERT INTO employe(id_candidat, date_embauche, id_poste) VALUES (?, ?, ?)";
+        String query = "INSERT INTO employe(id_candidat, date_embauche, id_poste, salaire_base) VALUES (?, ?, ?, ?)";
         try {
             c = Database.getConnection();
             c.setAutoCommit(false);
@@ -222,6 +222,7 @@ public class Candidat {
             prstm.setInt(1, this.getIdCandidat());
             prstm.setDate(2, Date.valueOf(LocalDate.now()));
             prstm.setInt(3,r.getPoste().getIdPoste());
+            prstm.setDouble(4, salaire_base);
 
             prstm.executeUpdate();
 

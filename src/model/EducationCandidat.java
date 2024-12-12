@@ -26,6 +26,7 @@ public class EducationCandidat {
 
     //ACTION
     public List<EducationCandidat> getAllByCandidat(Connection conn, int idCandidat)throws SQLException{
+        @SuppressWarnings({ "rawtypes", "unchecked" })
         List<EducationCandidat> result = new ArrayList();
         Connection c = null;
         PreparedStatement prstm = null; 

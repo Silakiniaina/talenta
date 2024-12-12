@@ -1,6 +1,7 @@
 package model;
 
 import java.sql.*;
+import java.time.LocalDate;
 
 import model.utils.Database;
 
@@ -40,7 +41,7 @@ public class Contrat {
             prstm.executeUpdate();
             c.commit();
 
-            this.getCandidat().insertIntoEmploye(r);
+            this.getCandidat().insertIntoEmploye(r, this.getSalaireBase());
         }catch(SQLException e){
             c.rollback();
             throw e;
@@ -97,7 +98,11 @@ public class Contrat {
         this.dateFinContrat = dateFinContrat;
     }
     public void setDateFinContrat(String dt){
-        this.dateFinContrat = Date.valueOf(dt);
+        if(dt != null && !dt.equals("null")){
+            this.dateFinContrat = Date.valueOf(LocalDate.parse(dt));
+        }else{
+            this.dateFinContrat = null;
+        }
     }
 
     public void setCandidat(Connection con, int candidat)throws SQLException {

@@ -7,8 +7,6 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.google.gson.Gson;
-
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -17,7 +15,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.AttributionTest;
 import model.NotificationCandidat;
-import model.Recrutement;
 import model.Test;
 
 @WebServlet("/attribuerTest")
@@ -62,7 +59,6 @@ public class AttribuerTestServlet extends HttpServlet{
 
        try {
         Connection connexion = (Connection)req.getSession().getAttribute("connexion");
-        Test t = new Test();
         List<Test> ls = Test.getAll(connexion);
 
         req.setAttribute("tests", ls);

@@ -33,6 +33,22 @@
             </div>
         </li>
         <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#employe_drop" aria-expanded="false" aria-controls="employe_drop">
+                <i class="ti-layout menu-icon"></i>
+                <span class="menu-title">Employe</span>
+                <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="employe_drop">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item"> <a class="nav-link" href="list-employe">Liste Employe</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="presence-employe">Presence</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="absence-employe">Abscence</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="prime-employe">Prime</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="indemnite-employe">Indemnite</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#conge_drop" aria-expanded="false" aria-controls="conge_drop">
                 <i class="icon-layout menu-icon"></i>
                 <span class="menu-title">Conges</span>
@@ -40,7 +56,8 @@
             </a>
             <div class="collapse" id="conge_drop">
                 <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"> <a class="nav-link" href="conge-planning">Planning</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="#">Ajout conge</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="conge-planning">Planning Conge</a></li>
                     <li class="nav-item"> <a class="nav-link" href="admin-employes">Conge restant</a></li>
                 </ul>
             </div>
