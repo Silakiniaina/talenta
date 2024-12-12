@@ -17,7 +17,7 @@
                                     <div class="card-body">
                                         <div class="d-flex mb-3" style="justify-content: space-between; align-items: center;">
                                             <h2>Liste des presences</h2>
-                                            <a href="#" type="button" class="btn btn-md btn-outline-success ">Ajouter Presence</a>
+                                            <a href="addPresence" type="button" class="btn btn-md btn-outline-success ">Ajouter Presence</a>
                                         </div>
                                         <div class="table-responsive">
                                             <table class="table table-bordered">
