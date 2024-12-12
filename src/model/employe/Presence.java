@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 import com.google.gson.Gson;
 
 import model.Employe;
+import model.Poste;
 import model.classification.Hierarchie;
 import model.utils.Database;
 
@@ -98,6 +100,37 @@ public class Presence {
         return result;
     }
 
+    public void insert(Connection c) throws SQLException{
+        boolean isNewConnection = false;
+        PreparedStatement prstm = null;
+        String query = "INSERT INTO presence_employe(id_employe,date_entree,date_sortie) VALUES (?, ?, ?)";
+        try {
+            if(c == null){
+                isNewConnection = true;
+                c = Database.getConnection();
+            }
+            c.setAutoCommit(false);
+
+            prstm = c.prepareStatement(query);
+            prstm.setInt(1, this.getEmploye().getIdEmploye());
+            prstm.setTimestamp(2, this.getDateHeureEntree());
+            prstm.setTimestamp(3, this.getDateHeureSortie());
+            prstm.executeUpdate();
+
+            c.commit();
+        } catch (SQLException e) {
+            c.rollback();
+            throw e;
+        }finally{
+            if(prstm != null){
+                prstm.close();
+            }
+            if(c != null && isNewConnection){
+                c.close();
+            }
+        }
+    }
+    
     // GETTERS AND SETTERS
     public int getIdPresence() {
         return idPresence;
