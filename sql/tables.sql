@@ -532,3 +532,9 @@ CREATE TABLE
 
 ALTER TABLE poste ADD COLUMN id_hierarchie INT ;
 ALTER TABLE poste ADD CONSTRAINT poste_id_hierarchie_pkey FOREIGN KEY(id_hierarchie) REFERENCES hierarchie(id_hierarchie);
+
+CREATE TABLE csp (
+    id_csp SERIAL PRIMARY KEY,
+    code_csp VARCHAR(20) NOT NULL UNIQUE, -- Ex: OP-2A
+    description TEXT NOT NULL
+);

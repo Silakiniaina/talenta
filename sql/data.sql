@@ -189,3 +189,11 @@ INSERT INTO hierarchie(nom_hierarchie) VALUES
     ('Junior'),
     ('Senior')
 ;
+
+INSERT INTO csp (code_csp, description)
+VALUES
+    ('OP-2A', 'Technicien de niveau intermédiaire'),
+    ('OP-1B', 'Manager junior'),
+    ('EX-3C', 'Expert senior'),
+    ('OP-2B', 'Technicien avancé'),
+    ('EX-2A', 'Expert débutant');
