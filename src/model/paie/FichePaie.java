@@ -13,6 +13,7 @@ public class FichePaie {
     private AbsenceAvecSoldeEmploye absenceAvecSolde;
     private AbsenceSansSoldeEmploye absenceSansSolde;
     private SalaireEmploye salaireEmploye;
+    private TauxEmploye tauxEmploye;
     private DeductionSocialEtFiscalEmploye deductionFiscalEtSocial;
 
     public FichePaie(Connection c, int id_employe) throws SQLException{
@@ -23,6 +24,7 @@ public class FichePaie {
         this.setAbsenceSansSolde(AbsenceSansSoldeEmploye.getByEmploye(c, id_employe));
         this.setSalaireEmploye(SalaireEmploye.getByEmploye(c, id_employe));
         this.setDeductionFiscalEtSocial(DeductionSocialEtFiscalEmploye.getByEmploye(c, id_employe));
+        this.setTauxEmploye(TauxEmploye.getByEmploye(c, id_employe));
     }
 
     public Employe getEmploye() {
@@ -66,5 +68,12 @@ public class FichePaie {
     }
     public void setDeductionFiscalEtSocial(DeductionSocialEtFiscalEmploye deductionFiscalEtSocial) {
         this.deductionFiscalEtSocial = deductionFiscalEtSocial;
+    }
+    public TauxEmploye getTauxEmploye() {
+        return tauxEmploye;
+    }
+
+    public void setTauxEmploye(TauxEmploye tauxEmploye) {
+        this.tauxEmploye = tauxEmploye;
     }
 }

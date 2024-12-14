@@ -555,12 +555,12 @@ GROUP BY
     t.id_employe;
 
 
-CREATE VIEW v_taux_employe AS
+CREATE or replace VIEW v_taux_employe AS
 SELECT
     e.id_employe,
     e.salaire_base,
-    e.salaire_base / (30 * 8) AS taux_horaire, -- On suppose 30 jours travaillés et 8h par jour
-    e.salaire_base / 30 AS taux_journalier
+    ROUND(CAST(e.salaire_base / (30 * 8) as NUMERIC(18,2)),2) AS taux_horaire, -- On suppose 30 jours travaillés et 8h par jour
+    ROUND(CAST(e.salaire_base / 30  as numeric(18,2)),2) AS taux_journalier
 FROM
     employe e;
 

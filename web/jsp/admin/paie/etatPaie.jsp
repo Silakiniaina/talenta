@@ -22,6 +22,7 @@
                                                 <th>#</th>
                                                 <th>Nom</th>
                                                 <th>Prénom</th>
+                                                <th>CSP</th>
                                                 <th>Salaire Base</th>
                                                 <th>Action</th>
                                             </tr>
@@ -35,6 +36,7 @@
                                                 <td><%= employe.getIdEmploye() %></td>
                                                 <td><%= employe.getCandidat().getNomCandidat() %></td>
                                                 <td><%= employe.getCandidat().getPrenomCandidat() %></td>
+                                                <td><%= employe.getCsp().getCodeCsp() %></td>
                                                 <td><%= employe.getSalaireBase() %></td>
                                                 <td>
                                                     <a type="button" class="btn btn-sm btn-outline-primary" href="fichePaie?idEmploye=<%= employe.getIdEmploye() %>">Voir fiche</a>

@@ -30,9 +30,9 @@ public class CSP {
             rs = prstm.executeQuery();
 
             if (rs.next()) {
-                this.setIdCsp(rs.getInt(1));
-                this.setCodeCsp(rs.getString(2));
-                this.setDescriptionCsp(rs.getString(3));
+                this.setIdCsp(rs.getInt("id_csp"));
+                this.setCodeCsp(rs.getString("code_csp"));
+                this.setDescriptionCsp(rs.getString("description"));
             }
 
             return this;
