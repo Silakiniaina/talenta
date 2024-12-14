@@ -35,8 +35,8 @@ public class TauxEmploye {
             if(rs.next()){
                 result = new TauxEmploye();
                 result.setEmploye(c, rs.getInt(1));
-                result.setTauxHoraire(rs.getDouble(2));
-                result.setTauxJournalier(rs.getDouble(3));
+                result.setTauxHoraire(rs.getDouble(3));
+                result.setTauxJournalier(rs.getDouble(4));
             }
             return result;
         } catch (Exception e) {

@@ -94,6 +94,18 @@
                 <span class="label">Département :</span>
                 <span><%= fichePaie.getInformation().getDepartement() %></span>
             </div>
+            <div class="row">
+                <span class="label">Taux Journalier :</span>
+                <span><%= fichePaie.getTauxEmploye().getTauxJournalier() %></span>
+            </div>
+            <div class="row">
+                <span class="label">Taux horaire :</span>
+                <span><%= fichePaie.getTauxEmploye().getTauxHoraire() %></span>
+            </div>
+            <div class="row">
+                <span class="label">Classification :</span>
+                <span><%= fichePaie.getEmploye().getCsp().getCodeCsp() %></span>
+            </div>
         </div>
 
         <!-- Section Salaire -->

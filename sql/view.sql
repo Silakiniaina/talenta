@@ -251,7 +251,7 @@ FROM
     LEFT JOIN genre g ON c.id_genre = g.id_genre;
 
 
------------------------Liste des employes ayant pris un conge
+-----------------------Liste des employe ayant pris un conge
 CREATE OR REPLACE VIEW v_planning_conge AS
 SELECT 
     e.id_employe,
@@ -269,8 +269,8 @@ WHERE
     c.date_debut IS NOT NULL
     AND c.date_fin IS NOT NULL;
 
----------------------------Liste des employes qui ont l'age legal de retraite qui ne sont pas encore retraites
-CREATE OR REPLACE VIEW v_employes_age_retraite AS
+---------------------------Liste des employe qui ont l'age legal de retraite qui ne sont pas encore retraites
+CREATE OR REPLACE VIEW v_employe_age_retraite AS
 SELECT 
     e.id_employe,
     c.id_candidat as id_candidat,
@@ -292,7 +292,7 @@ WHERE
     EXTRACT(YEAR FROM AGE(NOW(), c.date_naissance)) >= 60
     AND f.id_employe IS NULL;
 
----------------------------Liste des candidats employes
+---------------------------Liste des candidats employe
 CREATE
 OR REPLACE view v_employe AS
 SELECT
@@ -555,12 +555,12 @@ GROUP BY
     t.id_employe;
 
 
-CREATE VIEW v_taux_employe AS
+CREATE or replace VIEW v_taux_employe AS
 SELECT
     e.id_employe,
     e.salaire_base,
-    e.salaire_base / (30 * 8) AS taux_horaire, -- On suppose 30 jours travaillés et 8h par jour
-    e.salaire_base / 30 AS taux_journalier
+    ROUND(CAST(e.salaire_base / (30 * 8) as NUMERIC(18,2)),2) AS taux_horaire, -- On suppose 30 jours travaillés et 8h par jour
+    ROUND(CAST(e.salaire_base / 30  as numeric(18,2)),2) AS taux_journalier
 FROM
     employe e;
 
@@ -720,3 +720,116 @@ SELECT
     JOIN 
         departement d ON p.id_departement = d.id_departement
     ;
+
+CREATE OR REPLACE VIEW v_csp_employe
+WITH 
+competence_scores AS (
+    SELECT 
+        e.id_employe,
+        e.id_candidat,
+        COUNT(DISTINCT cc.id_competence) AS nb_competences,
+        SUM(
+            CASE 
+                WHEN nc.niveau_competence = 'Expert' THEN 3
+                WHEN nc.niveau_competence = 'Avancé' THEN 2
+                WHEN nc.niveau_competence = 'Intermédiaire' THEN 1
+                ELSE 0
+            END
+        ) AS score_competences
+    FROM 
+        employe e
+    LEFT JOIN competence_candidat cc ON cc.id_candidat = e.id_candidat
+    LEFT JOIN niveau_competence nc ON nc.id_niveau_competence = cc.id_niveau_competence
+    GROUP BY 
+        e.id_employe, e.id_candidat
+),
+education_scores AS (
+    SELECT 
+        e.id_employe,
+        e.id_candidat,
+        COUNT(DISTINCT ec.id_education_candidat) AS nb_diplomes,
+        SUM(
+            CASE 
+                WHEN nd.niveau_diplome = 'Doctorat' THEN 5
+                WHEN nd.niveau_diplome = 'Master' THEN 4
+                WHEN nd.niveau_diplome = 'Licence' THEN 3
+                WHEN nd.niveau_diplome = 'BTS/DUT' THEN 2
+                WHEN nd.niveau_diplome = 'Bac' THEN 1
+                ELSE 0
+            END
+        ) AS score_education
+    FROM 
+        employe e
+    LEFT JOIN education_candidat ec ON ec.id_candidat = e.id_candidat
+    LEFT JOIN niveau_diplome nd ON nd.id_niveau_diplome = ec.id_niveau_diplome
+    GROUP BY 
+        e.id_employe, e.id_candidat
+),
+experience_scores AS (
+    SELECT 
+        e.id_employe,
+        e.id_candidat,
+        COUNT(DISTINCT ex.id_experience_candidat) AS nb_experiences,
+        COALESCE(SUM(
+            CASE 
+                WHEN EXTRACT(YEAR FROM AGE(ex.date_fin, ex.date_debut)) > 5 THEN 3
+                WHEN EXTRACT(YEAR FROM AGE(ex.date_fin, ex.date_debut)) > 2 THEN 2
+                WHEN EXTRACT(YEAR FROM AGE(ex.date_fin, ex.date_debut)) > 0 THEN 1
+                ELSE 0
+            END
+        ), 0) AS score_experience
+    FROM 
+        employe e
+    LEFT JOIN experience_candidat ex ON ex.id_candidat = e.id_candidat
+    GROUP BY 
+        e.id_employe, e.id_candidat
+),
+score_total_calcul AS (
+    SELECT 
+        e.id_employe,
+        e.id_candidat,
+        csp.id_csp,
+        csp.code_csp,
+        csp.description,
+        cs.nb_competences,
+        cs.score_competences,
+        es.nb_diplomes,
+        es.score_education,
+        exs.nb_experiences,
+        exs.score_experience,
+        (
+            COALESCE(cs.score_competences, 0) * 0.4 +  -- Pondération des compétences
+            COALESCE(es.score_education, 0) * 0.3 +    -- Pondération de l'éducation
+            COALESCE(exs.score_experience, 0) * 0.3    -- Pondération de l'expérience
+        ) AS score_total,
+        ROW_NUMBER() OVER (
+            PARTITION BY e.id_employe 
+            ORDER BY 
+                (COALESCE(cs.score_competences, 0) * 0.4 +  
+                 COALESCE(es.score_education, 0) * 0.3 +    
+                 COALESCE(exs.score_experience, 0) * 0.3) DESC
+        ) AS rang_csp
+    FROM 
+        employe e
+    CROSS JOIN csp
+    LEFT JOIN competence_scores cs ON cs.id_employe = e.id_employe
+    LEFT JOIN education_scores es ON es.id_employe = e.id_employe
+    LEFT JOIN experience_scores exs ON exs.id_employe = e.id_employe
+)
+SELECT 
+    id_employe,
+    id_candidat,
+    id_csp,
+    code_csp,
+    description,
+    nb_competences,
+    score_competences,
+    nb_diplomes,
+    score_education,
+    nb_experiences,
+    score_experience,
+    score_total
+FROM score_total_calcul
+WHERE rang_csp = 1
+ORDER BY 
+    score_total DESC;

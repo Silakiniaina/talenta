@@ -9,6 +9,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.employe.CSP;
 import model.utils.Database;
 
 public class Employe {
@@ -19,8 +20,10 @@ public class Employe {
     private Date dateEmbauche;
     int age;
     private double salaireBase;
+    private CSP csp;
 
     // CONSTRUCTORS
+
 
     public Employe(){
 
@@ -53,6 +56,14 @@ public class Employe {
     public Date getDateEmbauche() {
         return dateEmbauche;
     }
+    public CSP getCsp() {
+        return csp;
+    }
+
+
+    public void setCsp(CSP csp) {
+        this.csp = csp;
+    }
 
     public String getNomComplet(){
         return this.getCandidat().getPrenomCandidat()+" "+this.getCandidat().getNomCandidat();
@@ -74,6 +85,7 @@ public class Employe {
                 Poste poste = new Poste();
                 poste.setIdPoste(rs.getInt("id_poste"));
                 employe.setPoste(conn, poste.getIdPoste());
+                employe.setCsp(new CSP().getByEmploye(conn, employe.getIdEmploye()));
             }
         }
         return employe;
@@ -146,6 +158,7 @@ public class Employe {
                 e.setCandidat(c,rs.getInt(2));
                 e.setPoste(c, rs.getInt(3));
                 e.setDateEmbauche(rs.getDate(4));
+                e.setCsp(new CSP().getByEmploye(c, e.getIdEmploye()));
                 result.add(e);
             }
         } catch (SQLException e) {
@@ -208,6 +221,7 @@ public class Employe {
                 employe.setPoste(con, rs.getInt("id_poste"));
                 employe.setDateEmbauche(rs.getDate("date_embauche"));
                 employe.setSalaireBase(rs.getDouble("salaire_base"));
+                employe.setCsp(new CSP().getByEmploye(con, employe.getIdEmploye()));
             }
         } catch (SQLException e) {
             throw e;
@@ -237,6 +251,7 @@ public class Employe {
                 employe.setPoste(con, rs.getInt("id_poste"));
                 employe.setDateEmbauche(rs.getDate("date_embauche"));
                 employe.setAge(rs.getInt("age"));
+                employe.setCsp(new CSP().getByEmploye(con, employe.getIdEmploye()));
 
                 result.add(employe);
             }
@@ -272,6 +287,7 @@ public class Employe {
                 employe.setPoste(con, rs.getInt("id_poste"));
                 employe.setDateEmbauche(rs.getDate("date_embauche"));
                 employe.setSalaireBase(rs.getDouble("salaire_base"));
+                employe.setCsp(new CSP().getByEmploye(con, employe.getIdEmploye()));
 
                 result.add(employe);
             }
@@ -304,6 +320,7 @@ public class Employe {
                 employe.setCandidat(con, rs.getInt("id_candidat"));
                 employe.setPoste(con, rs.getInt("id_poste"));
                 employe.setDateEmbauche(rs.getDate("date_embauche"));
+                employe.setCsp(new CSP().getByEmploye(con, employe.getIdEmploye()));
             }
         } catch (SQLException e) {
             throw e;
