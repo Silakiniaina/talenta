@@ -56,7 +56,7 @@
             </a>
             <div class="collapse" id="conge_drop">
                 <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"> <a class="nav-link" href="#">Ajout conge</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="addConge">Ajout conge</a></li>
                     <li class="nav-item"> <a class="nav-link" href="conge-planning">Planning Conge</a></li>
                     <li class="nav-item"> <a class="nav-link" href="admin-employes">Conge restant</a></li>
                 </ul>

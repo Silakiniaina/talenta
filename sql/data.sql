@@ -1,10 +1,18 @@
 INSERT INTO
+    genre(label)
+VALUES
+    ('Homme'),
+    ('Femme');
+
+
+INSERT INTO
     departement(nom)
 VALUES
     ('DSI'),
     ('DIGITAL'),
     ('MARKETING'),
     ('FINANCE');
+
 
 INSERT INTO
     poste(nom, id_departement,annees_experience_requises)
@@ -34,20 +42,6 @@ VALUES
     ('Leadership',1),
     ('Travail en équipe',1),
     ('Créativité',1);
-
-INSERT INTO
-    genre(label)
-VALUES
-    ('Homme'),
-    ('Femme');
-
-INSERT INTO
-    type_questionaire (label)
-VALUES
-    ('Compétences Techniques'),
-    ('Competences Theoriques'),
-    ('Aptitudes Interpersonnelles')
-;
 
 INSERT INTO
     type_contrat(label)
@@ -144,7 +138,6 @@ VALUES
 -- prime et indemnite
 INSERT INTO type_prime (nom_type_prime) VALUES ('prime_rendement');
 INSERT INTO type_prime (nom_type_prime) VALUES ('prime_ancienete');
-
 INSERT INTO type_indemnite (nom_type_indemnite) VALUES ('indemnite_licenciement');
 
 

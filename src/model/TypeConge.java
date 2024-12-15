@@ -63,15 +63,18 @@ public class TypeConge {
     }
 
         // Méthode pour récupérer un type de congé par son ID
-    public static TypeConge getById(int id) throws SQLException {
+    public static TypeConge getById(Connection c,int id) throws SQLException {
         TypeConge typeConge = null;
-        Connection c = null;
+        boolean isNewConnection = false;
         PreparedStatement prstm = null;
         ResultSet rs = null;
         String query = "SELECT * FROM type_conge WHERE id_type_conge = ?";
     
         try {
-            c = Database.getConnection();
+            if(c == null){
+                isNewConnection = true;
+                c = Database.getConnection();
+            }
             prstm = c.prepareStatement(query);
             prstm.setInt(1, id);
             rs = prstm.executeQuery();
@@ -86,7 +89,7 @@ public class TypeConge {
         } finally {
             if (rs != null) rs.close();
             if (prstm != null) prstm.close();
-            if (c != null) c.close();
+            if (c != null && isNewConnection) c.close();
         }
         return typeConge;
     }

@@ -24,7 +24,6 @@ public class Employe {
 
     // CONSTRUCTORS
 
-
     public Employe(){
 
     }
@@ -341,4 +340,37 @@ public class Employe {
         this.salaireBase = salaireBase;
     }
 
+    public Contrat getContrat(Connection c)throws SQLException {
+        Contrat result = null;
+        boolean isNewConnection = false;
+        PreparedStatement prstm = null; 
+        ResultSet rs = null;
+        String sql = "SELECT * FROM contrat WHERE id_candidat = ?";
+        try {
+            if(c == null){
+                c = Database.getConnection();
+                isNewConnection = true;
+            }
+            prstm = c.prepareStatement(sql);
+            prstm.setInt(1, this.getCandidat().getIdCandidat());
+            rs = prstm.executeQuery();
+            if(rs.next()){
+                result = new Contrat();
+                result.setIdContrat(rs.getInt(1));
+                result.setCandidat(c, rs.getInt("id_candidat"));
+                result.setDateDebutContrat(rs.getDate("date_debut_contrat"));
+                result.setDateFinContrat(rs.getDate(("date_fin_contrat")));
+                result.setSalaireBase(rs.getDouble("salaire_base"));
+                result.setTypeContrat(rs.getInt("id_type_contrat"));
+            }
+            
+            return result;
+        } catch (SQLException e) {
+            throw e;
+        } finally{
+            if (rs != null) rs.close();
+            if (prstm != null) prstm.close();
+            if (c != null && isNewConnection) c.close() ;
+        }
+    }
 }
