@@ -43,7 +43,7 @@ CREATE TABLE
 	csp (
 		id_csp SERIAL NOT NULL,
 		code_csp VARCHAR(20) NOT NULL,
-		description TEXT NULL,
+		description TEXT,
 		CONSTRAINT csp_pkey PRIMARY KEY (id_csp),
 		CONSTRAINT csp_code_csp_key UNIQUE (code_csp)
 	);
@@ -466,7 +466,7 @@ CREATE TABLE
 
 CREATE TABLE
 	conge (
-		id_conge INTEGER NOT NULL,
+		id_conge SERIAL NOT NULL,
 		id_employe INTEGER NOT NULL,
 		id_type_conge INTEGER,
 		date_debut DATE NOT NULL,

@@ -44,7 +44,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label for="entree">Montant :</label>
-                                                <input type="number" class="form-control" id="entree" name="montant" placeholder="Date debut">
+                                                <input type="number" class="form-control" id="entree" name="montant" placeholder="montant">
                                             </div>
                                             <button type="submit" class="btn btn-primary mr-2">Ajouter</button>
                                         </form>

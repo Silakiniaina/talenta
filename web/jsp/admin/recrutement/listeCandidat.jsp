@@ -24,7 +24,6 @@
                                                 <th>Prenom</th>
                                                 <th>Date Naissance</th>
                                                 <th>Genre</th>
-                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -38,8 +37,7 @@
                                                 <td><%= candidat.getPrenomCandidat() %></td>
                                                 <td><%= candidat.getDateNaissance() %></td>
                                                 <td><%= candidat.getAdresse() %></td>
-                                                <td><%= candidat.getGenre().getLabel() %></td>
-                                                <td><a type="button" class="btn btn-sm btn-outline-primary" href="detailsCandidat?idCandidat=<%= candidat.getIdCandidat() %>">Voir CV</a></td>
+                                                <td><%= candidat.getGenre().getLabel() %></td>                         
                                             </tr>
                                             <%
                                                     }

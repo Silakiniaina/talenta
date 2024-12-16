@@ -32,7 +32,7 @@ public class EducationCandidat {
         PreparedStatement prstm = null; 
         ResultSet rs = null;
         boolean isNewConnection = false;
-        String query = "SELECT id_education_candidat FROM education_candidat WHERE id_candidat = ?";
+        String query = "SELECT * FROM education_candidat WHERE id_candidat = ?";
         try {
 
             if(conn == null){

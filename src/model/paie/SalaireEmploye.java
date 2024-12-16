@@ -39,13 +39,13 @@ public class SalaireEmploye {
             rs = prstm.executeQuery();
             if(rs.next()){
                 result = new SalaireEmploye();
-                result.setEmploye(c, rs.getInt(1));
-                result.setSalaireBrut(rs.getDouble(2));
-                result.setPrimeRendement(rs.getDouble(3));
-                result.setPrimeAncienete(rs.getDouble(4));
-                result.setCongePaye(rs.getInt(5));
-                result.setMontantConge(rs.getDouble(6));
-                result.setTotal(rs.getDouble(7));
+                result.setEmploye(c, rs.getInt(2));
+                result.setSalaireBrut(rs.getDouble(3));
+                result.setPrimeRendement(rs.getDouble(4));
+                result.setPrimeAncienete(rs.getDouble(5));
+                result.setCongePaye(rs.getInt(6));
+                result.setMontantConge(rs.getDouble(7));
+                result.setTotal(rs.getDouble(8));
             }
             return result;
         } catch (Exception e) {

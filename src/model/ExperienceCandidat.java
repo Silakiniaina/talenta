@@ -31,7 +31,7 @@ public class ExperienceCandidat {
         PreparedStatement prstm = null; 
         ResultSet rs = null;
         boolean isNewConnection = false;
-        String query = "SELECT id_experience_candidat FROM experience_candidat WHERE id_candidat = ?";
+        String query = "SELECT * FROM experience_candidat WHERE id_candidat = ?";
         try {
 
             if(conn == null){

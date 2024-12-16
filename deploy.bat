@@ -38,6 +38,7 @@ rmdir /q/s "temp"
 mkdir "temp/WEB-INF"
 mkdir "temp/WEB-INF/classes"
 mkdir "temp/WEB-INF/lib"
+mkdir "temp/WEB-INF/views"
 
 echo D | xcopy /q/y/s %web-dir% "temp/WEB-INF/views"
 echo D | xcopy /q/y/s %assets-dir% "temp/assets"

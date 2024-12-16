@@ -9,6 +9,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Fiche de Paie</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -33,6 +35,18 @@
         .label {
             font-weight: bold;
         }
+        .download-btn {
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -44,7 +58,7 @@
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE);
     %>
 
-    <div class="fiche-paie">
+    <div id="fiche-paie-content" class="fiche-paie">
         <h1>Fiche de Paie</h1>
         
         <!-- Section Informations Personnelles -->
@@ -233,5 +247,33 @@
             </div>
         </div>
     </div>
+
+    <!-- Bouton de téléchargement PDF -->
+    <div class="download-btn" onclick="downloadPDF()">Télécharger en PDF</div>
+
+    <script>
+        function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({
+                orientation: 'p',
+                unit: 'pt',
+                format: 'a4'
+            });
+
+            // Utiliser html2canvas pour convertir le contenu en image
+            html2canvas(document.getElementById('fiche-paie-content'), { 
+                scale: 1,
+                useCORS: true 
+            }).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const imgProps = doc.getImageProperties(imgData);
+                const pdfWidth = doc.internal.pageSize.getWidth();
+                const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+                doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+                doc.save('Fiche_Paie.pdf');
+            });
+        }
+    </script>
 </body>
 </html>

@@ -562,7 +562,7 @@ CREATE VIEW v_conge_paye AS
     SELECT 
         e.id_employe,
         e.salaire_base,
-        SUM(CASE WHEN tc.nom_type = 'Conge payé' THEN (ce.date_fin - ce.date_debut + 1) ELSE 0 END) AS conge_paye
+        SUM(CASE WHEN tc.nom_type = 'Congé payé' THEN (ce.date_fin - ce.date_debut + 1) ELSE 0 END) AS conge_paye
     FROM 
         employe e
     LEFT JOIN 
@@ -577,7 +577,7 @@ CREATE VIEW v_conge_non_paye AS
     SELECT 
         e.id_employe,
         e.salaire_base,
-        SUM(CASE WHEN tc.nom_type = 'Conge non payé' THEN (ce.date_fin - ce.date_debut + 1) ELSE 0 END) AS conge_non_paye
+        SUM(CASE WHEN tc.nom_type = 'Congé sans solde' THEN (ce.date_fin - ce.date_debut + 1) ELSE 0 END) AS conge_non_paye
     FROM 
         employe e
     LEFT JOIN 
@@ -632,9 +632,9 @@ CREATE VIEW v_bulletin_paie AS
         e.id_employe,
         vsb.salaire_brut_avec_prime_indemnite as salaire_brut,
         -- Calcul de la CNAPS (exemple : 1% à la charge de l'employé, plafonné à 2 000 000 Ar)
-        LEAST(vsb.salaire_brut_avec_prime_indemnite * 1, 2500) AS cotisation_cnaps,
+        LEAST(vsb.salaire_brut_avec_prime_indemnite * 0.01, 2500) AS cotisation_cnaps,
         -- Calcul de l'OSTIE (exemple : 1% du salaire brut)
-        vsb.salaire_brut_avec_prime_indemnite * 1 AS cotisation_ostie,
+        vsb.salaire_brut_avec_prime_indemnite * 0.01 AS cotisation_ostie,
         calculer_irsa(vsb.salaire_brut_avec_prime_indemnite::NUMERIC) AS irsa,
         vsb.salaire_brut_avec_prime_indemnite - (LEAST(vsb.salaire_brut_avec_prime_indemnite * 0.01, 20000))  - (vsb.salaire_brut_avec_prime_indemnite * 0.01) - (calculer_irsa(vsb.salaire_brut_avec_prime_indemnite::NUMERIC)) AS salaire_net
     FROM

@@ -62,7 +62,7 @@
                 </ul>
             </div>
         </li>
-        <li class="nav-item">
+        <%-- <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#finContrat_drop" aria-expanded="false" aria-controls="finContrat_drop">
                 <i class="icon-layout menu-icon"></i>
                 <span class="menu-title">Fin Contrat</span>
@@ -74,7 +74,7 @@
                 <li class="nav-item"> <a class="nav-link" href="retraite-liste">Liste retraite</a></li>
                 </ul>
             </div>
-        </li>
+        </li> --%>
         <li class="nav-item">
             <a class="nav-link" href="demission-liste">
                 <i class="icon-grid menu-icon"></i>
